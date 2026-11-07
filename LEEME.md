@@ -26,19 +26,13 @@ La primera vez que la abras aparece la guía «Dedica 5 minutos a contarnos de t
 
 La app lee tu correo directamente desde tu teléfono con un permiso de Google de solo lectura. No hay servidor intermedio: los correos, los PDF y tu cédula nunca salen del dispositivo.
 
-Necesitas un «ID de cliente» de Google. Se crea una vez, gratis:
+**Ya está configurado** en el proyecto de Google Cloud `InvierteRD` (ID de cliente incluido en la app, origen autorizado `https://dylanvargas02.github.io`, permiso `gmail.readonly`, app en modo **Prueba**).
 
-1. Entra a console.cloud.google.com y crea un proyecto llamado `InvierteRD`.
-2. En *APIs y servicios → Biblioteca*, busca **Gmail API** y pulsa **Habilitar**.
-3. En *Google Auth Platform* (antes «Pantalla de consentimiento de OAuth»):
-   - Tipo de usuario: **Externo**. Nombre de la app: `InvierteRD`. Correo de asistencia: el tuyo.
-   - En **Público**, deja la app en modo **Prueba** y agrega tu correo de Gmail como **usuario de prueba**.
-   - En **Acceso a los datos**, agrega el permiso `https://www.googleapis.com/auth/gmail.readonly`.
-4. En **Clientes**, crea uno de tipo **Aplicación web**. En **Orígenes de JavaScript autorizados** pon tu enlace sin barra final, por ejemplo `https://invierterd.netlify.app`. Copia el **ID de cliente** (termina en `.apps.googleusercontent.com`).
-5. En la app: *Ajustes → Correo y documentos → Configuración avanzada*, pega el ID y toca **Conectar Gmail**.
-6. Google mostrará «Google no verificó esta app». Es normal en modo prueba: toca *Avanzado → Ir a InvierteRD* y acepta.
+1. En la app: *Ajustes → Correo y documentos → Conectar Gmail*.
+2. Google mostrará «Google no verificó esta app». Es normal en modo prueba: toca *Avanzado → Ir a InvierteRD* y acepta.
+3. Para que otra persona pueda conectar su Gmail, agrega su correo en Google Cloud → *Google Auth Platform → Público → Usuarios de prueba* (máximo 100).
 
-Después de eso, toca **Revisar correo ahora** cuando quieras actualizar. Los consumos aparecen en *Gastos* y las inversiones en *Ahorros*, siempre para que los confirmes tú.
+Si algún día cambias el enlace de la app (por ejemplo, a un dominio propio), agrega el nuevo origen en *Google Auth Platform → Clientes → InvierteRD web → Orígenes autorizados de JavaScript*.
 
 ### PDF protegidos con la cédula
 Escribe tu cédula en *Correo y documentos*. La app prueba con y sin guiones. Puedes elegir si la recuerda en el teléfono o si la pides cada vez. Nunca se envía a ningún lado.

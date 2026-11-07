@@ -1287,7 +1287,8 @@ function parseBroker(raw,sender){
 }
 
 /* ---------- Correo: Gmail solo lectura, desde el propio teléfono ---------- */
-const MAIL_DEFAULT={clientId:'',connected:false,lastScan:0,seen:{},minRate:'',keepCed:false,
+const GOOGLE_CLIENT_ID='841813943891-ue07m6inn374ki8gch2uj3ktaq0jij12.apps.googleusercontent.com';
+const MAIL_DEFAULT={clientId:GOOGLE_CLIENT_ID,connected:false,lastScan:0,seen:{},minRate:'',keepCed:false,
   cardQ:'newer_than:60d (consumo OR compra OR transacción OR transaccion OR cargo OR "fue utilizada") (tarjeta OR débito OR crédito)',
   brokerQ:'newer_than:365d ("puesto de bolsa" OR valores OR "casa de bolsa") (confirmación OR confirmacion OR operación OR operacion OR liquidación OR colocación OR colocacion OR reporto)'};
 const GSI_SRC='https://accounts.google.com/gsi/client', GAPI='https://gmail.googleapis.com/gmail/v1/users/me/';
@@ -1916,7 +1917,7 @@ setInterval(()=>{
   if(view==='mercado'&&mktSeg==='acciones'){const el=$('#ticks');if(el)el.innerHTML=ticksHTML()}
 },reduce?5000:1500);
 
-S.mail=Object.assign({},MAIL_DEFAULT,S.mail||{});S.pendingInv=S.pendingInv||[];
+S.mail=Object.assign({},MAIL_DEFAULT,S.mail||{});if(!S.mail.clientId)S.mail.clientId=GOOGLE_CLIENT_ID;S.pendingInv=S.pendingInv||[];
 try{if(getCed())S.mail.keepCed=true}catch(e){}
 render();
 if(!S.onboarded&&!S.onbDismissed)openOnboarding(true);
