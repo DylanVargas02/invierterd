@@ -43,9 +43,36 @@ En «Avísame si una colocación paga al menos (%)» pon tu tasa mínima. Cuando
 ### Ajustar el lector a tus bancos
 Las búsquedas de Gmail se pueden editar en *Configuración avanzada*. Por ejemplo, para leer solo los avisos de tu banco: `from:(alertas@tubanco.com.do) newer_than:60d`. Si un aviso real no se reconoce, usa «Probar con un archivo o un texto» y comparte el texto **sin datos personales** para ajustar el lector.
 
+## 4. Cuentas y respaldo en la nube (Supabase)
+
+Cada persona entra con su correo (sin contraseña: recibe un código de 6 dígitos) y sus datos se guardan en su cuenta. La primera vez que alguien entra, lo que ya tenía en el teléfono se sube a su cuenta. Si dos teléfonos tienen cambios distintos, la app pregunta cuáles usar.
+
+**Configuración actual** (proyecto Supabase `InvierteRD`, plan gratis):
+- Tabla `app_state`: una fila por persona con todos sus datos. Seguridad por fila activada: cada quien solo puede leer y modificar lo suyo. Sin sesión no se puede leer ni escribir nada.
+- Función `delete_my_account`: «Eliminar mi cuenta» en la app borra la cuenta y sus datos.
+- URL del sitio y de redirección: `https://dylanvargas02.github.io/invierterd/`.
+- Plantillas «Magic link or OTP» y «Confirm sign up» en español, con el código y un botón de respaldo.
+- La app acepta el código, el enlace tocado en el navegador o el enlace pegado en «¿Te llegó un enlace en vez de un código?».
+
+**Estado: solo el dueño del proyecto puede entrar.** Supabase, con su remitente por defecto, solo envía correos a los miembros del proyecto y unos 2 por hora. Los amigos pueden usar la app sin cuenta mientras tanto.
+
+### Siguiente paso: abrir las cuentas a tus amigos
+1. Activa la verificación en 2 pasos de tu Gmail y crea una **contraseña de aplicación** en `myaccount.google.com/apppasswords` (16 letras; no es tu contraseña normal de Gmail).
+2. En Supabase → *Authentication → Emails → SMTP Settings*, activa «Enable custom SMTP» y llena:
+   - Sender email y Username: `dylanvargas022003@gmail.com`
+   - Sender name: `InvierteRD`
+   - Host: `smtp.gmail.com` · Port: `465`
+   - Password: la contraseña de aplicación del paso 1
+3. Guarda. El límite sube a 30 correos por hora (ajustable en *Rate Limits*). Gmail permite unos 500 por día.
+4. Prueba: en la app, *Tu cuenta* → escribe un correo que no sea del proyecto → debe llegar «Tu código de InvierteRD: 123456».
+
+Si más adelante quieres un remitente propio (por ejemplo `hola@invierterd.com`), usa Brevo o Resend con un dominio verificado y cambia solo estos datos de SMTP.
+
+**Ver o borrar cuentas:** Supabase → *Authentication → Users*. Los datos de cada persona están en *Table Editor → app_state*. Como dueño del proyecto puedes verlos; por eso la sección «Privacidad» de la app explica dónde se guardan.
+
 ## Límites de esta versión
 
 - **Revisión del correo:** ocurre cuando tocas «Revisar correo ahora». Para que sea automática y en segundo plano hace falta un servidor (Gmail envía avisos a un servidor, no a una página web).
 - **Modo prueba de Google:** sirve para ti y hasta 100 usuarios de prueba que agregues a mano. Para abrirla al público, Google exige verificar la app y, por usar un permiso de lectura de Gmail, una evaluación de seguridad anual de un tercero, que tiene costo.
-- **Tus datos:** se guardan solo en el navegador de ese teléfono. Si borras los datos del navegador o cambias de teléfono, se pierden. Las cuentas de usuario y el respaldo en la nube son el siguiente paso.
-- **App Store y Play Store:** esta misma app puede empaquetarse con Capacitor para publicarla en las tiendas, cuando haya servidor y cuentas.
+- **Sin cuenta:** los datos viven solo en el navegador de ese teléfono. Con cuenta, además quedan en la nube y se ven en cualquier teléfono.
+- **App Store y Play Store:** esta misma app puede empaquetarse con Capacitor para publicarla en las tiendas.
