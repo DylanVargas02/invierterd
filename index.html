@@ -575,6 +575,23 @@ details.adv summary{cursor:pointer;font-weight:700;font-size:14px;padding:12px 0
 .choice{align-items:stretch}
 .choice .pill span{height:100%;display:flex;align-items:center;justify-content:center;padding:10px 4px;line-height:1.2}
 
+
+/* ---- Cuenta ---- */
+#accBtn{position:relative}
+#accBtn.in{background:var(--grow);border-color:var(--grow)}
+.acc-ini{color:var(--surface);font-weight:800;font-size:14px;font-family:var(--f-display);line-height:1}
+#accBtn[data-sync="pend"]::after,#accBtn[data-sync="sync"]::after,#accBtn[data-sync="error"]::after{content:"";position:absolute;right:-2px;top:-2px;width:11px;height:11px;border-radius:50%;background:var(--debt);border:2px solid var(--bg)}
+#accBtn[data-sync="error"]::after{background:var(--spend)}
+.lead-s{margin:0;color:var(--ink-2);font-size:14.5px;line-height:1.5}
+.lead-s b{color:var(--ink)}
+.link-btn.danger{color:var(--spend);align-self:flex-start}
+.del-box{background:var(--spend-soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.del-box p{margin:0;font-size:13.5px}
+.priv p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.priv b{color:var(--ink)}
+.onb-login{border:0;background:none;color:var(--grow);font-weight:700;font-size:14px;padding:10px 0;text-decoration:underline;align-self:flex-start;display:block}
+a.btn{display:block;text-align:center;text-decoration:none}
+
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -583,6 +600,7 @@ details.adv summary{cursor:pointer;font-weight:700;font-size:14px;padding:12px 0
     <div class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M4 17l5-5 4 4 7-8"/></svg></span><div><small id="brandSmall">InvierteRD</small><h1 id="viewName">Ahorros</h1></div></div>
     <div class="top-actions">
       <button class="chip-btn" id="curBtn" aria-label="Cambiar moneda de referencia"><span id="curLbl">DOP</span><svg width="12" height="12" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:2.4"><path d="M7 10l5 5 5-5"/></svg></button>
+      <button class="icon-btn" id="accBtn" aria-label="Iniciar sesión"></button>
       <button class="icon-btn" id="setBtn" aria-label="Ajustes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     </div>
   </header>
@@ -681,7 +699,7 @@ if(S.example&&(S.ver||0)<3){const keep={base:S.base,rates:S.rates,theme:S.theme}
 S.cards=S.cards||[];S.incomes=S.incomes||[];S.recurring=S.recurring||[];S.goals=S.goals||[];S.pending=S.pending||[];
 if(!S.catBudget){S.catBudget={};if(S.budget>0)S.catBudget.otros=S.budget}
 S.home=S.home||{on:false,partner:'',adj:0};
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){S._upd=Date.now();persistLocal();schedulePush()}
 let view='resumen'; try{view=localStorage.getItem(KEY+'.view')||'resumen'}catch(e){}
 if(!TABS.find(t=>t.id===view))view='resumen';
 let savSeg='inst', monthOffset=0, loanType='Hipotecario', mktSeg='acciones', prodFilter='Certificado', newsFilter='Todo';
@@ -763,6 +781,7 @@ $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');i
 $('#fab').addEventListener('click',()=>{if(view==='resumen')openExpense();else if(view==='gastos'){gastSeg==='fijos'?openRecurring():openExpense()}else if(view==='ahorros'){savSeg==='metas'?openGoal():openSaving()}else if(view==='prestamos'){credSeg==='tarjetas'?openCard():openLoan()}});
 $('#curBtn').addEventListener('click',()=>{S.base=CURS[(CURS.indexOf(S.base)+1)%CURS.length];save();render();toast('Mostrando totales en '+S.base)});
 $('#setBtn').addEventListener('click',openSettings);
+$('#accBtn').addEventListener('click',()=>openAccount());
 
 function renderNotice(){
   $('#notice').innerHTML=S.example?`<div class="notice"><span class="tag">Ejemplo</span><span>Datos de muestra</span><button id="clearEx">Borrar todo</button></div>`:'';
@@ -773,7 +792,7 @@ function renderNotice(){
 function render(){
   if(S.theme)document.documentElement.setAttribute('data-theme',S.theme);
   $('#curLbl').textContent=S.base; $('#viewName').textContent=TABS.find(t=>t.id===view).n;
-  renderTabs(); renderNotice();
+  renderTabs(); renderNotice(); paintAcc();
   $('#brandSmall').textContent=S.name&&view==='resumen'?'Hola, '+S.name:'InvierteRD';
   ({resumen:vResumen,ahorros:vAhorros,gastos:vGastos,prestamos:vPrestamos,mercado:vMercado})[view]();
   bindPromos(); tickLive(); fitBig();
@@ -1473,7 +1492,8 @@ const OS={
     <h2>Dedica 5 minutos a contarnos de ti</h2><p class="lead">Te preguntaremos, en este orden:</p>
     <ol class="onb-list">${['Tus ingresos','Tus gastos fijos','Tus ahorros e inversiones','Tus tarjetas y préstamos','Tus metas','Un presupuesto sugerido','Tu correo, si quieres'].map(x=>`<li>${x}</li>`).join('')}</ol>
     <p class="hint">Puedes saltar cualquier paso y completarlo luego. Tus datos se guardan en este teléfono.</p>
-    <button class="btn ghost" type="button" id="oDemo">Prefiero ver un ejemplo primero</button>`}),
+    <button class="btn ghost" type="button" id="oDemo">Prefiero ver un ejemplo primero</button>
+    <button class="onb-login" type="button" id="oLogin">¿Ya tienes cuenta? Inicia sesión</button>`}),
   tu:()=>({html:`<h2>Empecemos por ti</h2><p class="lead">Para saludarte y mostrar todo en tu moneda.</p><div class="onb-body form">
     <div class="field"><label for="oName">¿Cómo te llamas?</label><input id="oName" value="${esc(W.name)}" maxlength="30" autocomplete="given-name" placeholder="Tu nombre"></div>
     <fieldset class="field"><legend>¿En qué moneda piensas tus finanzas?</legend><div class="choice">${pill('oBase','DOP','Pesos',W.base==='DOP')}${pill('oBase','USD','Dólares',W.base==='USD')}${pill('oBase','EUR','Euros',W.base==='EUR')}</div></fieldset>
@@ -1578,6 +1598,7 @@ function renderOnb(keepScroll){
   const bk=$('#oBack');if(bk)bk.onclick=()=>{collectOnb();go(-1)};
   const sk=$('#oSkip');if(sk)sk.onclick=()=>go(1);
   const lt=$('#oLater');if(lt)lt.onclick=leaveOnb;
+  const lg=$('#oLogin');if(lg)lg.onclick=()=>{$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open');openAccount()};
   const dm=$('#oDemo');if(dm)dm.onclick=()=>{S.onbDismissed=true;if(!S.example){const keep={base:S.base,rates:S.rates,theme:S.theme,mail:S.mail};S=Object.assign(sample(),keep)}save();$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open');render();toast('Explora con datos de ejemplo. La guía está en Ajustes.')};
   $('.onb').scrollTop=y;
   if(!keepScroll){const h=$('.onb h2');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}
@@ -1604,6 +1625,166 @@ function finishOnb(){
   const wantMail=W.mail;S=n;delete S.onbDraft;save();W=null;$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open');
   view='resumen';render();window.scrollTo({top:0});toast(S.name?`Listo, ${S.name}. Este es tu resumen.`:'Listo. Este es tu resumen.');
   if(wantMail)setTimeout(openMail,900);
+}
+
+/* ---------- Cuenta y sincronización en la nube (Supabase) ---------- */
+const SUPABASE_URL='https://blvwglrfnwgndflfduir.supabase.co', SUPABASE_KEY='sb_publishable_I7WGlO8D0B0uflXjDOQcnQ_vrqCAnM6';
+const APP_URL='https://dylanvargas02.github.io/invierterd/';
+const SUPA_JS='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
+let sb=null,sbUser=null,syncTimer=null,syncState='idle',accStep={email:'',sent:false},loginFor='';
+const canCloud=()=>/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(SUPABASE_URL);
+const isPublished=()=>/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
+function persistLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+async function sbClient(){
+  if(sb)return sb;
+  if(!canCloud())throw new Error('Las cuentas todavía no están activadas.');
+  if(!isPublished())throw new Error('Para iniciar sesión abre la app publicada.');
+  if(!window.supabase)await loadScript(SUPA_JS);
+  if(!window.supabase)throw new Error('No se pudo cargar el servicio de cuentas. Revisa tu conexión.');
+  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'implicit',storageKey:KEY+'.auth'}});
+  sb.auth.onAuthStateChange((ev,session)=>{const before=sbUser;sbUser=session?session.user:null;paintAcc();if(sbUser&&(!before||before.id!==sbUser.id))setTimeout(afterLogin,0)});
+  return sb;
+}
+function cloudData(){const d=JSON.parse(JSON.stringify(S));delete d.onbDraft;return d}
+async function pushNow(){
+  if(!sbUser||S.example)return;
+  syncState='sync';paintAcc();
+  try{const c=await sbClient();const t=S._upd||Date.now();S._owner=sbUser.id;
+    const {error}=await c.from('app_state').upsert({user_id:sbUser.id,data:cloudData(),updated_at:new Date(t).toISOString()});
+    if(error)throw error;S._synced=t;persistLocal();syncState='ok';}
+  catch(e){syncState='error'}
+  paintAcc();
+}
+function schedulePush(){if(!sbUser||S.example)return;clearTimeout(syncTimer);syncState='pend';paintAcc();syncTimer=setTimeout(pushNow,1200)}
+function applyRemote(row){
+  const keepTheme=S.theme;S=row.data||{};S._synced=S._upd=Date.parse(row.updated_at)||Date.now();S._owner=sbUser.id;
+  if(S.theme===undefined)S.theme=keepTheme;normalizeS();persistLocal();syncState='ok';
+  $('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open');render();
+}
+async function fetchRemote(){const c=await sbClient();const {data,error}=await c.from('app_state').select('data,updated_at').eq('user_id',sbUser.id).maybeSingle();if(error)throw error;return data}
+async function afterLogin(){
+  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;
+  try{
+    const row=await fetchRemote();
+    if(!row){if(!S.example){S._owner=sbUser.id;await pushNow();toast('Tus datos quedaron guardados en tu cuenta')}else toast('Sesión iniciada. Lo que registres se guardará en tu cuenta.');return}
+    const remoteT=Date.parse(row.updated_at)||0, mine=S._owner===sbUser.id, dirty=(S._upd||0)>(S._synced||0);
+    if(S.example||(S._owner&&!mine)||(mine&&!dirty)){if(remoteT!==(S._synced||0)||!mine)applyRemote(row);syncState='ok';paintAcc();return}
+    if(mine&&dirty&&remoteT<=(S._synced||0)){await pushNow();return}
+    openConflict(row);
+  }catch(e){loginFor='';syncState='error';paintAcc()}
+}
+async function pullIfNewer(){
+  if(!sbUser||(S._upd||0)>(S._synced||0))return;
+  try{const row=await fetchRemote();if(row&&Date.parse(row.updated_at)>(S._synced||0)){applyRemote(row);toast('Datos actualizados desde tu cuenta')}}catch(e){}
+}
+function openConflict(row){
+  const when=dtFmt.format(new Date(Date.parse(row.updated_at)));
+  sheet(`<h3>¿Qué datos quieres usar?</h3><div class="form"><p class="lead-s">Este teléfono tiene datos que no están en tu cuenta, y tu cuenta tiene datos guardados el ${esc(when)}.</p>
+  <button class="btn" type="button" id="cfRemote">Usar los de mi cuenta</button>
+  <button class="btn ghost" type="button" id="cfLocal">Usar los de este teléfono y guardarlos en mi cuenta</button>
+  <p class="hint">La opción que no elijas se reemplaza.</p></div>`,'var(--grow)');
+  $('#cfRemote').onclick=()=>{close();applyRemote(row);toast('Listo: estás viendo los datos de tu cuenta')};
+  $('#cfLocal').onclick=async()=>{close();S._owner=sbUser.id;S._upd=Date.now();await pushNow();toast('Tus datos de este teléfono quedaron en tu cuenta')};
+}
+function wipeLocal(){try{localStorage.removeItem(KEY);localStorage.removeItem(KEY+'.ced')}catch(e){}cedSession='';const keep={base:S.base,rates:S.rates,theme:S.theme};S=Object.assign(sample(),keep);S.onbDismissed=true;normalizeS();persistLocal()}
+function paintAcc(){
+  const b=$('#accBtn');if(!b)return;
+  b.classList.toggle('in',!!sbUser);b.dataset.sync=sbUser?syncState:'';
+  b.innerHTML=sbUser?`<span class="acc-ini">${esc((sbUser.email||'?').charAt(0).toUpperCase())}</span>`:`<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>`;
+  b.setAttribute('aria-label',sbUser?'Tu cuenta: '+sbUser.email:'Iniciar sesión');
+  const st=$('#accSync');if(st)st.textContent=syncLabel();
+}
+const syncLabel=()=>S.example?'Con datos de ejemplo no se sincroniza. Completa la guía o empieza en blanco.':{sync:'Guardando en tu cuenta…',pend:'Cambios por guardar…',error:'No se pudo guardar. Lo intentaremos de nuevo cuando tengas conexión.',ok:'Todo guardado en tu cuenta',idle:'Todo guardado en tu cuenta'}[syncState]||'';
+function openAccount(){
+  if(!canCloud()){sheet(`<h3>Tu cuenta</h3><div class="form"><p class="lead-s">Las cuentas se están activando. Pronto podrás guardar tus datos en la nube.</p></div>`,'var(--grow)');return}
+  if(!isPublished()){sheet(`<h3>Tu cuenta</h3><div class="form"><p class="lead-s">Para iniciar sesión y guardar tus datos en la nube, abre la app publicada:</p><a class="btn" href="${APP_URL}" target="_blank" rel="noopener">Abrir InvierteRD</a><p class="hint num">${APP_URL}</p></div>`,'var(--grow)');return}
+  if(sbUser){
+    sheet(`<h3>Tu cuenta</h3><div class="form">
+      <div class="mail-st on"><b>${esc(sbUser.email)}</b><span id="accSync">${esc(syncLabel())}</span></div>
+      <button class="btn" type="button" id="aSync">Sincronizar ahora</button>
+      <button class="btn ghost" type="button" id="aOut">Cerrar sesión</button>
+      <p class="hint">Al cerrar sesión, tus datos se borran de este teléfono y quedan guardados en tu cuenta.</p>
+      <button class="link-btn danger" type="button" id="aDel">Eliminar mi cuenta y todos mis datos</button>
+      <div id="aDelBox" hidden class="del-box"><p><b>Esto no se puede deshacer.</b> Se borran tu cuenta y todos tus datos de la nube y de este teléfono.</p><button class="btn" type="button" id="aDelYes" style="--accent:var(--spend)">Sí, eliminar mi cuenta</button></div>
+      <button class="link-btn" type="button" id="aPriv">Privacidad</button>
+      <p class="err" id="aErr" role="alert"></p></div>`,'var(--grow)');
+    $('#aSync').onclick=async()=>{await pushNow();await pullIfNewer();paintAcc()};
+    $('#aOut').onclick=async()=>{try{await sb.auth.signOut()}catch(e){}sbUser=null;loginFor='';wipeLocal();close();render();toast('Sesión cerrada. Tus datos siguen en tu cuenta.')};
+    $('#aDel').onclick=()=>{$('#aDelBox').hidden=false};
+    $('#aDelYes').onclick=async()=>{const b=$('#aDelYes');b.disabled=true;b.textContent='Eliminando…';
+      try{const {error}=await sb.rpc('delete_my_account');if(error)throw error;try{await sb.auth.signOut()}catch(e){}sbUser=null;loginFor='';wipeLocal();close();render();toast('Tu cuenta y tus datos fueron eliminados')}
+      catch(e){$('#aErr').textContent='No se pudo eliminar la cuenta. Revisa tu conexión e inténtalo de nuevo.';b.disabled=false;b.textContent='Sí, eliminar mi cuenta'}};
+    $('#aPriv').onclick=openPrivacy;return;
+  }
+  const codeStep=accStep.sent&&accStep.email;
+  sheet(`<h3>${codeStep?'Escribe el código':'Guarda tus datos en tu cuenta'}</h3><form class="form" id="f">
+    ${codeStep?`<p class="lead-s">Te enviamos un código a <b>${esc(accStep.email)}</b>. Revisa también la carpeta de spam.</p>
+      <div class="field"><label for="aCode">Código</label><input id="aCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
+      <button class="link-btn" type="button" id="aLinkT">¿Te llegó un enlace en vez de un código?</button>
+      <div class="field" id="aLinkBox" hidden><label for="aLink">Mantén presionado el botón del correo, copia el enlace y pégalo aquí</label><input id="aLink" type="url" autocomplete="off" placeholder="https://…"></div>
+      <div class="err" id="err" role="alert"></div><button class="btn" type="submit">Entrar</button>
+      <div class="two"><button class="btn ghost" type="button" id="aResend">Reenviar código</button><button class="btn ghost" type="button" id="aBack">Cambiar correo</button></div>`
+    :`<p class="lead-s">Inicia sesión con tu correo para ver tus datos en cualquier teléfono y no perderlos si cambias de equipo. No necesitas contraseña: te enviamos un código.</p>
+      <div class="field"><label for="aEmail">Correo electrónico</label><input id="aEmail" type="email" inputmode="email" autocomplete="email" value="${esc(accStep.email)}" placeholder="tu@correo.com"></div>
+      <div class="err" id="err" role="alert"></div><button class="btn" type="submit">Enviarme un código</button>
+      <p class="hint">Si ya registraste datos en este teléfono, se guardan en tu cuenta al entrar. <button class="link-btn" type="button" id="aPriv">Privacidad</button></p>`}
+  </form>`,'var(--grow)');
+  const err=m=>{$('#err').textContent=m};
+  const send=async email=>{const c=await sbClient();const {error}=await c.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:APP_URL}});if(error)throw error};
+  const pv=$('#aPriv');if(pv)pv.onclick=openPrivacy;
+  if(codeStep){
+    $('#aBack').onclick=()=>{accStep.sent=false;openAccount()};
+    $('#aResend').onclick=async()=>{try{await send(accStep.email);toast('Te enviamos otro código')}catch(e){err(friendlyAuth(e))}};
+    $('#aLinkT').onclick=()=>{$('#aLinkBox').hidden=false;$('#aLinkT').hidden=true;$('#aLink').focus()};
+    $('#f').onsubmit=async e=>{e.preventDefault();const code=$('#aCode').value.replace(/\D/g,''),lk=linkToken($('#aLink').value);
+      if(!lk&&$('#aLink').value.trim())return err('Ese enlace no es el del correo de InvierteRD. Cópialo completo, desde el botón del correo.');
+      if(!lk&&code.length<6)return err('Escribe el código completo que llegó a tu correo.');
+      const b=e.target.querySelector('[type=submit]');b.disabled=true;b.textContent='Entrando…';
+      try{const c=await sbClient();const {data,error}=await c.auth.verifyOtp(lk?{token_hash:lk.hash,type:lk.type}:{email:accStep.email,token:code,type:'email'});if(error)throw error;sbUser=data.user;accStep={email:'',sent:false};close();paintAcc();toast('Sesión iniciada');afterLogin()}
+      catch(x){err(friendlyAuth(x));b.disabled=false;b.textContent='Entrar'}};
+  }else{
+    $('#f').onsubmit=async e=>{e.preventDefault();const email=$('#aEmail').value.trim().toLowerCase();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))return err('Revisa el correo: debe verse como nombre@correo.com.');
+      const b=e.target.querySelector('[type=submit]');b.disabled=true;b.textContent='Enviando…';
+      try{await send(email);accStep={email,sent:true};openAccount()}catch(x){err(friendlyAuth(x));b.disabled=false;b.textContent='Enviarme un código'}};
+  }
+}
+function linkToken(v){
+  v=String(v||'').trim();if(!v)return null;
+  try{const u=new URL(v);if(!/\.supabase\.co$/.test(u.hostname)&&u.origin+u.pathname!==APP_URL)return null;
+    const h=u.searchParams.get('token_hash')||u.searchParams.get('token');if(!h)return null;
+    const t=u.searchParams.get('type');return{hash:h,type:t==='signup'||t==='invite'?'signup':t==='magiclink'?'magiclink':'email'}}catch(e){return null}
+}
+async function sessionFromUrl(){
+  const h=location.hash||'';if(!/access_token=|error_description=/.test(h))return;
+  const err=/error_description=/.test(h)?decodeURIComponent((h.match(/error_description=([^&]*)/)||[])[1]||'').replace(/\+/g,' '):'';
+  try{const c=await sbClient();await c.auth.getSession()}catch(e){}
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  if(err)toast(/expired|invalid/i.test(err)?'Ese enlace ya venció. Pide un código nuevo desde Tu cuenta.':'No se pudo iniciar sesión con ese enlace.');
+  else if(sbUser)toast('Sesión iniciada');
+}
+function friendlyAuth(e){
+  const m=String(e&&(e.message||e.error_description||e)||'');
+  if(/rate|too many|seconds/i.test(m))return 'Pediste varios códigos seguidos. Espera un minuto e inténtalo de nuevo.';
+  if(/expired|invalid|token/i.test(m))return 'El código no es válido o ya venció. Pide uno nuevo.';
+  if(/network|fetch|Failed/i.test(m))return 'No hay conexión con el servicio de cuentas. Revisa tu internet.';
+  return 'No se pudo completar. '+m;
+}
+function openPrivacy(){
+  sheet(`<h3>Privacidad</h3><div class="form priv">
+  <p><b>Qué guardamos.</b> Lo que registras en la app: ingresos, gastos, ahorros, tarjetas, préstamos, metas y ajustes. Sin cuenta, se guarda solo en este teléfono. Con cuenta, además se guarda una copia en la nube (Supabase, servidores en EE. UU.), cifrada en tránsito y en reposo.</p>
+  <p><b>Qué no guardamos.</b> Tu cédula (solo se usa en tu teléfono para abrir PDF protegidos), contraseñas (entras con un código) ni el contenido de tus correos: del correo solo quedan los consumos e inversiones que tú confirmas.</p>
+  <p><b>Quién puede ver tus datos.</b> Solo tú. Las reglas de la base de datos impiden que otra cuenta lea o cambie tus datos. No los vendemos ni los compartimos.</p>
+  <p><b>Gmail.</b> El permiso es de solo lectura. Los correos se procesan en tu teléfono y no se envían a nuestros servidores. Puedes quitar el permiso cuando quieras desde tu cuenta de Google.</p>
+  <p><b>Tus derechos.</b> Puedes ver y corregir tus datos en la app, y borrar tu cuenta con todos tus datos desde <i>Ajustes → Tu cuenta</i>. Se borran de inmediato. Esto sigue la Ley 172-13 de protección de datos personales de la República Dominicana.</p>
+  </div>`,'var(--grow)');
+}
+
+function normalizeS(){
+  ['cards','incomes','recurring','goals','pending','savings','loans','expenses','pendingInv'].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});
+  if(!S.catBudget)S.catBudget={};S.home=S.home||{on:false,partner:'',adj:0};
+  S.rates=S.rates||{DOP:1,USD:63.5,EUR:73.4};S.base=S.base||'DOP';
+  S.mail=Object.assign({},MAIL_DEFAULT,S.mail||{});if(!S.mail.clientId)S.mail.clientId=GOOGLE_CLIENT_ID;
 }
 
 /* ---------- Tarjetas de crédito ---------- */
@@ -1880,9 +2061,12 @@ function openSettings(){
   <div class="field"><label for="aPartner">Nombre de esa persona</label><input id="aPartner" value="${esc(S.home.partner||'')}" maxlength="24" placeholder="Ej. Ana"></div>
   <div class="field"><label for="aTheme">Apariencia</label><select id="aTheme"><option value="">Según el teléfono</option><option value="light" ${S.theme==='light'?'selected':''}>Clara</option><option value="dark" ${S.theme==='dark'?'selected':''}>Oscura</option></select></div>
   <div class="err" id="err"></div><button class="btn" type="submit">Guardar</button>
+  <div class="two"><button class="btn ghost" type="button" id="aAcc">Tu cuenta</button><button class="btn ghost" type="button" id="aPrv">Privacidad</button></div>
   <div class="two"><button class="btn ghost" type="button" id="aMail">Correo y documentos</button><button class="btn ghost" type="button" id="aOnb">Repetir la guía inicial</button></div>
   <div class="two"><button class="btn ghost" type="button" id="aEx">Cargar ejemplo</button><button class="btn ghost" type="button" id="aBlank">Empezar en blanco</button></div></form>`,'var(--ink)');
   $('#aMail').onclick=()=>{close();openMail()};
+  $('#aAcc').onclick=()=>{close();openAccount()};
+  $('#aPrv').onclick=()=>{close();openPrivacy()};
   $('#aOnb').onclick=()=>{close();openOnboarding(true)};
   $('#f').onsubmit=e=>{e.preventDefault();const u=rate($('#aUsd').value),eu=rate($('#aEur').value);
     if(!(u>0&&eu>0))return $('#err').textContent='Las tasas de cambio deben ser mayores que cero.';
@@ -1917,10 +2101,13 @@ setInterval(()=>{
   if(view==='mercado'&&mktSeg==='acciones'){const el=$('#ticks');if(el)el.innerHTML=ticksHTML()}
 },reduce?5000:1500);
 
-S.mail=Object.assign({},MAIL_DEFAULT,S.mail||{});if(!S.mail.clientId)S.mail.clientId=GOOGLE_CLIENT_ID;S.pendingInv=S.pendingInv||[];
+normalizeS();
 try{if(getCed())S.mail.keepCed=true}catch(e){}
 render();
 if(!S.onboarded&&!S.onbDismissed)openOnboarding(true);
+if(isPublished()&&canCloud()){let has=false;try{has=!!localStorage.getItem(KEY+'.auth')}catch(e){}if(/access_token=|error_description=/.test(location.hash||''))sessionFromUrl();else if(has)sbClient().catch(()=>{})}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullIfNewer()});
+window.addEventListener('online',()=>{if(sbUser&&(S._upd||0)>(S._synced||0))pushNow()});
 })();
 </script>
 
