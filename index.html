@@ -907,6 +907,12 @@ details.acc[open] .chev.rot{transform:rotate(-90deg)}
 .grp-h .grp-v{grid-column:2/4;grid-row:2;text-align:left;display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
 .grp-h .grp-v b{font-size:20px;font-family:var(--f-display);letter-spacing:-.02em}
 .grp-h .cpills{margin:0;justify-content:flex-start}
+.grp-v.card{flex-direction:column;align-items:flex-start;gap:3px}
+.grp-k{font-size:11.5px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+.grp-owe{font-size:13px;color:var(--ink-2);font-weight:600}
+.grp-owe b{display:inline!important;font-family:var(--f-body)!important;font-size:13.5px!important;color:var(--spend);letter-spacing:0!important}
+.owe-s{font-size:11.5px!important;color:var(--spend)!important;font-weight:700}
+.it-k{display:none}
 .field label.via,.field label.cp{display:block;font-size:inherit;font-weight:inherit;color:var(--ink)}
 .via-t b{color:var(--ink)}
 .grp-ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--gc) 15%,transparent);color:var(--gc)}
@@ -2306,17 +2312,17 @@ function byCurHTML(list,sep){const m={};list.forEach(([v,c])=>{m[c]=(m[c]||0)+v}
 function holdGroup(g){
   const ents={};g.items.forEach(it=>{(ents[it.entity]=ents[it.entity]||[]).push(it)});
   const E=Object.entries(ents).map(([e,L])=>({e,L,b:L.reduce((a,it)=>a+conv(it.val,it.cur,S.base),0)})).sort((a,b)=>b.b-a.b);
-  const tot=E.reduce((a,x)=>a+x.b,0),n=g.items.length;
+  const tot=E.reduce((a,x)=>a+x.b,0),n=g.items.length,oweT=g.card?g.items.reduce((a,it)=>a+conv(it.owe,it.cur,S.base),0):0;
   return `<details class="grp" data-g="${g.key}" ${openG[g.key]?'open':''} style="--gc:${g.color}"><summary class="grp-h">
       <span class="grp-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${g.icon}</svg></span>
       <span class="grp-t"><b>${g.title}</b><span>${E.length} ${E.length===1?'entidad':'entidades'} · ${n} ${n===1?g.unit[0]:g.unit[1]}</span></span>
       <span class="chev rot" aria-hidden="true">›</span>
-      <span class="grp-v num"><b>${g.neg&&tot?'−':''}${esc(fmt(tot,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?`<span class="cpills">${byCurHTML(g.items.map(it=>[it.val,it.cur]))}</span>`:''}</span></summary>
+      <span class="grp-v num${g.card?' card':''}">${g.card?'<span class="grp-k">Disponible para gastar</span>':''}<b>${esc(fmt(tot,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?`<span class="cpills">${byCurHTML(g.items.map(it=>[it.val,it.cur]))}</span>`:''}${g.card?`<span class="grp-owe">Debes <b>${esc(fmt(oweT,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?' · '+g.items.filter(it=>it.owe>0).map(it=>esc(fmt(it.owe,it.cur,0))).join(' + '):''}</span>`:''}</span></summary>
     <div class="grp-in">
       ${n?E.map(x=>`<details class="ent" data-g="${g.key}:${esc(x.e)}" ${openG[g.key+':'+x.e]?'open':''}><summary class="ent-h">${inst(x.e,1)}
           <span class="ent-t"><b>${esc(x.e)}</b><span>${x.L.length} ${x.L.length===1?g.unit[0]:g.unit[1]} · ${tot?Math.round(x.b/tot*100):0} %</span></span>
-          <span class="ent-v num">${byCurHTML(x.L.map(it=>[it.val,it.cur]),'')}</span><span class="chev rot" aria-hidden="true">›</span></summary>
-        <div class="ent-in">${x.L.map(it=>`<button type="button" class="it-r" ${it.attr}="${it.id}"><span class="it-t"><b>${esc(it.name)}</b><span>${it.sub}</span></span><span class="it-v num"><b ${it.live?`data-sv="${it.id}"`:''}>${esc(fmt(it.val,it.cur,2))}</b>${it.cur!==S.base?`<small>≈ ${esc(fmt(conv(it.val,it.cur,S.base),S.base,0))}</small>`:''}</span>${chev}</button>`).join('')}</div></details>`).join('')
+          <span class="ent-v num">${byCurHTML(x.L.map(it=>[it.val,it.cur]),'')}${g.card?`<small class="owe-s">Debes ${x.L.map(it=>esc(fmt(it.owe,it.cur,0))).join(' + ')}</small>`:''}</span><span class="chev rot" aria-hidden="true">›</span></summary>
+        <div class="ent-in">${x.L.map(it=>`<button type="button" class="it-r" ${it.attr}="${it.id}"><span class="it-t"><b>${esc(it.name)}</b>${g.card?'<small class="it-k">Disponible</small>':''}<span>${it.sub}</span></span><span class="it-v num"><b ${it.live?`data-sv="${it.id}"`:''}>${esc(fmt(it.val,it.cur,2))}</b>${g.card?`<small class="owe-s">Debes ${esc(fmt(it.owe,it.cur,2))}</small>`:it.cur!==S.base?`<small>≈ ${esc(fmt(conv(it.val,it.cur,S.base),S.base,0))}</small>`:''}</span>${chev}</button>`).join('')}</div></details>`).join('')
         :`<p class="hint grp-empty">${g.empty}</p>`}
       <button type="button" class="grp-add" id="${g.add[0]}">+ ${g.add[1]}</button>
     </div></details>`;
@@ -2346,8 +2352,8 @@ function vResumen(){
       items:A.map(s=>({id:s.id,entity:s.entity,name:s.name,cur:s.cur,val:savValue(s,t),live:1,attr:'data-edit-s',sub:esc(s.type)+(s.rate?' · '+s.rate.toFixed(2)+' %':'')}))},
     {key:'inv',title:'Inversiones',color:'var(--grow)',icon:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',unit:['inversión','inversiones'],add:['addInv','Agregar inversión'],empty:'Certificados, bonos, SBB, mutuos o fondos.',
       items:inv.map(s=>({id:s.id,entity:s.entity,name:s.name,cur:s.cur,val:savValue(s,t),live:1,attr:'data-edit-s',sub:`<span class="ty" style="--tc:${TYPE_C[s.type]||'var(--c-gray)'}">${esc(s.type==='Sell Buy Back (SBB)'?'SBB':s.type)}</span> ${s.rate?s.rate.toFixed(2)+' % · ':''}${esc(matText(s))}`}))},
-    {key:'card',title:'Tarjetas de crédito',color:'var(--debt)',neg:1,icon:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>',unit:['tarjeta','tarjetas'],add:['addCard','Agregar tarjeta'],empty:'Sin tarjetas de crédito registradas.',
-      items:S.cards.map(c=>{const dd=daysTo(dueDate(c));return {id:c.id,entity:c.entity,name:c.name,cur:c.cur,val:c.balance,attr:'data-card',sub:`Usado ${c.limit?Math.round(c.balance/c.limit*100):0} % de ${esc(fmt(c.limit,c.cur,0))}${c.balance>0?` · <span class="due${dd<=5?' soon':''}">pagar ${dd===0?'hoy':dd===1?'mañana':'en '+dd+' d'}</span>`:''}`}})}
+    {key:'card',title:'Tarjetas de crédito',color:'var(--debt)',card:1,icon:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>',unit:['tarjeta','tarjetas'],add:['addCard','Agregar tarjeta'],empty:'Sin tarjetas de crédito registradas.',
+      items:S.cards.map(c=>{const dd=daysTo(dueDate(c));return {id:c.id,entity:c.entity,name:c.name,cur:c.cur,val:Math.max(0,c.limit-c.balance),owe:c.balance,attr:'data-card',sub:`Usado ${c.limit?Math.round(c.balance/c.limit*100):0} % de ${esc(fmt(c.limit,c.cur,0))}${c.balance>0?` <span class="due${dd<=5?' soon':''}">pagar ${dd===0?'hoy':dd===1?'mañana':'en '+dd+' d'}</span>`:''}`}})}
   ];
   $('#view').innerHTML=`
     ${S.onboarded?'':`<button class="onb-cta" id="goOnb"><span><b>Dedica 5 minutos a contarnos de ti</b><small>${S.onbDraft&&S.onbDraft.step>1?'Sigue donde lo dejaste · paso '+Math.min(S.onbDraft.step,total)+' de '+total:'Así la app trabaja con tus números, no con los del ejemplo.'}</small></span><span aria-hidden="true">›</span></button>`}
