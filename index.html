@@ -1088,6 +1088,13 @@ details.acc[open] .chev.rot{transform:rotate(-90deg)}
 .panel:has(.dempty) .chart-f,.panel:has(.dempty) .panel-h .seg{display:none}
 .dempty span{font-size:13px;color:var(--ink-2);max-width:30ch}
 
+
+/* ---- Globos de los gráficos: solo al tocar ---- */
+.tipc{position:relative}
+.tipc .cols{padding-top:66px;height:190px}
+.dual .col i,.stk-in{opacity:1}
+.tipc.picked .col:not([aria-pressed="true"]) i,.tipc.picked .stk:not([aria-pressed="true"]) .stk-in{opacity:.38}
+.dguide{top:70px;height:120px}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2392,19 +2399,19 @@ function dualBuckets(unit,N){
 function dualBlock(B){
   const mx=Math.max(0,...B.map(b=>Math.max(resShow.i?b.vi:0,resShow.e?b.ve:0))),n=B.length;let sel=n-1;while(sel>0&&!B[sel].vi&&!B[sel].ve)sel--;
   const h=v=>mx&&v?Math.max(2.5,v/mx*100).toFixed(1):0;
-  return `<div class="colw dual${n>20?' dense':''}${n<6?' few':''}" id="dualW"><div class="cols" data-sel="${sel}">${B.map((b,i)=>`<button type="button" class="col" data-cap="${esc(b.cap)}" data-vi="${esc(fmt(b.vi,S.base,0))}" data-ve="${esc(fmt(b.ve,S.base,0))}" aria-label="${esc(b.cap)}: ingresos ${esc(fmt(b.vi,S.base,0))}, gastos ${esc(fmt(b.ve,S.base,0))}" aria-pressed="${i===sel}">${resShow.i?`<i class="ci" style="height:${h(b.vi)}%"></i>`:''}${resShow.e?`<i class="ce" style="height:${h(b.ve)}%"></i>`:''}</button>`).join('')}</div>
+  return `<div class="colw dual tipc${n>20?' dense':''}${n<6?' few':''}" id="dualW"><div class="cols" data-sel="${sel}">${B.map((b,i)=>`<button type="button" class="col" data-cap="${esc(b.cap)}" data-vi="${esc(fmt(b.vi,S.base,0))}" data-ve="${esc(fmt(b.ve,S.base,0))}" aria-label="${esc(b.cap)}: ingresos ${esc(fmt(b.vi,S.base,0))}, gastos ${esc(fmt(b.ve,S.base,0))}" aria-pressed="false">${resShow.i?`<i class="ci" style="height:${h(b.vi)}%"></i>`:''}${resShow.e?`<i class="ce" style="height:${h(b.ve)}%"></i>`:''}</button>`).join('')}</div>
     <div class="col-l" aria-hidden="true">${B.map(b=>`<span>${esc(b.l)}</span>`).join('')}</div>
-    <div class="dtip num" id="dTip" role="status" aria-live="polite"></div></div>`;
+    <div class="dtip num" id="dTip" role="status" aria-live="polite" hidden></div></div>`;
 }
-function bindDual(){const w=$('#dualW');if(!w)return;const cols=w.querySelector('.cols'),tip=$('#dTip');
-  const show=b=>{w.querySelectorAll('.col').forEach(x=>x.setAttribute('aria-pressed',x===b));
-    tip.innerHTML=`<span class="dt-c">${esc(b.dataset.cap)}</span>${resShow.i?`<span><i style="background:var(--grow)"></i>${esc(b.dataset.vi)}</span>`:''}${resShow.e?`<span><i style="background:var(--spend)"></i>${esc(b.dataset.ve)}</span>`:''}`;
-    const cr=w.getBoundingClientRect(),br=b.getBoundingClientRect(),tw=tip.offsetWidth,x=br.left-cr.left+br.width/2;
-    tip.style.left=Math.max(0,Math.min(cr.width-tw,x-tw/2))+'px';tip.style.setProperty('--ax',(x-Math.max(0,Math.min(cr.width-tw,x-tw/2)))+'px');
-    const g=w.querySelector('.dguide');g.style.left=x+'px'};
-  w.insertAdjacentHTML('beforeend','<span class="dguide" aria-hidden="true"></span>');
-  w.querySelectorAll('.col').forEach(b=>b.onclick=()=>show(b));
-  const sel=w.querySelectorAll('.col')[+cols.dataset.sel];if(sel)requestAnimationFrame(()=>show(sel))}
+function tipChart(w,tip,html){if(!w||!tip)return;
+  w.insertAdjacentHTML('beforeend','<span class="dguide" aria-hidden="true" hidden></span>');const g=w.querySelector('.dguide');tip.hidden=true;
+  w.querySelectorAll('.col').forEach(b=>b.onclick=()=>{
+    const was=b.getAttribute('aria-pressed')==='true';w.querySelectorAll('.col').forEach(x=>x.setAttribute('aria-pressed','false'));
+    w.classList.toggle('picked',!was);if(was){tip.hidden=true;g.hidden=true;return}
+    b.setAttribute('aria-pressed','true');tip.innerHTML=html(b);tip.hidden=false;g.hidden=false;
+    const cr=w.getBoundingClientRect(),br=b.getBoundingClientRect(),tw=tip.offsetWidth,x=br.left-cr.left+br.width/2,lf=Math.max(0,Math.min(cr.width-tw,x-tw/2));
+    tip.style.left=lf+'px';tip.style.setProperty('--ax',(x-lf)+'px');g.style.left=x+'px'})}
+function bindDual(){tipChart($('#dualW'),$('#dTip'),b=>`<span class="dt-c">${esc(b.dataset.cap)}</span>${resShow.i?`<span><i style="background:var(--grow)"></i>Ingresos ${esc(b.dataset.vi)}</span>`:''}${resShow.e?`<span><i style="background:var(--spend)"></i>Gastos ${esc(b.dataset.ve)}</span>`:''}`)}
 const chev='<span class="chev" aria-hidden="true">›</span>';
 const secAdd=id=>`<button type="button" class="sec-add" id="${id}">+ Agregar</button>`;
 const CUR_N={DOP:'Pesos · RD$',USD:'Dólares · US$',EUR:'Euros · €'},CUR_C={DOP:'var(--c1)',USD:'var(--c3)',EUR:'var(--c7)'};
@@ -2480,20 +2487,24 @@ function curMixHTML(t){
     for(let i=N;i>=0;i--){const tt=i?new Date(n.getFullYear(),n.getMonth()-i+1,1).getTime()-1:t,h=holdAt(tt,!i),d=new Date(tt);
       const parts=CURS.map(c=>[c,conv(h[c]||0,c,S.base),h[c]||0]),tb=parts.reduce((a,p)=>a+p[1],0);
       P.push({l:i?new Intl.DateTimeFormat('es-DO',{month:'short'}).format(d).replace('.',''):'hoy',cap:i?monthFmt.format(d):'Hoy',parts,tb})}
+    const pk=Math.max(0,...P.map(p=>p.tb)),f0=P.findIndex(p=>p.tb>=pk*.05&&p.tb>0),cut0=f0>0;if(f0>0)P.splice(0,f0);
+    if(P.length<2)return `<section class="panel"><div class="panel-h"><b>Tu dinero por moneda</b><span class="panel-s">ahorros e inversiones</span></div>${chips}<div class="dempty" style="margin-top:12px"><b>Tu evolución aparecerá aquí</b><span>Cuando tus ahorros tengan al menos un mes de historia verás cómo cambian entre pesos y dólares.</span></div></section>`;
     const mx=Math.max(1,...P.map(p=>p.tb)),every=Math.ceil(P.length/7);
     const txt=p=>p.parts.filter(x=>x[1]>0).map(([c,b,v])=>`${fmt(v,c,0)} (${Math.round(b/p.tb*100)} %)`).join(' · ')||'Sin datos';
     const f=P[0],l=P[P.length-1],share=(p,c)=>p.tb?Math.round((p.parts.find(x=>x[0]===c)[1])/p.tb*100):0,ch=l.tb-f.tb;
-    body=`<div class="colw" id="mixW"><div class="cols">${P.map((p,i)=>`<button type="button" class="col stk" data-cap="${esc(p.cap)}" data-txt="${esc(txt(p))}" data-tot="${esc(fmt(p.tb,S.base,0))}" aria-label="${esc(p.cap)}: ${esc(txt(p))}" aria-pressed="${i===P.length-1}"><span class="stk-in" style="height:${(p.tb/mx*100).toFixed(1)}%">${p.parts.filter(x=>x[1]>0).map(([c,b])=>`<i style="flex:${b.toFixed(2)};background:${CUR_C[c]}"></i>`).join('')}</span></button>`).join('')}</div>
+    const tipH=p=>`<span class="dt-c">${esc(p.cap)}</span><span>Total ${esc(fmt(p.tb,S.base,0))}</span>`+p.parts.filter(x=>x[1]>0).map(([c,b,v])=>`<span><i style="background:${CUR_C[c]}"></i>${esc(fmt(v,c,0))} · ${Math.round(b/p.tb*100)} %</span>`).join('');
+    body=`<div class="colw tipc" id="mixW"><div class="cols">${P.map((p,i)=>`<button type="button" class="col stk" data-tip="${esc(tipH(p))}" aria-label="${esc(p.cap)}: ${esc(txt(p))}" aria-pressed="false"><span class="stk-in" style="height:${(p.tb/mx*100).toFixed(1)}%">${p.parts.filter(x=>x[1]>0).map(([c,b])=>`<i style="flex:${b.toFixed(2)};background:${CUR_C[c]}"></i>`).join('')}</span></button>`).join('')}</div>
       <div class="col-l" aria-hidden="true">${P.map((p,i)=>`<span>${i%every===0||i===P.length-1?esc(p.l):''}</span>`).join('')}</div>
-      <div class="mix-cap num" aria-live="polite"><span class="mc-a"><b class="mc-c">Hoy</b> · <span class="mc-t">${esc(fmt(l.tb,S.base,0))}</span></span><span class="mc-b">${esc(txt(l))}</span></div></div>
-      <p class="mix-note">${f.tb?`Desde ${esc(monthFmt.format(new Date(n.getFullYear(),n.getMonth()-N,1)))}: ${ch>=0?'sumaste':'bajaste'} <b>${esc(fmt(Math.abs(ch),S.base,0))}</b>. En dólares pasaste de <b>${share(f,'USD')} %</b> a <b>${share(l,'USD')} %</b> del total.`:'Aún no hay historia suficiente para comparar.'}</p>
+      <div class="dtip num" id="mTip" role="status" aria-live="polite" hidden></div></div>
+      ${cut0?'<p class="hint dnote">Se muestra desde que tus ahorros empezaron a crecer.</p>':''}
+      <p class="mix-note">${f.tb?`Desde ${esc(f.cap)}: ${ch>=0?'sumaste':'bajaste'} <b>${esc(fmt(Math.abs(ch),S.base,0))}</b>. En dólares pasaste de <b>${share(f,'USD')} %</b> a <b>${share(l,'USD')} %</b> del total.`:'Aún no hay historia suficiente para comparar.'}</p>
       <div class="leg">${L.map(([c])=>`<span><span class="sw" style="background:${CUR_C[c]}"></span>${CUR_N[c]}</span>`).join('')}<span class="leg-h">Dólares a la tasa de hoy</span></div>`;
   }
   return `<section class="panel"><div class="panel-h"><b>Tu dinero por moneda</b><span class="panel-s">ahorros e inversiones</span></div>${chips}<div style="margin-top:12px">${body}</div></section>`;
 }
 function bindMix(){
   document.querySelectorAll('[data-mix]').forEach(b=>b.onclick=()=>{mixP=b.dataset.mix;try{localStorage.setItem(KEY+'.mix',mixP)}catch(e){}render()});
-  const w=$('#mixW');if(w)w.querySelectorAll('.col').forEach(b=>b.onclick=()=>{w.querySelectorAll('.col').forEach(x=>x.setAttribute('aria-pressed',x===b));w.querySelector('.mc-c').textContent=b.dataset.cap;w.querySelector('.mc-t').textContent=b.dataset.tot;w.querySelector('.mc-b').textContent=b.dataset.txt});
+  tipChart($('#mixW'),$('#mTip'),b=>b.dataset.tip);
 }
 
 /* ---- Lista única de gastos e ingresos con filtros ---- */
