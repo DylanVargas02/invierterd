@@ -913,6 +913,24 @@ details.acc[open] .chev.rot{transform:rotate(-90deg)}
 .grp-owe b{display:inline!important;font-family:var(--f-body)!important;font-size:13.5px!important;color:var(--spend);letter-spacing:0!important}
 .owe-s{font-size:11.5px!important;color:var(--spend)!important;font-weight:700}
 .it-k{display:none}
+.last2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lcol{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;min-width:0;display:flex;flex-direction:column}
+.lcol.exp{border-top:3px solid var(--spend)}
+.lcol.inc{border-top:3px solid var(--grow)}
+.lcol-h{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 12px;font:inherit;font-size:13.5px;font-weight:800;color:var(--ink)}
+.lcol-h>span{display:flex;align-items:center;gap:7px}
+.lrow{display:flex;flex-direction:column;gap:1px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:9px 12px;font:inherit;color:inherit;min-width:0}
+.lrow:last-child{border-bottom:0}
+.lrow:active{background:var(--surface-2)}
+.lrow b{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow span{font-size:11px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow strong{font-size:14px;font-weight:800;margin-top:2px}
+.lcol.exp .lrow strong{color:var(--spend)}
+.lcol.inc .lrow strong{color:var(--grow)}
+.lcol.inc{text-align:right}
+.lcol.inc .lrow{align-items:flex-end;text-align:right}
+.lrow b,.lrow span{max-width:100%}
+.lempty{margin:0;padding:14px 12px;font-size:12.5px;color:var(--ink-2)}
 .field label.via,.field label.cp{display:block;font-size:inherit;font-weight:inherit;color:var(--ink)}
 .via-t b{color:var(--ink)}
 .grp-ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--gc) 15%,transparent);color:var(--gc)}
@@ -2317,7 +2335,7 @@ function holdGroup(g){
       <span class="grp-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${g.icon}</svg></span>
       <span class="grp-t"><b>${g.title}</b><span>${E.length} ${E.length===1?'entidad':'entidades'} · ${n} ${n===1?g.unit[0]:g.unit[1]}</span></span>
       <span class="chev rot" aria-hidden="true">›</span>
-      <span class="grp-v num${g.card?' card':''}">${g.card?'<span class="grp-k">Disponible para gastar</span>':''}<b>${esc(fmt(tot,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?`<span class="cpills">${byCurHTML(g.items.map(it=>[it.val,it.cur]))}</span>`:''}${g.card?`<span class="grp-owe">Debes <b>${esc(fmt(oweT,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?' · '+g.items.filter(it=>it.owe>0).map(it=>esc(fmt(it.owe,it.cur,0))).join(' + '):''}</span>`:''}</span></summary>
+      <span class="grp-v num${g.card?' card':''}">${g.card?'<span class="grp-k">Disponible</span>':''}<b>${esc(fmt(tot,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?`<span class="cpills">${byCurHTML(g.items.map(it=>[it.val,it.cur]))}</span>`:''}${g.card?`<span class="grp-owe">Debes <b>${esc(fmt(oweT,S.base,0))}</b>${new Set(g.items.map(it=>it.cur)).size>1?' · '+g.items.filter(it=>it.owe>0).map(it=>esc(fmt(it.owe,it.cur,0))).join(' + '):''}</span>`:''}</span></summary>
     <div class="grp-in">
       ${n?E.map(x=>`<details class="ent" data-g="${g.key}:${esc(x.e)}" ${openG[g.key+':'+x.e]?'open':''}><summary class="ent-h">${inst(x.e,1)}
           <span class="ent-t"><b>${esc(x.e)}</b><span>${x.L.length} ${x.L.length===1?g.unit[0]:g.unit[1]} · ${tot?Math.round(x.b/tot*100):0} %</span></span>
@@ -2346,7 +2364,7 @@ function vResumen(){
   const years=[...new Set([n.getFullYear(),n.getFullYear()-1,resYM.y,...[...S.incomes,...S.expenses].map(x=>new Date(x.date).getFullYear())])].filter(y=>y<=n.getFullYear()).sort((a,b)=>b-a);
   const A=accts(),avail=A.reduce((a,s)=>a+conv(savValue(s,t),s.cur,S.base),0),inv=S.savings.filter(s=>!isAcct(s));
   const B=dualBuckets(resFreq,resN[resFreq]),bi=B.reduce((a,b)=>a+b.vi,0),be=B.reduce((a,b)=>a+b.ve,0);
-  const lastE=[...S.expenses].sort((a,b)=>b.date-a.date).slice(0,5),total=OSTEPS.length-2;
+  const lastE=[...S.expenses].sort((a,b)=>b.date-a.date).slice(0,5),lastI=[...S.incomes].sort((a,b)=>b.date-a.date).slice(0,5),total=OSTEPS.length-2;
   const groups=[
     {key:'acc',title:'Cuentas y débito',color:'var(--inv)',icon:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/>',unit:['cuenta','cuentas'],add:['addAcc','Agregar cuenta'],empty:'Agrega tus cuentas de ahorro, corrientes o efectivo.',
       items:A.map(s=>({id:s.id,entity:s.entity,name:s.name,cur:s.cur,val:savValue(s,t),live:1,attr:'data-edit-s',sub:esc(s.type)+(s.rate?' · '+s.rate.toFixed(2)+' %':'')}))},
@@ -2396,8 +2414,13 @@ function vResumen(){
     ${curMixHTML(t)}
     <h2 class="sec">¿Dónde está tu dinero?</h2>
     <div class="grps">${groups.map(holdGroup).join('')}</div>
-    <h2 class="sec">Últimos gastos ${lastE.length?'<button type="button" class="sec-add" data-go="gastos:mov">Ver todos</button>':''}</h2>
-    ${lastE.length?`<div class="tx-group">${lastE.map(x=>`<button class="tx rowbtn" data-edit-e="${x.id}">${catIc(x.cat)}<div class="tx-main"><b>${esc(x.desc)}</b><span>${esc(dateFmt.format(new Date(x.date)))} · ${esc(viaName(x.via))}</span></div><div class="tx-amt num">−${esc(fmt(x.amt,x.cur))}</div>${chev}</button>`).join('')}</div>`:`<div class="empty sm">Todavía no registras gastos.</div>`}
+    <h2 class="sec">Últimos gastos e ingresos</h2>
+    <div class="last2">
+      <section class="lcol exp" aria-label="Últimos gastos"><button type="button" class="lcol-h" data-go="gastos:mov"><span><span class="sw" style="background:var(--spend)"></span>Gastos</span>${chev}</button>
+        ${lastE.length?lastE.map(x=>`<button type="button" class="lrow" data-edit-e="${x.id}"><b>${esc(x.desc)}</b><span>${esc(dateFmt.format(new Date(x.date)))} · ${esc(viaName(x.via))}</span><strong class="num">−${esc(fmt(x.amt,x.cur,0))}</strong></button>`).join(''):'<p class="lempty">Sin gastos todavía.</p>'}</section>
+      <section class="lcol inc" aria-label="Últimos ingresos"><button type="button" class="lcol-h" data-go="ingresos"><span><span class="sw" style="background:var(--grow)"></span>Ingresos</span>${chev}</button>
+        ${lastI.length?lastI.map(x=>`<button type="button" class="lrow" data-edit-i="${x.id}"><b>${esc(x.desc)}</b><span>${esc(dateFmt.format(new Date(x.date)))} · ${esc(viaName(x.via))}</span><strong class="num">+${esc(fmt(x.amt,x.cur,0))}</strong></button>`).join(''):'<p class="lempty">Sin ingresos todavía.</p>'}</section>
+    </div>
     <p class="hint center">Toca cualquier fila para ver, editar o eliminar.</p>`;
   const setYM=v=>{resYM=v;try{localStorage.setItem(KEY+'.ym',JSON.stringify(resYM))}catch(e){}render()};
   $('#rM').onchange=e=>setYM({y:resYM.y,m:+e.target.value});
