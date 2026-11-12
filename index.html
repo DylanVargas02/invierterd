@@ -1364,6 +1364,10 @@ em.o{background:var(--spend)}em.n{background:var(--grow)}
 .inst.logo img{display:block;width:100%;height:100%;object-fit:contain}
 .inst.logo.tile{padding:0}
 .inst.logo.sm{padding:4px;border-radius:10px}.inst.logo.sm.tile{padding:0}
+.int-ic{background:var(--grow-soft);color:var(--grow)}.int-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.intc{border-color:color-mix(in srgb,var(--grow) 35%,var(--line))}
+#intTot{color:var(--grow)}
+.int-note{margin:8px 0 10px}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2701,8 +2705,8 @@ function dualBuckets(unit,N){
   if(unit==='dia')for(let i=N-1;i>=0;i--){const s=new Date(n.getFullYear(),n.getMonth(),n.getDate()-i);B.push({s:+s,e:+new Date(s.getFullYear(),s.getMonth(),s.getDate()+1),lf:String(s.getDate()),cap:dayShort.format(s)})}
   else if(unit==='sem'){const m=new Date(n.getFullYear(),n.getMonth(),n.getDate()-((n.getDay()+6)%7));for(let i=N-1;i>=0;i--){const s=new Date(m.getFullYear(),m.getMonth(),m.getDate()-7*i);B.push({s:+s,e:+new Date(s.getFullYear(),s.getMonth(),s.getDate()+7),lf:s.getDate()+' '+mo.format(s).replace('.',''),cap:'Semana del '+dateFmt.format(s)})}}
   else for(let i=N-1;i>=0;i--){const s=new Date(n.getFullYear(),n.getMonth()-i,1);B.push({s:+s,e:+new Date(n.getFullYear(),n.getMonth()-i+1,1),lf:mo.format(s).replace('.','').slice(0,3)+(s.getMonth()===0?' '+String(s.getFullYear()).slice(2):''),cap:monthFmt.format(s)})}
-  B.forEach(b=>{b.vi=S.incomes.filter(x=>x.date>=b.s&&x.date<b.e).reduce(sumB,0);b.ve=S.expenses.filter(x=>x.date>=b.s&&x.date<b.e).reduce(sumB,0)});
-  const all=[...S.incomes,...S.expenses].map(x=>x.date);if(!all.length)return [];const first=Math.min(...all);
+  B.forEach(b=>{b.vi=S.incomes.filter(x=>x.date>=b.s&&x.date<b.e).reduce(sumB,0)+intIn(b.s,b.e);b.ve=S.expenses.filter(x=>x.date>=b.s&&x.date<b.e).reduce(sumB,0)});
+  const all=[...S.incomes,...S.expenses].map(x=>x.date).concat(S.savings.filter(s=>s.rate>0).map(s=>s.start));if(!all.length)return [];const first=Math.min(...all);
   const F=B.filter(b=>b.e>first),ev=Math.ceil(F.length/6);F.forEach((b,i)=>{b.l=(F.length-1-i)%ev===0?b.lf:''});return F;
 }
 function dualBlock(B,show=resShow){
@@ -2859,7 +2863,7 @@ function bindMov(){
 function vResumen(){
   const t=Date.now(),F=snapshot(t),net=netValue(F),neg=net<0,n=new Date();
   normYM();
-  const inc=S.incomes.filter(inYM).reduce(sumB,0),exp=S.expenses.filter(inYM).reduce(sumB,0),bal=inc-exp;
+  const inc=S.incomes.filter(inYM).reduce(sumB,0)+intYM(resYM.y,resYM.ms),exp=S.expenses.filter(inYM).reduce(sumB,0),bal=inc-exp;
   const years=[...new Set([n.getFullYear(),n.getFullYear()-1,resYM.y,...[...S.incomes,...S.expenses].map(x=>new Date(x.date).getFullYear())])].filter(y=>y<=n.getFullYear()).sort((a,b)=>b-a);
   const A=accts(),avail=A.reduce((a,s)=>a+conv(savValue(s,t),s.cur,S.base),0),inv=S.savings.filter(s=>!isAcct(s));
   const B=dualBuckets(resFreq,resN[resFreq]);
@@ -3145,6 +3149,11 @@ function openCalendar(y0,m0,sel0){
   bindCalGo();
 }
 
+/* ---------- Rendimientos: intereses ganados como ingreso ---------- */
+function intOf(s,a,b){const t2=Math.min(b,Date.now()),t1=Math.max(a,s.start);if(!(s.rate>0)||t2<=t1)return 0;return Math.max(0,savValue(s,t2)-savValue(s,t1))}
+const intIn=(a,b)=>S.savings.reduce((x,s)=>x+conv(intOf(s,a,b),s.cur,S.base),0);
+const intYM=(y,ms)=>ms.reduce((x,m)=>x+intIn(+new Date(y,m,1),+new Date(y,m+1,1)-1),0);
+let intR=null;
 /* ---------- Ingresos y Gastos: Día · Semana · Mes · Año · Período ---------- */
 const FLT_U=[['dia','Día'],['sem','Semana'],['mes','Mes'],['ano','Año'],['per','Período']];
 let flt={gastos:{u:'mes',off:0},ingresos:{u:'mes',off:0}},openCat={};
@@ -3168,17 +3177,20 @@ function bigDonut(parts,tot,label,sub){
   const R=50,C=2*Math.PI*R,gap=parts.length>1?1.6:0;let off=0;
   const arcs=parts.map(p=>{const L=p.v/tot*C,len=Math.max(.6,L-gap);const s=`<circle r="${R}" cx="70" cy="70" fill="none" stroke="${p.c}" stroke-width="18" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 70 70)"/>`;off+=L;return s}).join('');
   return `<div class="bdn"><svg viewBox="0 0 140 140" role="img" aria-label="${esc(label)}: ${parts.map(p=>esc(p.n)+' '+Math.round(p.v/tot*100)+' %').join(', ')}">${tot?arcs:`<circle r="${R}" cx="70" cy="70" fill="none" stroke="var(--surface-2)" stroke-width="18"/>`}</svg>
-    <div class="bdn-c"><b class="num">${esc(fmt(tot,S.base,0))}</b><span>${sub}</span></div></div>`;
+    <div class="bdn-c"><b class="num" id="bdnTot">${esc(fmt(tot,S.base,0))}</b><span>${sub}</span></div></div>`;
 }
 const incIc=k=>`<span class="tx-ic" style="background:color-mix(in srgb,${INC_C[k]||'var(--c-gray)'} 16%,transparent);color:${INC_C[k]||'var(--c-gray)'}">${esc((INC[k]||'Ot').slice(0,2))}</span>`;
 function flowView(kind){
   const inc=kind==='ingresos',f=flt[kind],R=fltRange(f),src=inc?S.incomes:S.expenses;
-  const L=src.filter(x=>inR(x,R)).sort((a,b)=>b.date-a.date),tot=L.reduce(sumB,0);
+  const L=src.filter(x=>inR(x,R)).sort((a,b)=>b.date-a.date);let tot=L.reduce(sumB,0);
   const key=x=>inc?(x.src||'otros'):(CATS[x.cat]?x.cat:'otros');
   const G={};L.forEach(x=>{const k=key(x);(G[k]=G[k]||{k,L:[],v:0}).L.push(x);G[k].v+=conv(x.amt,x.cur,S.base)});
-  const parts=Object.values(G).sort((a,b)=>b.v-a.v).map(g=>({...g,n:inc?(INC[g.k]||'Otros'):CATS[g.k].n,c:inc?(INC_C[g.k]||'var(--c-gray)'):CATS[g.k].c}));
+  let parts=Object.values(G).map(g=>({...g,n:inc?(INC[g.k]||'Otros'):CATS[g.k].n,c:inc?(INC_C[g.k]||'var(--c-gray)'):CATS[g.k].c}));
+  let IT=[];if(inc){intR=R;IT=S.savings.map(s=>({s,v:intOf(s,R[0],R[1])})).filter(x=>x.v>0).sort((a,b)=>conv(b.v,b.s.cur,S.base)-conv(a.v,a.s.cur,S.base));
+    const iv=IT.reduce((a,x)=>a+conv(x.v,x.s.cur,S.base),0);if(iv>0){parts.push({k:'interes',n:'Intereses ganados',c:'var(--grow)',L:[],v:iv,int:true});tot+=iv}}
+  parts.sort((a,b)=>b.v-a.v);
   const days=Math.max(1,Math.round((Math.min(R[1],Date.now())-R[0])/DAY));
-  const sub=L.length?`${L.length} ${inc?(L.length===1?'ingreso':'ingresos'):(L.length===1?'gasto':'gastos')}`:(inc?'Sin ingresos':'Sin gastos');
+  const sub=L.length?`${L.length} ${inc?(L.length===1?'ingreso':'ingresos'):(L.length===1?'gasto':'gastos')}${inc&&IT.length?' + intereses':''}`:(inc&&IT.length?'Intereses ganados':(inc?'Sin ingresos':'Sin gastos'));
   const nav=f.u==='per'?`<div class="per-dates light flt-dates"><label>Desde<input type="date" data-pf="from" value="${esc(perC.from)}"></label><label>Hasta<input type="date" data-pf="to" value="${esc(perC.to)}"></label></div>`
     :`<div class="flt-nav"><button type="button" class="flt-arr" data-fo="1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><b>${esc(fltLabel(f,R))}</b><button type="button" class="flt-arr" data-fo="-1" aria-label="Siguiente" ${f.off<=0?'disabled':''}><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>`;
   const row=x=>`<button type="button" class="cat-it" data-edit-${inc?'i':'e'}="${x.id}"><span class="cat-it-t"><b>${esc(x.desc)}</b><small>${esc(dayShort.format(new Date(x.date)))} · ${esc(viaName(x.via))}</small></span><span class="cat-it-v num">${inc?'+':'−'}${esc(fmt(x.amt,x.cur,2))}${x.cur!==S.base?`<small>≈ ${esc(fmt(conv(x.amt,x.cur,S.base),S.base,0))}</small>`:''}</span></button>`;
@@ -3191,7 +3203,10 @@ function flowView(kind){
       <button type="button" class="flt-add ${inc?'inc':'exp'}" id="heroAdd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>${inc?'Agregar ingreso':'Agregar gasto'}</button>
     </section>
     ${parts.length?`<h2 class="sec">Desglose <span class="sec-note">Toca para ver ${inc?'los ingresos':'los gastos'}</span></h2>
-    <div class="cats2">${parts.map(p=>`<details class="cat2" data-oc="${kind}:${p.k}" ${openCat[kind+':'+p.k]?'open':''}><summary>${inc?incIc(p.k):catIc(p.k)}<span class="cat2-n"><b>${esc(p.n)}</b><small>${p.L.length} ${p.L.length===1?'movimiento':'movimientos'}</small></span><span class="cat2-p num">${tot?Math.round(p.v/tot*100):0} %</span><b class="cat2-v num">${esc(fmt(p.v,S.base,0))}</b><span class="chev rot" aria-hidden="true">›</span></summary>
+    <div class="cats2">${parts.map(p=>p.int?`<details class="cat2 intc" data-oc="${kind}:interes" ${openCat[kind+':interes']?'open':''}><summary><span class="tx-ic int-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span class="cat2-n"><b>Intereses ganados</b><small>${IT.length} ${IT.length===1?'inversión':'inversiones'} · en vivo</small></span><span class="cat2-p num">${tot?Math.round(p.v/tot*100):0} %</span><b class="cat2-v num" id="intTot">${esc(fmt(p.v,S.base,2))}</b><span class="chev rot" aria-hidden="true">›</span></summary>
+      <div class="cat2-in">${IT.map(({s,v})=>`<button type="button" class="cat-it" data-edit-s="${s.id}"><span class="cat-it-t"><b>${esc(s.name)}</b><small>${esc(s.entity)} · ${s.rate?esc(rateTxt(s)):''}</small></span><span class="cat-it-v num">+<span data-int="${s.id}">${esc(fmt(v,s.cur,4))}</span>${s.cur!==S.base?`<small>≈ ${esc(fmt(conv(v,s.cur,S.base),S.base,0))}</small>`:''}</span></button>`).join('')}
+      <p class="hint int-note">Lo que generan tus ahorros e inversiones en este período, ya con ISR si aplica. Se suma solo; no tienes que registrarlo.</p></div></details>`
+    :`<details class="cat2" data-oc="${kind}:${p.k}" ${openCat[kind+':'+p.k]?'open':''}><summary>${inc?incIc(p.k):catIc(p.k)}<span class="cat2-n"><b>${esc(p.n)}</b><small>${p.L.length} ${p.L.length===1?'movimiento':'movimientos'}</small></span><span class="cat2-p num">${tot?Math.round(p.v/tot*100):0} %</span><b class="cat2-v num">${esc(fmt(p.v,S.base,0))}</b><span class="chev rot" aria-hidden="true">›</span></summary>
       <div class="cat2-in">${p.L.map(row).join('')}</div></details>`).join('')}</div>`
     :`<p class="hint center" style="margin:18px 0">${inc?'No registraste ingresos':'No registraste gastos'} en este período.</p>`}
     <section class="panel">
@@ -3657,6 +3672,8 @@ let lastLen=0;
 function tickLive(){
   const t=Date.now();
   if(view==='resumen'){const F=snapshot(t),nb=$('#netBig');if(nb){nb.innerHTML=split(netValue(F),S.base,2);if(nb.textContent.length!==lastLen){lastLen=nb.textContent.length;fitBig()}$('#netA').textContent=fmt(F.assets,S.base,0);const nd=$('#netD');if(nd)nd.textContent=fmt(accts().reduce((a,s)=>a+conv(savValue(s,t),s.cur,S.base),0),S.base,0);S.savings.forEach(s=>{const a=document.querySelector(`[data-sv="${s.id}"]`);if(a)a.textContent=fmt(savValue(s,t),s.cur,2)})}return}
+  if(view==='ingresos'&&intR){const it=$('#intTot');if(it){let sum=0;S.savings.forEach(s=>{const v=intOf(s,intR[0],intR[1]);sum+=conv(v,s.cur,S.base);const e=document.querySelector(`[data-int="${s.id}"]`);if(e)e.textContent=fmt(v,s.cur,4)});
+    it.textContent=fmt(sum,S.base,2);const bt=$('#bdnTot');if(bt){if(bt.dataset.b===undefined)bt.dataset.b=String(S.incomes.filter(x=>inR(x,intR)).reduce(sumB,0));bt.textContent=fmt(+bt.dataset.b+sum,S.base,0)}}return}
   if(view!=='ahorros')return;
   const T=totals(t), lt=$('#liveTotal'); if(!lt)return;
   lt.innerHTML=split(T.v,S.base,4);
