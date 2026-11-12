@@ -1331,6 +1331,35 @@ details.acc[open] .chev.rot{transform:rotate(-90deg)}
 .mvr.mid{align-self:center;align-items:center;text-align:center;background:var(--surface-2);border-radius:14px}
 .mvr.mid strong{color:var(--ink);font-weight:700}
 .o-amtline .echo{display:none}
+/* ===== Calendario de pagos ===== */
+.cal-sum{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-2);margin:2px 0 10px}
+.cal-sum b{color:var(--ink);font-weight:700}
+.cal-sum em,.cal-day em{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+em.o{background:var(--spend)}em.n{background:var(--grow)}
+.cal-list{display:flex;flex-direction:column}
+.cal-r{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;color:var(--ink);text-align:left;padding:10px 0;min-height:56px}
+.cal-r+.cal-r{border-top:1px solid var(--line)}
+.cal-r.done{opacity:.55}
+.cal-d{width:40px;flex-shrink:0;text-align:center;line-height:1.05}
+.cal-d b{display:block;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.cal-d small{font-size:11.5px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.03em}
+.cal-ic{width:34px;height:34px;border-radius:10px;background:var(--surface-2);color:var(--ink-2);display:grid;place-items:center;flex-shrink:0}
+.cal-ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.cal-t{flex:1;min-width:0}
+.cal-t b{display:block;font-size:14.5px;font-weight:600;overflow-wrap:anywhere}
+.cal-t small{display:block;font-size:12.5px;color:var(--ink-2)}
+.cal-v{font-size:14.5px;font-weight:700;white-space:nowrap;text-align:right}
+.cal-r.out .cal-v{color:var(--spend)}.cal-r.in .cal-v{color:var(--grow)}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-wd{text-align:center;font-size:12px;font-weight:600;color:var(--ink-2);padding:4px 0}
+.cal-day{border:0;background:none;border-radius:12px;min-height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink);font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
+.cal-day i{display:flex;gap:3px;height:6px}
+.cal-day em{width:6px;height:6px;margin:0}
+.cal-day.today span{font-weight:800;color:var(--brand)}
+.cal-day[aria-pressed="true"]{background:var(--brand);color:var(--surface)}
+.cal-day[aria-pressed="true"] span{color:var(--surface)}
+.cal-day[aria-pressed="true"] em{box-shadow:0 0 0 1.5px var(--surface)}
+.cal-dh{margin:14px 0 2px;font-weight:700;font-size:15px}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2863,6 +2892,7 @@ function vResumen(){
         <div class="leg-t" role="group" aria-label="Mostrar"><button type="button" data-sh="i" aria-pressed="${resShow.i}"><span class="sw" style="background:var(--grow)"></span>Ingresos</button><button type="button" data-sh="e" aria-pressed="${resShow.e}"><span class="sw" style="background:var(--spend)"></span>Gastos</button></div></div>
       ${B.length?dualBlock(B)+(B.length<resN[resFreq]?`<p class="hint dnote">Se muestra desde tu primer registro.</p>`:''):`<div class="dempty"><b>Aquí verás cómo se mueve tu dinero</b><span>Registra tus primeros ingresos y gastos y el gráfico aparecerá solo.</span></div>`}
     </section>
+    ${nextPaysHTML()}
     ${curMixHTML(t)}
     <h2 class="sec">¿Dónde está tu dinero?</h2>
     <div class="grps">${groups.map(holdGroup).join('')}</div>
@@ -2879,7 +2909,7 @@ function vResumen(){
   const go=$('#goOnb');if(go)go.onclick=()=>openOnboarding(false);
   $('#qaInc').onclick=()=>openExpense('ingreso');$('#qaExp').onclick=()=>openExpense('gasto');$('#qaMore').onclick=openAddMenu;
   $('#addAcc').onclick=()=>openSaving({type:'Cuenta de ahorro'});$('#addCard').onclick=()=>openCard();$('#addInv').onclick=()=>openSaving({type:'Certificado'});
-  bindGo();bindDual();bindMix();bindMov();bindEdit();bindPay();
+  bindGo();bindDual();bindMix();bindMov();bindEdit();bindPay();bindNextPays();
 }
 
 function openAddMenu(){
@@ -3039,6 +3069,65 @@ function openTransfer(id,pre={}){
       save();close();render();toast(kind==='cash'?'Retiro guardado':'Transferencia guardada')};
     if(!ed)setTimeout(()=>{const a=$('#trAmt');if(a&&!a.value)a.focus()},60);
   };draw();
+}
+
+
+/* ---------- Calendario de pagos y cobros ---------- */
+const INT_F={'Certificado':1,'Bono':6,'Sell Buy Back (SBB)':0,'Mutuo':0,'Otro':0};
+const intF=s=>s.intFreq!==undefined?s.intFreq:(INT_F[s.type]!==undefined?INT_F[s.type]:null);
+const dim=(y,m)=>new Date(y,m+1,0).getDate();
+function addM(t0,k){const d=new Date(t0),x=new Date(d.getFullYear(),d.getMonth()+k,1,12);x.setDate(Math.min(d.getDate(),dim(x.getFullYear(),x.getMonth())));return x}
+function calEvents(a,b){
+  const E=[],push=(d,o)=>{const t=+d;if(t>=a&&t<=b)E.push({t,...o})};
+  const months=[];for(let d=new Date(new Date(a).getFullYear(),new Date(a).getMonth(),1);+d<=b;d=new Date(d.getFullYear(),d.getMonth()+1,1))months.push([d.getFullYear(),d.getMonth()]);
+  S.cards.forEach(c=>{if(c.balance>0){const d=dueDate(c);d.setHours(12);push(d,{k:'out',ic:'card',title:'Pago de '+c.name,sub:'Total a pagar · mínimo '+fmt(minPay(c),c.cur,0),amt:c.balance,cur:c.cur,go:'card:'+c.id})}});
+  S.loans.forEach(l=>{const c=cuota(l.principal,l.rate,l.months);for(let k=Math.max(1,paid(l));k<=l.months;k++){const d=addM(l.start,k);if(+d>b)break;
+    push(d,{k:'out',ic:'loan',title:'Cuota de '+l.name,sub:'Cuota '+k+' de '+l.months+' · '+l.entity,amt:c,cur:l.cur,go:'loan:'+l.id})}});
+  S.recurring.forEach(r=>months.forEach(([y,m])=>{const d=new Date(y,m,Math.min(r.day,dim(y,m)),12),done=r.lastPaid===y+'-'+(m+1);
+    push(d,{k:'out',ic:'fix',title:r.name,sub:done?'Ya pagado':'Pago fijo',amt:r.amt,cur:r.cur,done,go:'fix:'+r.id})}));
+  (S.paydays||[]).forEach(p=>months.forEach(([y,m])=>p.days.forEach(dd=>{const d=new Date(y,m,Math.min(dd,dim(y,m)),12),st=p.done[isoLocal(d)];if(+d<(p.start||0)-DAY)return;
+    push(d,{k:'in',ic:'pay',title:p.name,sub:st==='y'?'Ya cobrado':st==='n'?'No se cobró':'A '+viaName(p.via),amt:p.amt,cur:p.cur,done:!!st,go:'pay:'+p.id})})));
+  S.savings.filter(s=>!isAcct(s)).forEach(s=>{const f=intF(s),end=s.open?null:(s.due||null),r=effRate(s);
+    if(f&&r){for(let k=1;k<600;k++){const d=addM(s.start,k*f);if(+d>b||(end&&+d>end+DAY/2))break;
+      push(d,{k:'in',ic:'int',title:'Intereses · '+s.name,sub:(s.vr?'Aproximado · ':'')+(f===1?'Cada mes':'Cada '+f+' meses'),amt:s.principal*r*f/12,cur:s.cur,approx:true,go:'sav:'+s.id})}}
+    if(!s.open){let m=nextMat(s,a-1);for(let i=0;m&&m<=b&&i<40;i++){
+      push(new Date(m),{k:'in',ic:'mat',title:'Vence '+s.name,sub:f?'Recibes tu capital':'Capital más intereses',amt:f?s.principal:savValue(s,m),cur:s.cur,go:'sav:'+s.id});m=nextMat(s,m+1)}}});
+  return E.sort((x,y)=>x.t-y.t||(x.k==='in'?-1:1));
+}
+const CAL_IC={card:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/>',loan:'<path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/>',fix:'<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16"/>',pay:'<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/>',int:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',mat:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'};
+const calRow=e=>`<button type="button" class="cal-r ${e.k}${e.done?' done':''}" data-cgo="${e.go}"><span class="cal-d"><b>${new Date(e.t).getDate()}</b><small>${MESES[new Date(e.t).getMonth()].slice(0,3)}</small></span><span class="cal-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${CAL_IC[e.ic]}</svg></span><span class="cal-t"><b>${esc(e.title)}</b><small>${esc(e.sub)}</small></span><span class="cal-v num">${e.k==='in'?'+':'−'}${e.approx?'≈ ':''}${esc(fmt(e.amt,e.cur,0))}</span></button>`;
+function bindCalGo(){document.querySelectorAll('[data-cgo]').forEach(b=>b.onclick=()=>{const [k,id]=b.dataset.cgo.split(':');
+  if(k==='card')openCardActions(id);else if(k==='sav')openSaving({id});else if(k==='pay')openPayday(id);else{close();goTo(k==='loan'?'prestamos':'gastos',k==='loan'?'prestamos':'fijos')}})}
+function nextPaysHTML(){
+  const n=new Date(),a=+new Date(n.getFullYear(),n.getMonth(),n.getDate()),E=calEvents(a,a+31*DAY-1).filter(e=>!e.done);
+  if(!E.length)return '';const out=E.filter(e=>e.k==='out').reduce((s,e)=>s+conv(e.amt,e.cur,S.base),0),inn=E.filter(e=>e.k==='in').reduce((s,e)=>s+conv(e.amt,e.cur,S.base),0);
+  return `<section class="panel calp"><div class="panel-h"><b>Próximos 30 días</b><button type="button" class="ym-pill" id="calOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Calendario</span></button></div>
+    <div class="cal-sum num"><span>Pagas <b>−${esc(fmt(out,S.base,0))}</b></span><span>Recibes <b>+${esc(fmt(inn,S.base,0))}</b></span></div>
+    <div class="cal-list">${E.slice(0,5).map(calRow).join('')}</div>
+    ${E.length>5?`<button type="button" class="grp-add" id="calMore" style="--gc:var(--brand)">Ver los ${E.length} en el calendario</button>`:''}</section>`;
+}
+function bindNextPays(){const o=$('#calOpen');if(!o)return;o.onclick=()=>openCalendar();const m=$('#calMore');if(m)m.onclick=()=>openCalendar();bindCalGo()}
+function openCalendar(y0,m0,sel0){
+  const n=new Date();let y=y0!==undefined?y0:n.getFullYear(),m=m0!==undefined?m0:n.getMonth(),sel=sel0||(y===n.getFullYear()&&m===n.getMonth()?n.getDate():1);
+  const a=+new Date(y,m,1),b=+new Date(y,m+1,1)-1,E=calEvents(a,b),by={};E.forEach(e=>{const d=new Date(e.t).getDate();(by[d]=by[d]||[]).push(e)});
+  const out=E.filter(e=>e.k==='out').reduce((s,e)=>s+conv(e.amt,e.cur,S.base),0),inn=E.filter(e=>e.k==='in').reduce((s,e)=>s+conv(e.amt,e.cur,S.base),0);
+  const lead=(new Date(y,m,1).getDay()+6)%7,isT=d=>y===n.getFullYear()&&m===n.getMonth()&&d===n.getDate();
+  const cells=[...Array(lead).fill('<span></span>'),...[...Array(dim(y,m)).keys()].map(i=>{const d=i+1,L=by[d]||[];
+    return `<button type="button" class="cal-day${isT(d)?' today':''}" data-cd="${d}" aria-pressed="${d===sel}" aria-label="${d} de ${MESES[m]}${L.length?': '+L.length+(L.length===1?' movimiento':' movimientos'):''}"><span>${d}</span><i aria-hidden="true">${L.some(e=>e.k==='out')?'<em class="o"></em>':''}${L.some(e=>e.k==='in')?'<em class="n"></em>':''}</i></button>`})];
+  const L=by[sel]||[],keepSc=y0!==undefined&&$('.sheet')?$('.sheet').scrollTop:0;
+  sheet(`<h3>Calendario de pagos</h3>
+    <div class="mp-y"><button type="button" class="ym-arr" id="clPrev" aria-label="Mes anterior">‹</button><b>${MESES[m][0].toUpperCase()+MESES[m].slice(1)} de ${y}</b><button type="button" class="ym-arr" id="clNext" aria-label="Mes siguiente">›</button></div>
+    <div class="cal-sum num"><span><em class="o"></em>Pagas <b>−${esc(fmt(out,S.base,0))}</b></span><span><em class="n"></em>Recibes <b>+${esc(fmt(inn,S.base,0))}</b></span></div>
+    <div class="cal-g" aria-hidden="true">${['L','M','M','J','V','S','D'].map(d=>`<span class="cal-wd">${d}</span>`).join('')}</div>
+    <div class="cal-g" role="group" aria-label="Días">${cells.join('')}</div>
+    <p class="cal-dh">${sel} de ${MESES[m]}</p>
+    <div class="cal-list">${L.length?L.map(calRow).join(''):'<p class="hint center" style="margin:10px 0">Nada para este día.</p>'}</div>
+    <p class="hint">Intereses aproximados según la tasa, con ISR si aplica. Las tarjetas muestran solo su próximo pago.</p>`,'var(--brand)');
+  if(keepSc)$('.sheet').scrollTop=keepSc;
+  $('#clPrev').onclick=()=>{const d=new Date(y,m-1,1);openCalendar(d.getFullYear(),d.getMonth(),1)};
+  $('#clNext').onclick=()=>{const d=new Date(y,m+1,1);openCalendar(d.getFullYear(),d.getMonth(),1)};
+  document.querySelectorAll('[data-cd]').forEach(c=>c.onclick=()=>openCalendar(y,m,+c.dataset.cd));
+  bindCalGo();
 }
 
 /* ---------- Ingresos y Gastos: Día · Semana · Mes · Año · Período ---------- */
@@ -3385,7 +3474,7 @@ function openExpense(kind='gasto',keep={},editId){
 
 function openSaving(pre={}){
   const ed=pre.id?S.savings.find(x=>x.id===pre.id):null;
-  if(ed)pre={last4:ed.last4,entity:ed.entity,name:ed.name,type:ed.type,cur:ed.cur,principal:+ed.principal.toFixed(2),rate:ed.rate,months:ed.months,mode:ed.open?'sin':ed.due?'fecha':'meses',dueISO:ed.due?isoLocal(new Date(ed.due)):'',startISO:isoLocal(new Date(ed.start)),isr:ed.isr,liquid:isLiquid(ed),vr:!!ed.vr};
+  if(ed)pre={last4:ed.last4,entity:ed.entity,name:ed.name,type:ed.type,cur:ed.cur,principal:+ed.principal.toFixed(2),rate:ed.rate,months:ed.months,mode:ed.open?'sin':ed.due?'fecha':'meses',dueISO:ed.due?isoLocal(new Date(ed.due)):'',startISO:isoLocal(new Date(ed.start)),isr:ed.isr,liquid:isLiquid(ed),vr:!!ed.vr,intFreq:ed.intFreq};
   const type=SAV_T.includes(pre.type)?pre.type:'Certificado', mode0=pre.mode||(ACCT_TYPES.includes(type)||type==='Fondo de inversión'?'sin':'fecha');
   sheet(`<h3>${ed?'Editar '+esc(ed.type==='Sell Buy Back (SBB)'?'SBB':ed.type.toLowerCase()):pre.entity===AD?'Simular ahorro':'Nuevo ahorro o inversión'}</h3><form class="form" id="f">
   <div class="two"><div class="field"><label for="sType">Tipo</label><select id="sType">${SAV_T.map(t=>`<option ${t===type?'selected':''}>${t}</option>`).join('')}</select></div><div class="field"><label for="sEnt">Entidad</label>${entPick('sEnt',pre.entity===AD?'':pre.entity)}</div></div>
@@ -3395,6 +3484,7 @@ function openSaving(pre={}){
   <fieldset class="field"><legend>Vencimiento</legend><div class="choice">${pill('sMode','fecha','Fecha',mode0==='fecha')}${pill('sMode','meses','En meses',mode0==='meses')}${pill('sMode','sin','No vence',mode0==='sin')}</div></fieldset>
   <div class="field" id="sDateF"><label for="sDue">Fecha de vencimiento</label><input type="date" id="sDue" value="${pre.dueISO!==undefined?pre.dueISO:pre.months?addMonthsISO(pre.months):''}"><small class="hint">Toca para elegir en el calendario o escribe día, mes y año.</small></div>
   <div class="field" id="sMonF"><label for="sMon">Plazo en meses</label><input id="sMon" inputmode="numeric" value="${pre.months||6}"></div>
+  <div class="field" id="sIntF"><label for="sInt">¿Cuándo te pagan los intereses?</label><select id="sInt">${[[1,'Cada mes'],[3,'Cada 3 meses'],[6,'Cada 6 meses'],[0,'Al vencimiento, junto al capital']].map(([v,l])=>`<option value="${v}" ${(pre.intFreq!==undefined?pre.intFreq:intF({type}))===v?'selected':''}>${l}</option>`).join('')}</select><small class="hint">Así aparecen en tu calendario de pagos.</small></div>
   <p class="hint" id="sSinH">Para cuentas de ahorro, corrientes, efectivo y fondos abiertos: el dinero está disponible siempre y los intereses se suman cada mes.</p>
   <div class="field"><label for="sStart" id="sStartL">Fecha de inicio</label><input type="date" id="sStart" value="${pre.startISO||today()}"></div>
   <label class="check" id="sIsrF"><input type="checkbox" id="sIsr" ${pre.isr===false?'':'checked'}><span>Retener ISR 10 % sobre intereses</span></label>
@@ -3405,22 +3495,22 @@ function openSaving(pre={}){
   if(ed)$('#sDel').onclick=()=>confirmDel(ed.name,delDetail('savings',ed),()=>removeItem('savings',ed.id));
   const mode=()=>(document.querySelector('[name=sMode]:checked')||{}).value||'fecha';
   const sync=()=>{const ty=$('#sType').value,acc=ACCT_TYPES.includes(ty),cash=ty==='Efectivo',m=mode();$('#s4F').hidden=!acc||cash;
-    $('#sDateF').hidden=m!=='fecha';$('#sMonF').hidden=m!=='meses';$('#sSinH').hidden=m!=='sin';$('#sRateF').hidden=cash;$('#sIsrF').hidden=cash;
+    $('#sDateF').hidden=m!=='fecha';$('#sIntF').hidden=acc||m==='sin';$('#sMonF').hidden=m!=='meses';$('#sSinH').hidden=m!=='sin';$('#sRateF').hidden=cash;$('#sIsrF').hidden=cash;
     $('#sAmtL').textContent=acc?'Saldo actual':'Monto invertido';$('#sStartL').textContent=acc?'Desde cuándo':'Fecha de inicio'};
   const setMode=v=>{const r=document.querySelector(`[name=sMode][value="${v}"]`);if(r)r.checked=true};
   $('#sLiq').checked=pre.liquid!==undefined?pre.liquid:ACCT_TYPES.includes(type)||type==='Fondo de inversión';
   $('#sVr').onchange=()=>{$('#sRateL').textContent=$('#sVr').checked?'Rendimiento anual aproximado %':'Tasa anual %'};
-  $('#sType').onchange=()=>{const ty=$('#sType').value;if(!ed){$('#sVr').checked=['Fondo de inversión','Acciones'].includes(ty);$('#sVr').onchange()}if(ACCT_TYPES.includes(ty))setMode('sin');else if(mode()==='sin'&&ty!=='Fondo de inversión'&&ty!=='Acciones')setMode('fecha');$('#sLiq').checked=ACCT_TYPES.includes(ty)||ty==='Fondo de inversión';sync()};
+  $('#sType').onchange=()=>{const ty=$('#sType').value;if(!ed){const f0=intF({type:ty});if(f0!==null)$('#sInt').value=String(f0);$('#sVr').checked=['Fondo de inversión','Acciones'].includes(ty);$('#sVr').onchange()}if(ACCT_TYPES.includes(ty))setMode('sin');else if(mode()==='sin'&&ty!=='Fondo de inversión'&&ty!=='Acciones')setMode('fecha');$('#sLiq').checked=ACCT_TYPES.includes(ty)||ty==='Fondo de inversión';sync()};
   document.querySelectorAll('[name=sMode]').forEach(r=>r.onchange=sync);sync();
   $('#f').onsubmit=e=>{e.preventDefault();const ty=$('#sType').value,cash=ty==='Efectivo',P=money($('#sAmt').value),r=cash?0:rate($('#sRate').value||'0'),m=mode(),start=parseDate($('#sStart').value||today()),ent=readEnt('sEnt');
     if(!(P>0))return $('#err').textContent='Escribe el monto en números, por ejemplo 1500.';if(!(r>=0&&r<100))return $('#err').textContent='La tasa debe estar entre 0 y 100 %.';
     const l4=$('#s4').value.replace(/\D/g,'').slice(0,4);if(l4&&l4.length!==4&&!$('#s4F').hidden)return $('#err').textContent='Escribe los 4 últimos dígitos completos o deja el campo vacío.';
-    const x={id:uid(),entity:ent||'Sin entidad',type:ty,cur:$('#sCur').value,principal:P,rate:r,start,isr:!cash&&$('#sIsr').checked,liquid:$('#sLiq').checked,last4:ACCT_TYPES.includes(ty)&&ty!=='Efectivo'&&l4?l4:undefined,vr:!cash&&$('#sVr').checked||undefined};
+    const x={id:uid(),entity:ent||'Sin entidad',type:ty,cur:$('#sCur').value,principal:P,rate:r,start,isr:!cash&&$('#sIsr').checked,liquid:$('#sLiq').checked,last4:ACCT_TYPES.includes(ty)&&ty!=='Efectivo'&&l4?l4:undefined,vr:!cash&&$('#sVr').checked||undefined,intFreq:$('#sIntF').hidden?undefined:+$('#sInt').value};
     if(m==='fecha'){const dv=$('#sDue').value;if(!dv)return $('#err').textContent='Elige la fecha de vencimiento o marca «No vence».';const due=parseDate(dv);if(!(due>start+DAY/2))return $('#err').textContent='La fecha de vencimiento debe ser posterior a la de inicio.';x.due=due;x.months=Math.max(1,Math.round((due-start)/MONTH))}
     else if(m==='meses'){const mo=parseInt($('#sMon').value,10);if(!(mo>0))return $('#err').textContent='El plazo debe ser de al menos 1 mes.';x.months=mo}
     else{x.open=true;x.months=1}
     x.name=$('#sName').value.trim()||(ty==='Efectivo'?'Efectivo':(ty==='Sell Buy Back (SBB)'?'SBB':ty)+(ent?' · '+ent:''));
-    if(ed){x.id=ed.id;delete ed.due;delete ed.open;delete ed.vr;Object.assign(ed,x);save();close();render();toast('Cambios guardados');return}
+    if(ed){x.id=ed.id;delete ed.due;delete ed.open;delete ed.vr;delete ed.intFreq;Object.assign(ed,x);save();close();render();toast('Cambios guardados');return}
     S.savings.push(x);save();close();if(view!=='resumen'){view='ahorros';try{localStorage.setItem(KEY+'.view',view)}catch(err){}}render();window.scrollTo({top:0});toast('Guardado')};
 }
 
