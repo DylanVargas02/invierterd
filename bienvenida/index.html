@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es-DO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>InvierteRD · Tus finanzas en orden (beta)</title>
+<meta name="description" content="InvierteRD organiza tus cuentas, gastos, tarjetas, préstamos e inversiones en pesos y dólares. Gratis, en fase beta.">
+<meta name="theme-color" content="#F6F1E7">
+<meta property="og:title" content="InvierteRD · beta">
+<meta property="og:description" content="Tus cuentas, gastos, tarjetas, préstamos e inversiones en un solo lugar. Hecho en República Dominicana.">
+<meta property="og:image" content="https://dylanvargas02.github.io/invierterd/bienvenida/img/resumen.webp">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#F6F1E7;--surface:#FFFCF6;--surface-2:#EEE7D9;--ink:#1E1A14;--ink-2:#655C4E;--line:#E5DBCA;--brand:#0B4A9E;--brand-soft:#E2EBF8;--grow:#0E7A55;--beta:#B4530A;--beta-soft:#FBEBD9;--r:20px;--f-d:"Bricolage Grotesque",system-ui,sans-serif;--f:"Figtree",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#12100D;--surface:#1B1915;--surface-2:#26231E;--ink:#F3EEE5;--ink-2:#B3AA9B;--line:#33302A;--brand:#86AEFF;--brand-soft:#15233F;--grow:#4FD39B;--beta:#F3A35B;--beta-soft:#3A2614}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left))}
+/* barra superior */
+.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.sc{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-d);font-weight:800;font-size:20px;letter-spacing:-.02em}
+.brand img{width:34px;height:34px;border-radius:10px}
+.pill-beta{display:inline-flex;align-items:center;gap:6px;font-family:var(--f);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--beta);background:var(--beta-soft);border:1px solid color-mix(in srgb,var(--beta) 35%,transparent);padding:4px 10px;border-radius:99px}
+.pill-beta i{width:7px;height:7px;border-radius:50%;background:var(--beta);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.top nav{margin-left:auto;display:flex;gap:6px;align-items:center}
+.top nav a.l{text-decoration:none;color:var(--ink-2);font-weight:600;font-size:15px;padding:8px 10px;border-radius:10px}
+.top nav a.l:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;text-decoration:none;font-family:var(--f);font-weight:700;font-size:16px;border-radius:14px;padding:0 20px;min-height:52px;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.98)}
+.btn.p{background:var(--brand);color:#fff}
+.btn.p:hover{box-shadow:0 8px 24px -10px var(--brand)}
+@media (prefers-color-scheme:dark){.btn.p{color:#0B1830}}
+.btn.g{background:var(--surface-2);color:var(--ink)}
+.btn.sm{min-height:40px;font-size:14.5px;padding:0 14px;border-radius:12px}
+.btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+/* aviso beta */
+.beta-bar{background:var(--beta-soft);color:var(--ink);border-bottom:1px solid color-mix(in srgb,var(--beta) 25%,transparent);font-size:14.5px}
+.beta-bar .wrap{display:flex;gap:10px;align-items:center;padding-top:10px;padding-bottom:10px}
+.beta-bar b{color:var(--beta)}
+/* héroe */
+.hero{padding:56px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+h1{font-family:var(--f-d);font-weight:800;font-size:clamp(38px,6.2vw,64px);line-height:1.02;letter-spacing:-.035em;margin:16px 0 18px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--brand)}
+.lead{font-size:clamp(17px,2.2vw,20px);color:var(--ink-2);max-width:34ch;margin:0 0 28px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
+.small{font-size:14px;color:var(--ink-2);margin-top:14px}
+.small b{color:var(--ink)}
+.phone{position:relative;justify-self:center;width:min(300px,78vw);aspect-ratio:585/1306;border-radius:44px;padding:30px 10px 12px;background:#111;box-shadow:0 40px 80px -30px rgb(0 0 0 / .45),inset 0 0 0 2px #333}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:22px;display:block;background:var(--surface)}
+.phone::before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);width:70px;height:14px;border-radius:99px;background:#2a2a2a;z-index:2}
+.phone .tag{position:absolute;right:-14px;top:70px;z-index:3;transform:rotate(6deg)}
+/* secciones */
+section{padding:56px 0}
+h2{font-family:var(--f-d);font-weight:800;font-size:clamp(28px,4vw,40px);letter-spacing:-.03em;line-height:1.08;margin:0 0 12px;text-wrap:balance}
+.sub{color:var(--ink-2);max-width:56ch;margin:0 0 32px}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.feat .ic{width:44px;height:44px;border-radius:13px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin-bottom:14px}
+.feat .ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.feat h3{font-size:18px;margin:0 0 6px;font-weight:700}
+.feat p{margin:0;color:var(--ink-2);font-size:15.5px}
+/* galería */
+.shots{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 24px;margin:0 -20px;scrollbar-width:none}
+.shots::-webkit-scrollbar{display:none}
+.shot{flex:0 0 auto;scroll-snap-align:center;text-align:center}
+.shot .phone{width:236px;border-radius:36px;padding:24px 8px 10px;box-shadow:0 24px 48px -24px rgb(0 0 0 / .4),inset 0 0 0 2px #333}
+.shot .phone img{border-radius:18px}
+.shot .phone::before{top:8px;width:54px;height:11px}
+.shot p{margin:14px 0 0;font-weight:600;font-size:15px}
+/* instalar */
+.install{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.os{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.os.me{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.os h3{display:flex;align-items:center;gap:10px;margin:0 0 4px;font-size:20px}
+.os .you{font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-soft);padding:3px 8px;border-radius:99px}
+.os ol{margin:14px 0 0;padding:0;list-style:none;counter-reset:s}
+.os li{counter-increment:s;display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:16px}
+.os li:first-child{border-top:0}
+.os li::before{content:counter(s);flex:0 0 28px;height:28px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:14px}
+.os .k{display:inline;font-weight:700;background:var(--surface-2);padding:1px 7px;border-radius:7px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.os li>span{min-width:0}
+.qr{display:flex;gap:20px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-top:14px}
+.qr img{width:120px;height:120px;background:#fff;border-radius:12px;padding:8px;flex-shrink:0}
+.qr p{margin:0;color:var(--ink-2)}
+.qr b{color:var(--ink);display:block;font-size:18px;margin-bottom:4px}
+/* beta */
+.betabox{background:var(--surface);border:1.5px solid color-mix(in srgb,var(--beta) 45%,var(--line));border-radius:24px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.betabox ul{margin:0;padding:0;list-style:none}
+.betabox li{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.betabox li:first-child{border-top:0}
+.betabox li svg{width:22px;height:22px;flex-shrink:0;margin-top:2px;fill:none;stroke:var(--beta);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.betabox li b{display:block}
+.betabox li span{color:var(--ink-2);font-size:15.5px}
+/* preguntas */
+details.q{border-top:1px solid var(--line);padding:4px 0}
+details.q:last-of-type{border-bottom:1px solid var(--line)}
+details.q summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:16px 0;font-weight:700;font-size:17.5px}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::after{content:"+";font-size:24px;line-height:1;color:var(--ink-2);transition:transform .2s}
+details.q[open] summary::after{transform:rotate(45deg)}
+details.q p{margin:0 0 18px;color:var(--ink-2);max-width:66ch}
+.final{text-align:center;padding:72px 0}
+.final .lead{margin:0 auto 26px}
+footer{border-top:1px solid var(--line);padding:28px 0 calc(28px + env(safe-area-inset-bottom));color:var(--ink-2);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+/* hoja de instrucciones */
+.sheet-bg{position:fixed;inset:0;background:rgb(0 0 0 / .45);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.sheet-bg.on{display:flex}
+.sheet{background:var(--surface);width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:24px 22px calc(24px + env(safe-area-inset-bottom));animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet h3{font-family:var(--f-d);font-size:24px;margin:0 0 6px;letter-spacing:-.02em}
+.sheet .os{border:0;padding:0;background:none;box-shadow:none}
+.sheet .btn{width:100%;margin-top:16px}
+@media (max-width:860px){
+  .hero{padding-top:28px}
+  .hero .wrap{grid-template-columns:1fr;gap:36px}
+  .feats{grid-template-columns:1fr 1fr}
+  .install,.betabox{grid-template-columns:minmax(0,1fr)}
+  .qr{display:none}
+  .top nav a.l{display:none}
+}
+@media (max-width:560px){
+  .feats{grid-template-columns:1fr}
+  .ctas .btn{flex:1 1 100%}
+  .betabox{padding:22px}
+  .phone .tag{right:-6px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="beta-bar" role="note"><div class="wrap"><span class="pill-beta"><i aria-hidden="true"></i>Beta</span><span><b>Versión de prueba.</b> Es gratis y la estamos mejorando cada semana. Puede tener errores.</span></div></div>
+<header class="top" id="top"><div class="wrap">
+  <a class="brand" href="#"><img src="../icons/icon-192.png" alt="">InvierteRD</a>
+  <nav><a class="l" href="#funciones">Funciones</a><a class="l" href="#instalar">Instalar</a><a class="l" href="#beta">Beta</a><a class="btn p sm" href="../">Abrir la app</a></nav>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="pill-beta"><i aria-hidden="true"></i>Fase beta · gratis</span>
+    <h1>Tu dinero, <em>en orden</em>. En pesos y en dólares.</h1>
+    <p class="lead">Cuentas, gastos, tarjetas, préstamos e inversiones de cualquier banco dominicano, en una sola app. Sin complicaciones.</p>
+    <div class="ctas">
+      <button class="btn p" id="installBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Instalar en mi teléfono</button>
+      <a class="btn g" href="../">Usar en el navegador</a>
+    </div>
+    <p class="small"><b>No necesitas tienda de apps.</b> Se instala desde aquí en Android y iPhone, y pesa menos de 1 MB.</p>
+  </div>
+  <div class="phone"><span class="pill-beta tag">Beta</span><img src="img/resumen.webp" alt="Pantalla de Resumen de InvierteRD con el saldo neto, ingresos y gastos" width="585" height="1266"></div>
+</div></section>
+
+<section id="funciones"><div class="wrap">
+  <h2>Todo lo que tienes y lo que debes, de un vistazo</h2>
+  <p class="sub">Pensada para cómo se manejan las finanzas en República Dominicana: varios bancos, pesos y dólares, certificados y tarjetas.</p>
+  <div class="feats">
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></div><h3>Un resumen claro</h3><p>Tu saldo neto, lo que tienes en cada banco y lo que debes, en RD$ o US$.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></div><h3>Gastos en 3 toques</h3><p>Anota un gasto con la cuenta o tarjeta que usaste. Míralo por día, semana, mes o año.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><h3>Intereses en vivo</h3><p>Certificados, bonos, SBB y fondos: ve cuánto ganan cada día y cuándo vencen.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></div><h3>Calendario de pagos</h3><p>Cuotas, tarjetas, pagos fijos, salario e intereses en un solo calendario.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div><h3>Tarjetas y préstamos</h3><p>Cuánto tienes disponible, cuánto debes y la próxima fecha de pago.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div><h3>Más de 60 entidades</h3><p>Bancos, asociaciones, puestos de bolsa y corporaciones de crédito del país.</p></div>
+  </div>
+</div></section>
+
+<section aria-label="Pantallas de la app"><div class="wrap">
+  <h2>Así se ve</h2>
+  <p class="sub">Datos de ejemplo. Tú empiezas con una guía corta de 5 minutos.</p>
+  <div class="shots">
+    <figure class="shot"><div class="phone"><img src="img/resumen.webp" alt="Resumen" loading="lazy" width="585" height="1266"></div><p>Resumen</p></figure>
+    <figure class="shot"><div class="phone"><img src="img/dinero.webp" alt="Dónde está tu dinero, agrupado por entidad" loading="lazy" width="585" height="1266"></div><p>¿Dónde está tu dinero?</p></figure>
+    <figure class="shot"><div class="phone"><img src="img/gastos.webp" alt="Gastos por categoría" loading="lazy" width="585" height="1266"></div><p>Gastos por categoría</p></figure>
+    <figure class="shot"><div class="phone"><img src="img/ingresos.webp" alt="Ingresos con intereses ganados" loading="lazy" width="585" height="1266"></div><p>Ingresos e intereses</p></figure>
+    <figure class="shot"><div class="phone"><img src="img/calendario.webp" alt="Calendario de pagos" loading="lazy" width="585" height="1266"></div><p>Calendario de pagos</p></figure>
+  </div>
+</div></section>
+
+<section id="instalar"><div class="wrap">
+  <h2>Instálala en un minuto</h2>
+  <p class="sub">Queda como cualquier app en tu pantalla de inicio y funciona sin internet.</p>
+  <div class="install">
+    <div class="os" id="osAndroid"><h3>Android <span class="you" hidden>Tu teléfono</span></h3>
+      <ol><li><span>Abre esta página en <b>Chrome</b>.</span></li><li><span>Toca <span class="k">Instalar en mi teléfono</span> arriba, o el menú <span class="k">⋮</span> y luego <span class="k">Instalar app</span>.</span></li><li><span>Confirma con <span class="k">Instalar</span>. Listo.</span></li></ol></div>
+    <div class="os" id="osIos"><h3>iPhone <span class="you" hidden>Tu teléfono</span></h3>
+      <ol><li><span>Abre esta página en <b>Safari</b>.</span></li><li><span>Toca <span class="k">Compartir <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v7h14v-7"/></svg></span> abajo.</span></li><li><span>Elige <span class="k">Agregar a pantalla de inicio</span> y toca <span class="k">Agregar</span>.</span></li></ol></div>
+  </div>
+  <div class="qr"><img src="img/qr.svg" alt="Código QR para abrir esta página en tu teléfono"><p><b>¿Estás en la computadora?</b>Escanea el código con la cámara de tu teléfono para abrir esta página allí e instalarla.</p></div>
+</div></section>
+
+<section id="beta"><div class="wrap">
+  <div class="betabox">
+    <div><span class="pill-beta"><i aria-hidden="true"></i>Fase beta</span>
+      <h2 style="margin-top:14px">Estás entre los primeros</h2>
+      <p class="sub" style="margin:0">InvierteRD está en prueba. La puedes usar completa y gratis mientras la terminamos de pulir con tus comentarios.</p></div>
+    <ul>
+      <li><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg><div><b>Puede tener errores</b><span>Algunas funciones pueden cambiar o fallar. Revisa tus cifras importantes con tu banco.</span></div></li>
+      <li><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><div><b>Tus datos son tuyos</b><span>Se guardan en tu teléfono. La cuenta en la nube es opcional y aún no está abierta a todos.</span></div></li>
+      <li><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><div><b>Mejoras cada semana</b><span>La app se actualiza sola. Solo ábrela y tendrás la última versión.</span></div></li>
+      <li><svg viewBox="0 0 24 24"><path d="M12 3v18M17 6.5c0-1.9-2.2-3.5-5-3.5s-5 1.6-5 3.5S9.2 10 12 10s5 1.6 5 3.5S14.8 17 12 17s-5-1.6-5-3.5"/></svg><div><b>Gratis durante la beta</b><span>No pedimos tarjeta ni datos bancarios para usarla.</span></div></li>
+    </ul>
+  </div>
+</div></section>
+
+<section aria-label="Preguntas frecuentes"><div class="wrap" style="max-width:780px">
+  <h2>Preguntas frecuentes</h2>
+  <details class="q"><summary>¿Se conecta a mi banco?</summary><p>No. Tú anotas tus cuentas, gastos e inversiones. Nunca te pediremos la clave de tu banco. Más adelante podrás leer los avisos de consumo que te llegan al correo, solo si tú lo permites.</p></details>
+  <details class="q"><summary>¿Dónde se guardan mis datos?</summary><p>En tu propio teléfono. Si borras la app o los datos del navegador, se pierden, salvo que actives la cuenta en la nube cuando esté disponible.</p></details>
+  <details class="q"><summary>¿Por qué no está en Play Store ni en App Store?</summary><p>Es una app web instalable: se instala desde esta página, ocupa muy poco y se actualiza sola. La versión para tiendas llegará después de la beta.</p></details>
+  <details class="q"><summary>¿Es asesoría financiera?</summary><p>No. InvierteRD te ayuda a ordenar tu información. Las decisiones de inversión son tuyas; consulta a un asesor si lo necesitas.</p></details>
+  <details class="q"><summary>¿Cuánto cuesta?</summary><p>Nada durante la beta.</p></details>
+</div></section>
+
+<section class="final"><div class="wrap">
+  <span class="pill-beta"><i aria-hidden="true"></i>Beta gratis</span>
+  <h2 style="margin-top:16px">Empieza hoy, en 5 minutos</h2>
+  <p class="lead">Una guía corta te pregunta lo básico y listo.</p>
+  <div class="ctas" style="justify-content:center"><button class="btn p" type="button" data-install><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Instalar en mi teléfono</button><a class="btn g" href="../">Abrir en el navegador</a></div>
+</div></section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 InvierteRD · Hecho en República Dominicana · Versión beta</span><span>No es asesoría financiera. Los logos pertenecen a sus dueños.</span></div></footer>
+
+<div class="sheet-bg" id="sheetBg" role="dialog" aria-modal="true" aria-labelledby="shT"><div class="sheet"><h3 id="shT">Instálala así</h3><div id="shBody"></div><button class="btn g" type="button" id="shClose">Entendido</button></div></div>
+
+<script>
+(function(){
+  var ua=navigator.userAgent||'',ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),android=/Android/.test(ua);
+  var standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  var mine=ios?document.getElementById('osIos'):android?document.getElementById('osAndroid'):null;
+  if(mine){mine.classList.add('me');mine.querySelector('.you').hidden=false;if(ios)mine.parentNode.insertBefore(mine,mine.parentNode.firstChild)}
+  var deferred=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e});
+  window.addEventListener('appinstalled',function(){deferred=null;setBtns('Abrir la app')});
+  var btns=[document.getElementById('installBtn')].concat([].slice.call(document.querySelectorAll('[data-install]')));
+  function setBtns(t){btns.forEach(function(b){b.lastChild.nodeValue=t})}
+  if(standalone)setBtns('Abrir la app');
+  var bg=document.getElementById('sheetBg');
+  function sheet(){var src=mine||document.getElementById('osAndroid');document.getElementById('shBody').innerHTML=src.innerHTML.replace(/<h3[\s\S]*?<\/h3>/,'');bg.classList.add('on');document.getElementById('shClose').focus()}
+  document.getElementById('shClose').onclick=function(){bg.classList.remove('on')};
+  bg.onclick=function(e){if(e.target===bg)bg.classList.remove('on')};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')bg.classList.remove('on')});
+  btns.forEach(function(b){b.onclick=function(){
+    if(standalone){location.href='../';return}
+    if(deferred){deferred.prompt();deferred.userChoice.then(function(){deferred=null});return}
+    if(ios||android){sheet();return}
+    document.getElementById('instalar').scrollIntoView({behavior:'smooth'});
+  }});
+  var top=document.getElementById('top');addEventListener('scroll',function(){top.classList.toggle('sc',scrollY>8)},{passive:true});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(function(){});
+})();
+</script>
+</body>
+</html>
