@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>InvierteRD · Tus finanzas en orden (beta)</title>
 <meta name="description" content="InvierteRD organiza tus cuentas, gastos, tarjetas, préstamos e inversiones en pesos y dólares. Gratis, en fase beta.">
-<meta name="theme-color" content="#F6F1E7">
+<meta name="theme-color" content="#EFEBDD">
 <meta property="og:title" content="InvierteRD · beta">
 <meta property="og:description" content="Tus cuentas, gastos, tarjetas, préstamos e inversiones en un solo lugar. Hecho en República Dominicana.">
 <meta property="og:image" content="https://dylanvargas02.github.io/invierterd/bienvenida/img/resumen.webp">
@@ -14,10 +14,10 @@
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
 <style>
-:root{--bg:#F6F1E7;--surface:#FFFCF6;--surface-2:#EEE7D9;--ink:#1E1A14;--ink-2:#655C4E;--line:#E5DBCA;--brand:#0B4A9E;--brand-soft:#E2EBF8;--grow:#0E7A55;--beta:#B4530A;--beta-soft:#FBEBD9;--r:20px;--f-d:"Bricolage Grotesque",system-ui,sans-serif;--f:"Figtree",system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#12100D;--surface:#1B1915;--surface-2:#26231E;--ink:#F3EEE5;--ink-2:#B3AA9B;--line:#33302A;--brand:#86AEFF;--brand-soft:#15233F;--grow:#4FD39B;--beta:#F3A35B;--beta-soft:#3A2614}}
+:root{--bg:#EFEBDD;--surface:#FAF8F1;--surface-2:#E6E0CE;--ink:#13203A;--ink-2:#525D74;--line:#CEC6B1;--brand:#0A3A82;--brand-soft:#DDE5F2;--grow:#0B6E4F;--beta:#8A4F0A;--beta-soft:#F3E3C4;--r:6px;--f-d:"Archivo",system-ui,sans-serif;--f:"Archivo",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0A1220;--surface:#111B2C;--surface-2:#1B2739;--ink:#E9EEF6;--ink-2:#9BA9C0;--line:#27354B;--brand:#8FB4FF;--brand-soft:#16284A;--grow:#4FD39B;--beta:#F3A35B;--beta-soft:#3A2614}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -143,6 +143,17 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 .laptop .scr img{display:block;width:100%;height:auto;border-radius:6px 6px 0 0}
 .laptop .base{height:16px;background:linear-gradient(#d9d4ca,#bdb6a9);border-radius:0 0 16px 16px;margin:0 -4%}
 @media (prefers-color-scheme:dark){.laptop .base{background:linear-gradient(#4a4740,#2e2c28)}}
+
+/* identidad «papel moneda» */
+h1,h2,.brand,.sheet h3{font-stretch:112%;letter-spacing:-.02em}
+h1 em{color:inherit}
+.btn,.feat,.os,.qr,.betabox,.feat .ic,.sheet,.pill-beta,.os .k,.os .you,.brand img,.btn.sm{border-radius:6px}
+.pill-beta{text-transform:none;letter-spacing:0;font-size:13px;border-radius:3px}
+.feat .ic{background:none;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.g{background:none;box-shadow:inset 0 0 0 1.5px var(--ink)}
+h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
+.final h2,.betabox h2{border:0;display:block}
+.top.sc{border-bottom:1.5px solid var(--ink)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
 </style>
 </head>
