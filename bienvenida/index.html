@@ -136,6 +136,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   .betabox{padding:22px}
   .phone .tag{right:-6px}
 }
+.laptop{max-width:980px;margin:0 auto}
+.laptop .scr{background:#111;border-radius:18px 18px 0 0;padding:12px 12px 0;box-shadow:0 30px 60px -30px rgb(0 0 0 / .45)}
+.laptop .scr img{display:block;width:100%;height:auto;border-radius:6px 6px 0 0}
+.laptop .base{height:16px;background:linear-gradient(#d9d4ca,#bdb6a9);border-radius:0 0 16px 16px;margin:0 -4%}
+@media (prefers-color-scheme:dark){.laptop .base{background:linear-gradient(#4a4740,#2e2c28)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
 </style>
 </head>
@@ -184,6 +189,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
     <figure class="shot"><div class="phone"><img src="img/ingresos.webp" alt="Ingresos con intereses ganados" loading="lazy" width="585" height="1266"></div><p>Ingresos e intereses</p></figure>
     <figure class="shot"><div class="phone"><img src="img/calendario.webp" alt="Calendario de pagos" loading="lazy" width="585" height="1266"></div><p>Calendario de pagos</p></figure>
   </div>
+</div></section>
+
+<section id="laptop" aria-label="En la computadora"><div class="wrap">
+  <h2>También en tu laptop</h2>
+  <p class="sub">Ábrela en el navegador de tu computadora y todo se acomoda a la pantalla grande: menú a un lado y tu resumen en dos columnas. Por ahora cada dispositivo guarda sus propios datos; ver lo mismo en el teléfono y en la computadora llegará con las cuentas.</p>
+  <div class="laptop"><div class="scr"><img src="img/laptop.webp" alt="InvierteRD en una laptop: menú lateral y resumen en dos columnas" loading="lazy" width="1200" height="750"></div><div class="base"></div></div>
+  <p style="text-align:center;margin-top:24px"><a class="btn p" href="../">Abrir en la computadora</a></p>
 </div></section>
 
 <section id="instalar"><div class="wrap">

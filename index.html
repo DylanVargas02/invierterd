@@ -1368,6 +1368,50 @@ em.o{background:var(--spend)}em.n{background:var(--grow)}
 .intc{border-color:color-mix(in srgb,var(--grow) 35%,var(--line))}
 #intTot{color:var(--grow)}
 .int-note{margin:8px 0 10px}
+
+/* ===== Teléfono: Mercado y Metas van dentro de «Más» ===== */
+nav.tabs [data-tab="mercado"],nav.tabs [data-tab="metas"],nav.tabs .side-brand,nav.tabs .side-x{display:none}
+.res-g,.col-a,.col-b,.flowg,.fg-a,.fg-b,.fg-c{min-width:0}
+/* ===== Laptop y computadora ===== */
+@media (min-width:1000px){
+  body{background:var(--bg)}
+  nav.tabs{top:0;bottom:0;right:auto;width:248px;border-top:0;border-right:1px solid var(--line);box-shadow:none;background:var(--surface);display:flex;flex-direction:column;padding:22px 14px;overflow-y:auto}
+  nav.tabs .side-brand{display:flex;align-items:center;gap:10px;padding:0 10px 22px;font-family:var(--f-display);font-size:19px;letter-spacing:-.02em}
+  nav.tabs .side-brand .rd{color:#CE1126}
+  .side-logo{width:32px;height:32px;border-radius:9px;overflow:hidden;flex-shrink:0;display:block}
+  .side-logo svg{width:100%;height:100%;display:block}
+  .side-beta{margin-left:auto;font-family:var(--f-body,inherit);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#B4530A;background:#FBEBD9;padding:3px 8px;border-radius:99px}
+  nav.tabs .inner{display:flex!important;flex-direction:column;gap:2px;max-width:none;margin:0}
+  nav.tabs .inner button,nav.tabs .side-x button{flex-direction:row!important;justify-content:flex-start;gap:12px!important;padding:10px 12px!important;font-size:15px!important;font-weight:600!important;border-radius:12px;min-height:46px;text-align:left;width:100%}
+  nav.tabs .inner button:hover,nav.tabs .side-x button:hover{background:var(--surface-2)}
+  nav.tabs [data-tab="mercado"],nav.tabs [data-tab="metas"]{display:flex}
+  nav.tabs [data-tab="mas"]{display:none!important}
+  nav.tabs .ic{width:34px!important;height:34px!important;border-radius:10px!important;flex-shrink:0}
+  nav.tabs button[aria-selected="true"]{background:var(--tcs);font-weight:700!important}
+  nav.tabs button[aria-selected="true"] .ic{background:none}
+  nav.tabs .side-x{display:flex;flex-direction:column;gap:2px;margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+  nav.tabs .side-x button{border:0;background:none;color:var(--ink-2);display:flex;align-items:center}
+  nav.tabs .side-x svg{width:20px;height:20px;margin:0 7px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .app{max-width:none;margin:0 0 0 248px;padding:0 40px 56px}
+  header.top{max-width:1240px;margin:0 auto;padding-block:22px 14px}
+  header.top .brand-mark{display:none}
+  #notice,#view{max-width:1240px;margin-left:auto;margin-right:auto}
+  #view.v-ahorros,#view.v-prestamos,#view.v-mercado,#view.v-metas{max-width:820px}
+  .res-g{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:start}
+  .col-b>.panel:first-child,.col-b>.sec:first-child{margin-top:0}
+  .col-a .qa{margin-top:0}
+  .flowg{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);grid-template-areas:"a b" "c b";gap:0 24px;align-items:start}
+  .fg-a{grid-area:a}.fg-b{grid-area:b}.fg-c{grid-area:c}
+  .fg-b>.sec:first-child{margin-top:14px}
+  .scrim{align-items:center;padding:24px}
+  .sheet{max-width:540px;border-radius:24px;max-height:min(86vh,900px);padding-bottom:24px;animation:none;box-shadow:0 30px 80px -20px rgb(0 0 0 / .45)}
+  .sheet .grab{display:none}
+  .onb{background:var(--surface-2)}
+  .onb-in{max-width:620px;background:var(--bg);margin:32px auto;min-height:calc(100% - 64px);border-radius:28px;padding:28px 40px!important;box-shadow:0 20px 60px -30px rgb(0 0 0 / .35)}
+  .onb2 .o-foot{bottom:-28px;padding-bottom:28px}
+  .toast{left:calc(50% + 124px)!important;bottom:32px!important}
+}
+@media (min-width:1400px){.app{padding:0 56px 64px}.res-g{gap:32px}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1385,7 +1429,8 @@ em.o{background:var(--spend)}em.n{background:var(--grow)}
 </div>
 
 
-<nav class="tabs" aria-label="Secciones"><div class="inner" role="tablist" id="tabs"></div></nav>
+<nav class="tabs" aria-label="Secciones"><div class="side-brand" aria-hidden="true"><span class="side-logo"><svg viewBox="0 0 32 32"><rect width="32" height="32" fill="#002D62"/><rect x="16" width="16" height="16" fill="#CE1126"/><rect y="16" width="16" height="16" fill="#CE1126"/><path d="M13 0h6v32h-6zM0 13h32v6H0z" fill="#fff"/></svg></span><b>Invierte<span class="rd">RD</span></b><span class="side-beta">Beta</span></div><div class="inner" role="tablist" id="tabs"></div>
+<div class="side-x"><button type="button" id="sideMail"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Correo y documentos</button><button type="button" id="sideSet"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button></div></nav>
 <div id="layer"></div>
 <div id="onbLayer"></div>
 
@@ -1569,11 +1614,11 @@ const dayFmt=new Intl.DateTimeFormat('es-DO',{weekday:'long',day:'numeric',month
 /* ---------- Tabs y FAB ---------- */
 function renderTabs(){
   const more={id:'mas',n:'Más',c:'var(--ink)',s:'var(--surface-2)',i:'<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>'};
-  $('#tabs').innerHTML=[...TABS.slice(0,5),more].map(t=>{const on=t.id===view||(t.id==='mas'&&['mercado','metas'].includes(view));return `<button role="tab" data-tab="${t.id}" aria-selected="${on}" aria-label="${t.t||t.n}" style="--tc:${t.c};--tcs:${t.s}"><span class="ic"><svg viewBox="0 0 24 24">${t.i}</svg></span>${t.n}</button>`}).join('');
+  $('#tabs').innerHTML=[...TABS,more].map(t=>{const on=t.id===view||(t.id==='mas'&&['mercado','metas'].includes(view));return `<button role="tab" data-tab="${t.id}" aria-selected="${on}" aria-label="${t.t||t.n}" style="--tc:${t.c};--tcs:${t.s}"><span class="ic"><svg viewBox="0 0 24 24">${t.i}</svg></span>${t.n}</button>`}).join('');
 }
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;if(b.dataset.tab==='mas'){openMore();return}view=b.dataset.tab;try{localStorage.setItem(KEY+'.view',view)}catch(err){}render();window.scrollTo({top:0})});
 $('#curSeg').addEventListener('click',e=>{const b=e.target.closest('[data-base]');if(!b||b.dataset.base===S.base)return;S.base=b.dataset.base;save();render();toast(S.base==='USD'?'Mostrando todo en dólares':'Mostrando todo en pesos')});
-$('#setBtn').addEventListener('click',openSettings);
+$('#setBtn').addEventListener('click',openSettings);$('#sideSet').addEventListener('click',openSettings);$('#sideMail').addEventListener('click',()=>openMail());
 $('#accBtn').addEventListener('click',()=>openAccount());
 
 function renderNotice(){
@@ -1719,7 +1764,7 @@ function bindGo(){document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()
 function render(){
   if(S.theme)document.documentElement.setAttribute('data-theme',S.theme);
   const TB=TABS.find(t=>t.id===view);if(!['DOP','USD'].includes(S.base))S.base='DOP';document.querySelectorAll('[data-base]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.base===S.base)); $('#viewName').textContent=TB.t||TB.n;$('#viewName').classList.toggle('long',!!TB.t);
-  renderTabs(); renderNotice(); paintAcc();
+  $('#view').className='v-'+view;renderTabs(); renderNotice(); paintAcc();
   $('#brandSmall').innerHTML=S.name&&view==='resumen'?'Hola, '+esc(S.name):'Invierte<span class="rd">RD</span>';
   ({resumen:vResumen,ingresos:vIngresos,gastos:vGastos,ahorros:vAhorros,prestamos:vPrestamos,mercado:()=>vSoon('mercado'),metas:()=>vSoon('metas')})[view]();
   bindPromos(); tickLive(); fitBig();
@@ -2876,7 +2921,7 @@ function vResumen(){
     {key:'card',title:'Tarjetas de crédito',color:'var(--debt)',card:1,icon:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>',unit:['tarjeta','tarjetas'],add:['addCard','Agregar tarjeta'],empty:'Sin tarjetas de crédito registradas.',
       items:S.cards.map(c=>{const dd=daysTo(dueDate(c));return {id:c.id,entity:c.entity,name:c.name,cur:c.cur,val:Math.max(0,c.limit-c.balance),owe:c.balance,attr:'data-card',sub:`Usado ${c.limit?Math.round(c.balance/c.limit*100):0} % de ${esc(fmt(c.limit,c.cur,0))}${c.balance>0?` <span class="due${dd<=5?' soon':''}">pagar ${dd===0?'hoy':dd===1?'mañana':'en '+dd+' d'}</span>`:''}`}})}
   ];
-  $('#view').innerHTML=`
+  $('#view').innerHTML=`<div class="res-g"><div class="col-a">
     ${S.onboarded?'':`<button class="onb-cta" id="goOnb"><span><b>Dedica 5 minutos a contarnos de ti</b><small>${S.onbDraft&&S.onbDraft.step>1?'Sigue donde lo dejaste · paso '+Math.min(S.onbDraft.step,total)+' de '+total:'Así la app trabaja con tus números, no con los del ejemplo.'}</small></span><span aria-hidden="true">›</span></button>`}
     <div class="qa" role="group" aria-label="Registrar">
       <button type="button" class="qa-b inc" id="qaInc"><span class="qa-ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Ingreso</button>
@@ -2912,12 +2957,13 @@ function vResumen(){
       ${B.length?dualBlock(B)+(B.length<resN[resFreq]?`<p class="hint dnote">Se muestra desde tu primer registro.</p>`:''):`<div class="dempty"><b>Aquí verás cómo se mueve tu dinero</b><span>Registra tus primeros ingresos y gastos y el gráfico aparecerá solo.</span></div>`}
     </section>
     ${nextPaysHTML()}
+    </div><div class="col-b">
     ${curMixHTML(t)}
     <h2 class="sec">¿Dónde está tu dinero?</h2>
     <div class="grps">${groups.map(holdGroup).join('')}</div>
     <h2 class="sec">Gastos e ingresos</h2>
     ${movListHTML()}
-    <p class="hint center">Toca cualquier fila para ver, editar o eliminar.</p>`;
+    <p class="hint center">Toca cualquier fila para ver, editar o eliminar.</p></div></div>`;
   const setYM=v=>{resYM=v;normYM();try{localStorage.setItem(KEY+'.ym',JSON.stringify(resYM))}catch(e){}render()};
   $('#ymOpen').onclick=()=>openMonthPicker(setYM);
   document.querySelectorAll('[data-nm]').forEach(b=>b.onclick=()=>{netMode=b.dataset.nm;render()});
@@ -3180,7 +3226,7 @@ function bigDonut(parts,tot,label,sub){
     <div class="bdn-c"><b class="num" id="bdnTot">${esc(fmt(tot,S.base,0))}</b><span>${sub}</span></div></div>`;
 }
 const incIc=k=>`<span class="tx-ic" style="background:color-mix(in srgb,${INC_C[k]||'var(--c-gray)'} 16%,transparent);color:${INC_C[k]||'var(--c-gray)'}">${esc((INC[k]||'Ot').slice(0,2))}</span>`;
-function flowView(kind){
+function flowView(kind,extra){
   const inc=kind==='ingresos',f=flt[kind],R=fltRange(f),src=inc?S.incomes:S.expenses;
   const L=src.filter(x=>inR(x,R)).sort((a,b)=>b.date-a.date);let tot=L.reduce(sumB,0);
   const key=x=>inc?(x.src||'otros'):(CATS[x.cat]?x.cat:'otros');
@@ -3195,25 +3241,25 @@ function flowView(kind){
     :`<div class="flt-nav"><button type="button" class="flt-arr" data-fo="1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><b>${esc(fltLabel(f,R))}</b><button type="button" class="flt-arr" data-fo="-1" aria-label="Siguiente" ${f.off<=0?'disabled':''}><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>`;
   const row=x=>`<button type="button" class="cat-it" data-edit-${inc?'i':'e'}="${x.id}"><span class="cat-it-t"><b>${esc(x.desc)}</b><small>${esc(dayShort.format(new Date(x.date)))} · ${esc(viaName(x.via))}</small></span><span class="cat-it-v num">${inc?'+':'−'}${esc(fmt(x.amt,x.cur,2))}${x.cur!==S.base?`<small>≈ ${esc(fmt(conv(x.amt,x.cur,S.base),S.base,0))}</small>`:''}</span></button>`;
   const B=dualBuckets(resFreq,resN[resFreq]),show={i:inc,e:!inc};
-  return `<section class="panel flt">
+  return `<div class="flowg"><div class="fg-a"><section class="panel flt">
       <div class="flt-tabs" role="tablist" aria-label="Período">${FLT_U.map(([k,l])=>`<button type="button" role="tab" data-fu="${k}" aria-selected="${f.u===k}">${l}</button>`).join('')}</div>
       ${nav}
       ${bigDonut(parts,tot,inc?'Ingresos por tipo':'Gastos por categoría',sub)}
       ${L.length&&!inc?`<p class="flt-avg num">${esc(fmt(tot/days,S.base,0))} por día en promedio</p>`:''}
       <button type="button" class="flt-add ${inc?'inc':'exp'}" id="heroAdd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>${inc?'Agregar ingreso':'Agregar gasto'}</button>
-    </section>
-    ${parts.length?`<h2 class="sec">Desglose <span class="sec-note">Toca para ver ${inc?'los ingresos':'los gastos'}</span></h2>
+    </section></div>
+    <div class="fg-b">${parts.length?`<h2 class="sec">Desglose <span class="sec-note">Toca para ver ${inc?'los ingresos':'los gastos'}</span></h2>
     <div class="cats2">${parts.map(p=>p.int?`<details class="cat2 intc" data-oc="${kind}:interes" ${openCat[kind+':interes']?'open':''}><summary><span class="tx-ic int-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span class="cat2-n"><b>Intereses ganados</b><small>${IT.length} ${IT.length===1?'inversión':'inversiones'} · en vivo</small></span><span class="cat2-p num">${tot?Math.round(p.v/tot*100):0} %</span><b class="cat2-v num" id="intTot">${esc(fmt(p.v,S.base,2))}</b><span class="chev rot" aria-hidden="true">›</span></summary>
       <div class="cat2-in">${IT.map(({s,v})=>`<button type="button" class="cat-it" data-edit-s="${s.id}"><span class="cat-it-t"><b>${esc(s.name)}</b><small>${esc(s.entity)} · ${s.rate?esc(rateTxt(s)):''}</small></span><span class="cat-it-v num">+<span data-int="${s.id}">${esc(fmt(v,s.cur,4))}</span>${s.cur!==S.base?`<small>≈ ${esc(fmt(conv(v,s.cur,S.base),S.base,0))}</small>`:''}</span></button>`).join('')}
       <p class="hint int-note">Lo que generan tus ahorros e inversiones en este período, ya con ISR si aplica. Se suma solo; no tienes que registrarlo.</p></div></details>`
     :`<details class="cat2" data-oc="${kind}:${p.k}" ${openCat[kind+':'+p.k]?'open':''}><summary>${inc?incIc(p.k):catIc(p.k)}<span class="cat2-n"><b>${esc(p.n)}</b><small>${p.L.length} ${p.L.length===1?'movimiento':'movimientos'}</small></span><span class="cat2-p num">${tot?Math.round(p.v/tot*100):0} %</span><b class="cat2-v num">${esc(fmt(p.v,S.base,0))}</b><span class="chev rot" aria-hidden="true">›</span></summary>
       <div class="cat2-in">${p.L.map(row).join('')}</div></details>`).join('')}</div>`
-    :`<p class="hint center" style="margin:18px 0">${inc?'No registraste ingresos':'No registraste gastos'} en este período.</p>`}
-    <section class="panel">
+    :`<p class="hint center" style="margin:18px 0">${inc?'No registraste ingresos':'No registraste gastos'} en este período.</p>`}${extra||''}</div>
+    <div class="fg-c"><section class="panel">
       <div class="panel-h"><b>En el tiempo</b><div class="seg tiny" role="group" aria-label="Frecuencia"><button data-rf="dia" aria-pressed="${resFreq==='dia'}">Diario</button><button data-rf="sem" aria-pressed="${resFreq==='sem'}">Semanal</button><button data-rf="mes" aria-pressed="${resFreq==='mes'}">Mensual</button></div></div>
       <div class="chart-f"><div class="per light" role="group" aria-label="Rango">${RANGE_OPT[resFreq].map(([v,l])=>`<button type="button" data-rn="${v}" aria-pressed="${resN[resFreq]===v}">${l}</button>`).join('')}</div></div>
       ${B.length&&B.some(b=>inc?b.vi:b.ve)?dualBlock(B,show)+(B.length<resN[resFreq]?`<p class="hint dnote">Se muestra desde tu primer registro.</p>`:''):`<div class="dempty"><b>Aquí verás cómo cambian tus ${inc?'ingresos':'gastos'}</b><span>Aparece solo cuando registres los primeros.</span></div>`}
-    </section>`;
+    </section></div></div>`;
 }
 function bindFlow(kind,rerender){
   const f=flt[kind],keep=()=>{try{localStorage.setItem(KEY+'.flt',JSON.stringify(flt))}catch(e){}rerender()};
@@ -3231,7 +3277,7 @@ function paydaysHTML(){
     <button type="button" class="set-row" id="addPday"><span class="set-ic">+</span><span class="set-t"><b>${P.length?'Agregar otro cobro fijo':'Agregar tu salario'}</b><small>Te preguntamos «¿Ya cobraste?» el día de pago</small></span></button></div>`;
 }
 function vIngresos(){
-  $('#view').innerHTML=flowView('ingresos')+paydaysHTML();
+  $('#view').innerHTML=flowView('ingresos',paydaysHTML());
   $('#heroAdd').onclick=()=>openExpense('ingreso');
   document.querySelectorAll('[data-pday]').forEach(b=>b.onclick=()=>openPayday(b.dataset.pday));$('#addPday').onclick=()=>openPayday();
   bindFlow('ingresos',render);
