@@ -1,4 +1,4 @@
-# InvierteRD: instalar la app y conectar el correo
+# Caoba: instalar la app, conectar el correo y activar los inicios de sesión
 
 Esta carpeta es la app completa. Para tenerla en tu celular hay que publicarla una vez en un enlace propio (gratis) y luego agregarla a la pantalla de inicio. Funciona sin conexión y tus datos se guardan en tu teléfono.
 
@@ -6,7 +6,7 @@ Esta carpeta es la app completa. Para tenerla en tu celular hay que publicarla u
 
 **Opción A · Netlify (la más simple)**
 1. Crea una cuenta gratis en netlify.com.
-2. Entra a app.netlify.com/drop y arrastra la carpeta `InvierteRD` completa.
+2. Entra a app.netlify.com/drop y arrastra la carpeta `Caoba` completa.
 3. Netlify te da un enlace como `https://algo.netlify.app`. En «Site configuration» puedes cambiarle el nombre, por ejemplo `https://invierterd.netlify.app`.
 
 **Opción B · GitHub Pages**
@@ -76,3 +76,23 @@ Si más adelante quieres un remitente propio (por ejemplo `hola@invierterd.com`)
 - **Modo prueba de Google:** sirve para ti y hasta 100 usuarios de prueba que agregues a mano. Para abrirla al público, Google exige verificar la app y, por usar un permiso de lectura de Gmail, una evaluación de seguridad anual de un tercero, que tiene costo.
 - **Sin cuenta:** los datos viven solo en el navegador de ese teléfono. Con cuenta, además quedan en la nube y se ven en cualquier teléfono.
 - **App Store y Play Store:** esta misma app puede empaquetarse con Capacitor para publicarla en las tiendas.
+
+
+## Activar «Iniciar sesión con Google» y «con Outlook»
+
+Los botones ya están en la app (pantalla de bienvenida y *Tu cuenta*). Mientras no actives los proveedores, la app muestra «todavía no está activado» y ofrece entrar con correo y contraseña.
+
+**Google**
+1. Google Cloud (proyecto `InvierteRD`) → *Google Auth Platform → Clientes → Crear cliente* → tipo *Aplicación web*.
+2. URI de redirección autorizada: `https://blvwglrfnwgndflfduir.supabase.co/auth/v1/callback`.
+3. Supabase → *Authentication → Sign In / Providers → Google* → activa y pega el ID y el secreto del cliente.
+
+**Outlook (Microsoft)**
+1. portal.azure.com → *Microsoft Entra ID → Registros de aplicaciones → Nuevo registro*. Tipos de cuenta: *cuentas personales de Microsoft y de cualquier organización*.
+2. URI de redirección (Web): `https://blvwglrfnwgndflfduir.supabase.co/auth/v1/callback`.
+3. *Certificados y secretos → Nuevo secreto*. Copia el valor.
+4. Supabase → *Authentication → Sign In / Providers → Azure* → activa, pega el *Application (client) ID* y el secreto, y deja la URL `https://login.microsoftonline.com/common`.
+
+**Correo y contraseña**: Supabase → *Authentication → Sign In / Providers → Email* → activa *Email + password*. Para que los correos de confirmación y de cambio de contraseña lleguen sin límite, configura el SMTP (sección anterior).
+
+En *Authentication → URL Configuration* deja `https://dylanvargas02.github.io/invierterd/` como *Site URL* y en *Redirect URLs*.

@@ -1,14 +1,14 @@
 {
-  "name": "InvierteRD",
-  "short_name": "InvierteRD",
-  "description": "Tus gastos, ahorros, tarjetas, préstamos e inversiones en un solo lugar.",
+  "name": "Caoba · finanzas e inversión",
+  "short_name": "Caoba",
+  "description": "Donde tus ahorros perduran y crecen. Organiza tus finanzas y compara tasas en RD.",
   "lang": "es-DO",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#EFEBDD",
-  "theme_color": "#EFEBDD",
+  "background_color": "#F7F1EA",
+  "theme_color": "#F7F1EA",
   "categories": [
     "finance"
   ],

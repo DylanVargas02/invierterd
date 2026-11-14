@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>InvierteRD · Tus finanzas en orden (beta)</title>
-<meta name="description" content="InvierteRD organiza tus cuentas, gastos, tarjetas, préstamos e inversiones en pesos y dólares. Gratis, en fase beta.">
+<title>Caoba · Donde tus ahorros perduran y crecen (beta)</title>
+<meta name="description" content="Caoba organiza tus finanzas y te da la información completa para invertir mejor en República Dominicana. Gratis, en fase beta.">
 <meta name="theme-color" content="#EFEBDD">
-<meta property="og:title" content="InvierteRD · beta">
+<meta property="og:title" content="Caoba · beta">
 <meta property="og:description" content="Tus cuentas, gastos, tarjetas, préstamos e inversiones en un solo lugar. Hecho en República Dominicana.">
 <meta property="og:image" content="https://dylanvargas02.github.io/invierterd/bienvenida/img/resumen.webp">
 <link rel="icon" href="../icons/icon-192.png">
@@ -14,10 +14,10 @@
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
 <style>
-:root{--bg:#EFEBDD;--surface:#FAF8F1;--surface-2:#E6E0CE;--ink:#13203A;--ink-2:#525D74;--line:#CEC6B1;--brand:#0A3A82;--brand-soft:#DDE5F2;--grow:#0B6E4F;--beta:#8A4F0A;--beta-soft:#F3E3C4;--r:6px;--f-d:"Archivo",system-ui,sans-serif;--f:"Archivo",system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#0A1220;--surface:#111B2C;--surface-2:#1B2739;--ink:#E9EEF6;--ink-2:#9BA9C0;--line:#27354B;--brand:#8FB4FF;--brand-soft:#16284A;--grow:#4FD39B;--beta:#F3A35B;--beta-soft:#3A2614}}
+:root{--bg:#F7F1EA;--surface:#FFFDFA;--surface-2:#F0E7DD;--ink:#3A2A24;--ink-2:#6B5A52;--line:#E6D9CC;--brand:#7B2D1E;--brand-soft:#F5E6DF;--grow:#2E7D4F;--beta:#94570B;--beta-soft:#F6E7CF;--r:14px;--f-d:"Plus Jakarta Sans",system-ui,sans-serif;--f:"Plus Jakarta Sans",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#17100C;--surface:#211712;--surface-2:#2C1F18;--ink:#F4EAE2;--ink-2:#BFA99B;--line:#3B2B22;--brand:#E8A08A;--brand-soft:#3A2019;--grow:#8FD3A8;--beta:#E9B25E;--beta-soft:#352409}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -145,7 +145,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 @media (prefers-color-scheme:dark){.laptop .base{background:linear-gradient(#4a4740,#2e2c28)}}
 
 /* identidad «papel moneda» */
-h1,h2,.brand,.sheet h3{font-stretch:112%;letter-spacing:-.02em}
+h1,h2,.brand,.sheet h3{letter-spacing:-.03em;font-weight:800}
 h1 em{color:inherit}
 .btn,.feat,.os,.qr,.betabox,.feat .ic,.sheet,.pill-beta,.os .k,.os .you,.brand img,.btn.sm{border-radius:6px}
 .pill-beta{text-transform:none;letter-spacing:0;font-size:13px;border-radius:3px}
@@ -160,7 +160,7 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
 <body>
 <div class="beta-bar" role="note"><div class="wrap"><span class="pill-beta"><i aria-hidden="true"></i>Beta</span><span><b>Versión de prueba.</b> Es gratis y la estamos mejorando cada semana. Puede tener errores.</span></div></div>
 <header class="top" id="top"><div class="wrap">
-  <a class="brand" href="#"><img src="../icons/icon-192.png" alt="">InvierteRD</a>
+  <a class="brand" href="#"><img src="../icons/icon-192.png" alt="">Caoba</a>
   <nav><a class="l" href="#funciones">Funciones</a><a class="l" href="#instalar">Instalar</a><a class="l" href="#beta">Beta</a><a class="btn g sm" href="../">Abrir la app</a><button class="btn p sm" type="button" data-install><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Descargar</button></nav>
 </div></header>
 
@@ -168,26 +168,26 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
 <section class="hero"><div class="wrap">
   <div>
     <span class="pill-beta"><i aria-hidden="true"></i>Fase beta · gratis</span>
-    <h1>Tu dinero, <em>en orden</em>. En pesos y en dólares.</h1>
-    <p class="lead">Cuentas, gastos, tarjetas, préstamos e inversiones de cualquier banco dominicano, en una sola app. Sin complicaciones.</p>
+    <h1>Donde tus ahorros perduran y crecen</h1>
+    <p class="lead">Organiza tus finanzas y ten la información completa para tomar mejores decisiones de inversión. Tus cuentas, gastos, tarjetas, préstamos e inversiones de cualquier banco dominicano, en una sola app.</p>
     <div class="ctas">
       <button class="btn p" id="installBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Instalar en mi teléfono</button>
       <a class="btn g" href="../">Usar en el navegador</a>
     </div>
     <p class="small"><b>No necesitas tienda de apps.</b> Se descarga desde aquí en Android, iPhone y computadora, y pesa menos de 1 MB.</p>
   </div>
-  <div class="phone"><span class="pill-beta tag">Beta</span><img src="img/resumen.webp" alt="Pantalla de Resumen de InvierteRD con el saldo neto, ingresos y gastos" width="585" height="1266"></div>
+  <div class="phone"><span class="pill-beta tag">Beta</span><img src="img/resumen.webp" alt="Pantalla de Resumen de Caoba con el saldo neto, ingresos y gastos" width="585" height="1266"></div>
 </div></section>
 
 <section id="funciones"><div class="wrap">
   <h2>Todo lo que tienes y lo que debes, de un vistazo</h2>
   <p class="sub">Pensada para cómo se manejan las finanzas en República Dominicana: varios bancos, pesos y dólares, certificados y tarjetas.</p>
   <div class="feats">
-    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></div><h3>Un resumen claro</h3><p>Tu saldo neto, lo que tienes en cada banco y lo que debes, en RD$ o US$.</p></div>
-    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></div><h3>Gastos en 3 toques</h3><p>Anota un gasto con la cuenta o tarjeta que usaste. Míralo por día, semana, mes o año.</p></div>
-    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><h3>Intereses en vivo</h3><p>Certificados, bonos, SBB y fondos: ve cuánto ganan cada día y cuándo vencen.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div><h3>Se anota solo</h3><p>Conecta tu Gmail y tus gastos e ingresos se registran con los avisos de tu banco. Cargamos los últimos 3 meses.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M7 7h13l-3-3M17 17H4l3 3"/></svg></div><h3>Tasas de cambio al día</h3><p>Compara la compra y la venta del dólar y el euro en bancos y casas de cambio.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><h3>Compara productos</h3><p>Tasas de certificados, fondos, bonos y préstamos con su historia, para decidir mejor.</p></div>
     <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></div><h3>Calendario de pagos</h3><p>Cuotas, tarjetas, pagos fijos, salario e intereses en un solo calendario.</p></div>
-    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div><h3>Tarjetas y préstamos</h3><p>Cuánto tienes disponible, cuánto debes y la próxima fecha de pago.</p></div>
+    <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></div><h3>Préstamos claros</h3><p>Registra cuotas y abonos a capital. Te decimos cuánto te falta y cuánto ahorras en intereses.</p></div>
     <div class="feat"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div><h3>Más de 60 entidades</h3><p>Bancos, asociaciones, puestos de bolsa y corporaciones de crédito del país.</p></div>
   </div>
 </div></section>
@@ -197,7 +197,7 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
   <p class="sub">Datos de ejemplo. Tú empiezas con una guía corta de 5 minutos.</p>
   <div class="shots">
     <figure class="shot"><div class="phone"><img src="img/resumen.webp" alt="Resumen" loading="lazy" width="585" height="1266"></div><p>Resumen</p></figure>
-    <figure class="shot"><div class="phone"><img src="img/dinero.webp" alt="Dónde está tu dinero, agrupado por entidad" loading="lazy" width="585" height="1266"></div><p>¿Dónde está tu dinero?</p></figure>
+    <figure class="shot"><div class="phone"><img src="img/mercado.webp" alt="Mercado: compra y venta del dólar en bancos y casas de cambio" loading="lazy" width="585" height="1266"></div><p>Tasas de cambio</p></figure>
     <figure class="shot"><div class="phone"><img src="img/gastos.webp" alt="Gastos por categoría" loading="lazy" width="585" height="1266"></div><p>Gastos por categoría</p></figure>
     <figure class="shot"><div class="phone"><img src="img/ingresos.webp" alt="Ingresos con intereses ganados" loading="lazy" width="585" height="1266"></div><p>Ingresos e intereses</p></figure>
     <figure class="shot"><div class="phone"><img src="img/calendario.webp" alt="Calendario de pagos" loading="lazy" width="585" height="1266"></div><p>Calendario de pagos</p></figure>
@@ -207,7 +207,7 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
 <section id="laptop" aria-label="En la computadora"><div class="wrap">
   <h2>También en tu laptop</h2>
   <p class="sub">Ábrela en el navegador de tu computadora y todo se acomoda a la pantalla grande: menú a un lado y tu resumen en dos columnas. Por ahora cada dispositivo guarda sus propios datos; ver lo mismo en el teléfono y en la computadora llegará con las cuentas.</p>
-  <div class="laptop"><div class="scr"><img src="img/laptop.webp" alt="InvierteRD en una laptop: menú lateral y resumen en dos columnas" loading="lazy" width="1200" height="750"></div><div class="base"></div></div>
+  <div class="laptop"><div class="scr"><img src="img/laptop.webp" alt="Caoba en una laptop: menú lateral y resumen en dos columnas" loading="lazy" width="1200" height="750"></div><div class="base"></div></div>
   <p class="ctas" style="justify-content:center;margin-top:24px"><button class="btn p" type="button" data-install="desk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Descargar para la computadora</button><a class="btn g" href="../">Abrir en el navegador</a></p>
 </div></section>
 
@@ -229,7 +229,7 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
   <div class="betabox">
     <div><span class="pill-beta"><i aria-hidden="true"></i>Fase beta</span>
       <h2 style="margin-top:14px">Estás entre los primeros</h2>
-      <p class="sub" style="margin:0">InvierteRD está en prueba. La puedes usar completa y gratis mientras la terminamos de pulir con tus comentarios.</p></div>
+      <p class="sub" style="margin:0">Caoba está en prueba. La puedes usar completa y gratis mientras la terminamos de pulir con tus comentarios.</p></div>
     <ul>
       <li><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg><div><b>Puede tener errores</b><span>Algunas funciones pueden cambiar o fallar. Revisa tus cifras importantes con tu banco.</span></div></li>
       <li><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><div><b>Tus datos son tuyos</b><span>Se guardan en tu teléfono. La cuenta en la nube es opcional y aún no está abierta a todos.</span></div></li>
@@ -244,7 +244,7 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
   <details class="q"><summary>¿Se conecta a mi banco?</summary><p>No. Tú anotas tus cuentas, gastos e inversiones. Nunca te pediremos la clave de tu banco. Más adelante podrás leer los avisos de consumo que te llegan al correo, solo si tú lo permites.</p></details>
   <details class="q"><summary>¿Dónde se guardan mis datos?</summary><p>En tu propio teléfono. Si borras la app o los datos del navegador, se pierden, salvo que actives la cuenta en la nube cuando esté disponible.</p></details>
   <details class="q"><summary>¿Por qué no está en Play Store ni en App Store?</summary><p>Es una app web instalable: se instala desde esta página, ocupa muy poco y se actualiza sola. La versión para tiendas llegará después de la beta.</p></details>
-  <details class="q"><summary>¿Es asesoría financiera?</summary><p>No. InvierteRD te ayuda a ordenar tu información. Las decisiones de inversión son tuyas; consulta a un asesor si lo necesitas.</p></details>
+  <details class="q"><summary>¿Es asesoría financiera?</summary><p>No. Caoba te ayuda a ordenar tu información. Las decisiones de inversión son tuyas; consulta a un asesor si lo necesitas.</p></details>
   <details class="q"><summary>¿Cuánto cuesta?</summary><p>Nada durante la beta.</p></details>
 </div></section>
 
@@ -256,7 +256,7 @@ h2{padding-bottom:10px;border-bottom:2px solid var(--ink);display:inline-block}
 </div></section>
 </main>
 
-<footer><div class="wrap"><span>© 2026 InvierteRD · Hecho en República Dominicana · Versión beta</span><span>No es asesoría financiera. Los logos pertenecen a sus dueños.</span></div></footer>
+<footer><div class="wrap"><span>© 2026 Caoba · Hecho en República Dominicana · Versión beta</span><span>No es asesoría financiera. Los logos pertenecen a sus dueños.</span></div></footer>
 
 <div class="sheet-bg" id="sheetBg" role="dialog" aria-modal="true" aria-labelledby="shT"><div class="sheet"><h3 id="shT">Instálala así</h3><div id="shBody" class="os"></div><button class="btn g" type="button" id="shClose">Entendido</button></div></div>
 

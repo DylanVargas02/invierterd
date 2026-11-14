@@ -1,4 +1,4 @@
-# InvierteRD
+# Caoba (antes InvierteRD)
 
 App de finanzas personales para la República Dominicana: gastos e ingresos, presupuesto por categoría, gastos fijos, ahorros que crecen en vivo, metas y fondo de emergencia, tarjetas, préstamos con plan de deudas, productos financieros, noticias y lector de correo (consumos con tarjeta y acuerdos de puestos de bolsa).
 
