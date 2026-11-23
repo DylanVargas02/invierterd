@@ -1860,6 +1860,12 @@ h2.sec .seg button[aria-pressed="true"]{color:var(--ink)}
 .sso svg{width:22px;height:22px;flex-shrink:0}
 .sso:hover{background:var(--surface-2)}
 .wel-start{min-height:56px;font-size:16px;margin-top:6px}
+.wel-or{display:flex;align-items:center;gap:12px;margin:4px 0 0;color:var(--ink-2);font-size:13px}
+.wel-or::before,.wel-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.wel-solo{width:100%;min-height:52px;border:1.5px solid var(--brand);background:none;color:var(--brand);border-radius:14px;font-weight:700;font-size:15.5px;padding:0 14px}
+.wel-solo:hover{background:var(--brand-soft)}
+.sso svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
 .wel-note{margin:-2px 0 0;font-size:12.5px;color:var(--ink-2);text-align:center;line-height:1.4}
 .wel-demo{align-self:center;font-weight:700;font-size:15px;padding:10px}
 .wel-pw{align-self:center;font-size:13.5px;color:var(--ink-2);padding:6px}
@@ -1929,7 +1935,7 @@ html.tour-open{overflow:hidden}
 
 
 <nav class="tabs" aria-label="Secciones"><div class="side-brand" aria-hidden="true"><span class="side-logo"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#7B2D1E"/><g transform="translate(13 13) scale(.74)"><g fill="none" stroke="#FBF7F2" stroke-width="13" stroke-linecap="round"><path d="M72.34 19.26 A38 38 0 1 0 86.87 59.19"/><path d="M61.17 34.63 A19 19 0 1 0 68.44 54.6"/></g><path d="M50 50 Q71.21 32.7 94.17 33.92 Q77.37 49.62 50 50 Z" fill="#8FD3A8" stroke="#7B2D1E" stroke-width="4" stroke-linejoin="round" paint-order="stroke"/><path d="M54 48.6 L87.6 36.3" fill="none" stroke="#7B2D1E" stroke-width="1.4" stroke-linecap="round"/></g></svg></span><b class="wordmark">Caoba</b><span class="side-beta">Beta</span></div><div class="inner" role="tablist" id="tabs"></div>
-<div class="side-x"><button type="button" id="sideMail"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Conectar tu correo</button><button type="button" id="sideSet"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button></div></nav>
+<div class="side-x"><button type="button" id="sideSet"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button></div></nav>
 <div id="layer"></div>
 <div id="onbLayer"></div>
 
@@ -2010,12 +2016,9 @@ function sample(){
       {id:id(),name:'Agua (CAASD)',cat:'servicios',amt:450,cur:'DOP',day:25,lastPaid:null}
     ],
     goals:[],
-    pending:[
-      {id:id(),desc:'SUPERMERCADO LA ESQUINA',amt:2340,cur:'DOP',cat:'comida',cardId:cards[0].id,date:now-3*3600e3},
-      {id:id(),desc:'APP DE TRANSPORTE',amt:12.5,cur:'USD',cat:'transporte',cardId:cards[1].id,date:now-26*3600e3}
-    ],
+    pending:[],
     home:{on:false,partner:'Ana',adj:0}, emTarget:6, ver:4,
-    pendingInv:[{id:id(),name:'Bonos · Ministerio de Hacienda 2034',entity:'Parallax Valores (Parval)',issuer:'Ministerio de Hacienda',rate:10.6,amt:512437.5,cur:'DOP',start:now-2*DAY,end:new Date(2034,7,15).getTime(),months:93,date:now-2*DAY}]
+    pendingInv:[]
   };
 }
 
@@ -2224,7 +2227,7 @@ function renderTabs(){
 }
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;if(b.dataset.tab==='mas'){openMore();return}view=b.dataset.tab;try{localStorage.setItem(KEY+'.view',view)}catch(err){}render();window.scrollTo({top:0})});
 $('#curSeg').addEventListener('click',e=>{const b=e.target.closest('[data-base]');if(!b||b.dataset.base===S.base)return;S.base=b.dataset.base;save();render();toast(S.base==='USD'?'Mostrando todo en dólares':'Mostrando todo en pesos')});
-$('#setBtn').addEventListener('click',openSettings);$('#sideSet').addEventListener('click',openSettings);$('#sideMail').addEventListener('click',()=>openMail());
+$('#setBtn').addEventListener('click',openSettings);$('#sideSet').addEventListener('click',openSettings);
 $('#accBtn').addEventListener('click',()=>openAccount());
 
 
@@ -3013,7 +3016,7 @@ function showSplash(){
 /* ---------- Pantalla de bienvenida ---------- */
 const G_LOGO='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.6 28.7A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.7l8-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.2 1.5-5 2.3-8.2 2.3-6.2 0-11.5-4.2-13.4-9.8l-8 6C6.6 42.6 14.6 48 24 48z"/></svg>';
 const MS_LOGO='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#F25022" d="M1 1h10.5v10.5H1z"/><path fill="#7FBA00" d="M12.5 1H23v10.5H12.5z"/><path fill="#00A4EF" d="M1 12.5h10.5V23H1z"/><path fill="#FFB900" d="M12.5 12.5H23V23H12.5z"/></svg>';
-const W_IC={mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/><path d="M16 15l2 2 3.5-3.5" />',fx:'<path d="M7 7h13l-3-3M17 17H4l3 3"/>',rate:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'};
+const W_IC={all:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',fx:'<path d="M7 7h13l-3-3M17 17H4l3 3"/>',rate:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'};
 function closeOnbLayer(){$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open')}
 function openWelcome(){
   document.documentElement.classList.add('onb-open');
@@ -3022,33 +3025,24 @@ function openWelcome(){
     <h2 id="welT" tabindex="-1">Donde tus ahorros perduran y crecen</h2>
     <p class="wel-lead">Organiza tus finanzas y ten la información completa para invertir mejor.</p>
     <ul class="wel-f">
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.mail}</svg></span><span><b>Gastos e ingresos que se anotan solos</b>Con los avisos de tu banco en Gmail.</span></li>
+      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.all}</svg></span><span><b>Todo tu dinero en un solo lugar</b>Cuentas, tarjetas, préstamos e inversiones de cualquier banco.</span></li>
       <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.fx}</svg></span><span><b>Tasas de cambio al día</b>Compara bancos y casas de cambio.</span></li>
       <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.rate}</svg></span><span><b>Tasas de productos financieros</b>Con toda la información para decidir.</span></li>
     </ul>
     <div class="wel-act">
-      <button type="button" class="sso" id="wGoogle">${G_LOGO}<span>Iniciar sesión con Google</span></button>
-      <button type="button" class="sso" id="wOutlook">${MS_LOGO}<span>Iniciar sesión con Outlook</span></button>
-      <button type="button" class="btn wel-start" id="wStart">Empieza tu organización financiera</button>
-      <p class="wel-note">Sin correo. Tus datos se guardan solo en este teléfono: si lo pierdes, se pierden.</p>
+      <button type="button" class="btn wel-start" id="wNew">Crear mi cuenta</button>
+      <button type="button" class="sso" id="wLogin"><svg viewBox="0 0 24 24" aria-hidden="true">${W_IC.mail}</svg><span>Ya tengo cuenta · Iniciar sesión</span></button>
+      <p class="wel-note">Con tu correo y una contraseña. Tus datos quedan guardados y los ves en cualquier teléfono.</p>
+      <p class="wel-or"><span>o</span></p>
+      <button type="button" class="wel-solo" id="wStart">Empezar sin cuenta</button>
+      <p class="wel-note">Tus datos se guardan solo en este teléfono: si lo pierdes, se pierden.</p>
       <button type="button" class="o-link wel-demo" id="wDemo">Prefiero ver un ejemplo</button>
-      <p class="err" id="wErr" role="alert"></p>
-      <button type="button" class="o-link wel-pw" id="wPw">Entrar con correo y contraseña</button>
     </div></div></div>`;
   $('#welT').focus({preventScroll:true});
-  $('#wGoogle').onclick=()=>oauth('google',$('#wErr'));$('#wOutlook').onclick=()=>oauth('azure',$('#wErr'));
   $('#wStart').onclick=()=>openOnboarding(true);
   $('#wDemo').onclick=()=>{S.onbDismissed=true;if(!S.example){const keep={base:S.base,rates:S.rates,theme:S.theme,mail:S.mail};S=Object.assign(sample(),keep);normalizeS()}save();closeOnbLayer();view='resumen';render();window.scrollTo({top:0});startTour()};
-  $('#wPw').onclick=()=>{closeOnbLayer();S.onbDismissed=true;save();accMode='pw';openAccount()};
-}
-/* Google y Outlook (Supabase: proveedores google y azure) */
-async function oauth(provider,errEl){
-  const name=provider==='google'?'Google':'Outlook',say=m=>{if(errEl)errEl.textContent=m;else toast(m)};
-  if(!canCloud()||!isPublished()){say(`Para iniciar sesión con ${name}, abre la app publicada: ${APP_URL}`);return}
-  const off=`El inicio con ${name} todavía no está activado. Por ahora entra con correo y contraseña.`;
-  try{const r=await fetch(SUPABASE_URL+'/auth/v1/settings',{headers:{apikey:SUPABASE_KEY}});if(r.ok){const st=await r.json();if(st.external&&st.external[provider]===false){say(off);return}}}catch(e){}
-  try{const c=await sbClient();const {error}=await c.auth.signInWithOAuth({provider,options:{redirectTo:location.origin+location.pathname,scopes:provider==='azure'?'email openid profile':undefined,queryParams:provider==='google'?{prompt:'select_account'}:undefined}});if(error)throw error}
-  catch(e){say(/provider is not enabled|Unsupported provider|validation_failed/i.test(e&&e.message||'')?off:friendlyAuth(e))}
+  const acc=m=>{closeOnbLayer();S.onbDismissed=true;save();accMode=m;accStep={email:'',sent:false};openAccount()};
+  $('#wNew').onclick=()=>acc('new');$('#wLogin').onclick=()=>acc('pw');
 }
 /* ---------- Recorrido con datos de ejemplo ---------- */
 const TOUR=[
@@ -3104,7 +3098,7 @@ const FX_IC={
 };
 const fxIc=(k,cat)=>`<span class="fx-ic" style="--c:${CATS[cat]?CATS[cat].c:'var(--ink-2)'}" aria-hidden="true"><svg viewBox="0 0 24 24">${FX_IC[k]||FX_IC.otro}</svg></span>`;
 const FIXED=[['alquiler','Alquiler','vivienda',1],['mant','Mantenimiento del edificio','vivienda',5],['luz','Luz','servicios',5],['agua','Agua','servicios',10],['internet','Internet y cable','servicios',10],['celular','Celular','servicios',15],['colegio','Colegio o universidad','educacion',5],['seguro','Seguro médico','salud',20],['gimnasio','Gimnasio','salud',1],['streaming','Plataformas de streaming','ocio',10],['domestica','Ayuda doméstica','vivienda',30]];
-const OSTEPS=['tu','cuentas','ingresos','inversiones','tarjetas','prestamos','correo','fijos','listo'];
+const OSTEPS=['tu','cuentas','ingresos','inversiones','tarjetas','prestamos','fijos','listo'];
 const SAV_TYPES=['Cuenta de ahorro','Cuenta corriente','Certificado','Bono','Sell Buy Back (SBB)','Mutuo','Fondo de inversión','Acciones','Efectivo'];
 const INV_TYPES=['Certificado','Bono','Sell Buy Back (SBB)','Mutuo','Fondo de inversión','Acciones','Otro'];
 let W=null,oStep=0;
@@ -3222,20 +3216,6 @@ const OS={
       ['#ln_a','#ln_r','#ln_m','#ln_p'].forEach(s=>$(s+i).addEventListener('input',calc));$('#ln_c'+i).addEventListener('change',calc);
       document.querySelectorAll(`[name=ln_t${i}]`).forEach(r=>r.onchange=()=>{$('#ln_o'+i).hidden=r.value!=='Otro'});calc()}),
     collect:()=>{W.loans=W.loans.map((_,i)=>{const t=(document.querySelector(`[name=ln_t${i}]:checked`)||{}).value||'Personal',o=otroVal('ln_o'+i);return {type:t,otro:t==='Otro'?o:null,entity:readEnt('ln_e'+i),amt:$('#ln_a'+i).value,cur:$('#ln_c'+i).value,rate:$('#ln_r'+i).value,months:$('#ln_m'+i).value,paidN:$('#ln_p'+i).value}})}}),
-  correo:()=>{const items=mailItems();return {q:'Que tus gastos e ingresos se anoten solos',lead:'Conectamos tu Gmail solo para leer los avisos de tu banco. Cuando pagas con tu tarjeta o te depositan, lo anotamos por ti.',html:`
-    <ol class="o-how"><li>Marca las tarjetas y cuentas que quieres seguir.</li><li>Al terminar la guía, conectas tu Gmail con un toque.</li><li>Cargamos los últimos 3 meses y lo nuevo llega solo.</li></ol>
-    <div class="o-watch">${items.map((it,i)=>`<label class="o-w"><input type="checkbox" data-ow="${i}" ${it.on!==false?'checked':''}><span class="o-w-t"><b>${esc(it.name)}</b><small>${it.last4?'•••• '+esc(it.last4):'Sin últimos 4 dígitos'}</small></span>${it.last4?'':`<input class="o-w4" data-ow4="${i}" inputmode="numeric" maxlength="4" placeholder="1234" aria-label="Últimos 4 dígitos de ${esc(it.name)}" value="${esc(it.l4in||'')}">`}</label>`).join('')||'<p class="hint">Aún no agregaste cuentas ni tarjetas. Agrega una aquí.</p>'}</div>
-    <div class="o-item o-wadd" id="owAdd" hidden><div class="two"><div class="field"><label for="owE">Banco</label>${entPick('owE','')}</div><div class="field"><label for="ow4">Últimos 4</label><input id="ow4" inputmode="numeric" maxlength="4" placeholder="1234"></div></div>
-      <div class="choice">${pill('owK','tc','Tarjeta de crédito',true)}${pill('owK','cta','Cuenta o débito')}</div><button type="button" class="btn ghost" id="owOk">Agregar</button></div>
-    <button type="button" class="o-add" id="owNew">+ Agregar otra tarjeta o cuenta</button>
-    <p class="o-note">${oic('lock')}<span>Solo lectura. No enviamos correos ni guardamos tus mensajes: leemos los avisos en tu teléfono.</span></p>`,
-    next:'Sí, conectar al terminar',skipTxt:'Ahora no',
-    wire:()=>{$('#owNew').onclick=()=>{$('#owAdd').hidden=false;$('#owNew').hidden=true;$('#owE').focus()};
-      $('#owOk').onclick=()=>{collectOnb();const e=readEnt('owE'),l4=$('#ow4').value.replace(/\D/g,'');if(!e||l4.length!==4){toast('Elige el banco y escribe los 4 dígitos');return}
-        (W.watchX=W.watchX||[]).push({name:(($('[name=owK]:checked')||{}).value==='tc'?'Tarjeta ':'Cuenta ')+e,last4:l4,on:true});renderOnb(true)}},
-    collect:()=>{const its=mailItems();document.querySelectorAll('[data-ow]').forEach(c=>{const it=its[+c.dataset.ow];if(it)it.ref.on=c.checked});
-      document.querySelectorAll('[data-ow4]').forEach(x=>{const it=its[+x.dataset.ow4];if(it){it.ref.l4in=x.value.replace(/\D/g,'').slice(0,4)}})},
-    onNext:()=>{W.mailOn=true},onSkip:()=>{W.mailOn=false}}},
   fijos:()=>({q:'¿Qué pagas todos los meses?',lead:'Marca solo lo que aplique. Te avisamos antes de cada fecha.',html:`<div class="o-fx">
     ${FIXED.map(([k,l,,day])=>{const f=W.fixed[k]||{};return `<div class="o-fx-r${f.on?' on':''}" id="fxr_${k}"><label class="o-fx-h"><input type="checkbox" data-fx="${k}" ${f.on?'checked':''}><span class="o-fx-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${FX_IC[k]||FX_IC.otro}</svg></span><span class="o-fx-n">${l}</span><span class="o-tick" aria-hidden="true">${oic('check')}</span></label>
       <div class="two o-fx-in" id="fx_${k}" ${f.on?'':'hidden'}><div class="field"><label for="fa_${k}">Monto (RD$)</label><input id="fa_${k}" data-money="DOP" inputmode="decimal" value="${esc(f.amt||'')}" placeholder="0"></div><div class="field"><label for="fd_${k}">Día de pago</label><input id="fd_${k}" inputmode="numeric" maxlength="2" value="${esc(f.day||day)}"></div></div></div>`}).join('')}
@@ -3259,10 +3239,7 @@ const OS={
       <div><span>Te entra al mes</span><b>${f(inc)}</b></div><div><span>Pagos fijos y cuotas</span><b>${f(fx+debt)}</b></div><div class="tot"><span>Te queda al mes</span><b>${f(inc-fx-debt)}</b></div>
     </div>`}}
 };
-function mailItems(){const L=[];
-  W.accounts.forEach(a=>{if(a.type==='Efectivo'||!(a.entity||num(a.amt)))return;L.push({name:(a.type==='Cuenta corriente'?'Corriente ':'Ahorro ')+(a.entity||''),last4:a.last4,on:a.on,l4in:a.l4in,ref:a})});
-  if(W.has.cards)W.cards.forEach(c=>{if(!(c.entity||num(c.limit)))return;L.push({name:'Tarjeta '+(c.entity||''),last4:c.last4,on:c.on,l4in:c.l4in,ref:c})});
-  (W.watchX||[]).forEach(x=>L.push({name:x.name,last4:x.last4,on:x.on,ref:x}));return L}
+
 let oCur=null,oPrevP=0;
 function collectOnb(){if(oCur&&oCur.collect)try{oCur.collect()}catch(e){}}
 function renderOnb(keepScroll){
@@ -3293,19 +3270,6 @@ function renderOnb(keepScroll){
   $('.onb').scrollTop=y;
   if(!keepScroll){const h=$('.onb h2');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}
 }
-/* Después de la guía: conectar Gmail y cargar los últimos 3 meses */
-function openMailConnect(){
-  const W2=(S.mail.watch||[]);
-  sheet(`<div class="mc-hero">${treeSVG(1,undefined,'mc-tree')}</div><h3>Conecta tu Gmail</h3><p class="lead-s">Leeremos los avisos de ${W2.length?W2.length+(W2.length===1?' tarjeta o cuenta':' tarjetas y cuentas'):'tu banco'} de los últimos 3 meses. Luego los confirmas en un toque.</p>
-    ${W2.length?`<div class="chips">${W2.map(w=>`<span class="chip">•••• ${esc(w.last4)}</span>`).join('')}</div>`:''}
-    <div class="form"><button class="btn" type="button" id="mcGo">${G_LOGO}Conectar Gmail</button><p class="err" id="mcErr" role="alert"></p><button class="btn ghost" type="button" id="mcLater">Más tarde</button>
-    <p class="hint">Solo lectura. Puedes desconectarlo cuando quieras en Ajustes › Conectar tu correo.</p></div>`,'var(--brand)');
-  $('#mcLater').onclick=()=>{close();toast('Puedes conectarlo luego en Ajustes')};
-  $('#mcGo').onclick=async()=>{const b=$('#mcGo');b.disabled=true;
-    try{const r=await scanMail(t=>{b.textContent=t},{days:90});close();render();
-      const n=r.nc+(r.ni||0)+(r.nin||0);toast(n?n+(n===1?' movimiento por confirmar':' movimientos por confirmar'):'No encontramos avisos en los últimos 3 meses')}
-    catch(e){$('#mcErr').textContent=e.message;b.disabled=false;b.innerHTML=G_LOGO+'Conectar Gmail'}};
-}
 function finishOnb(){
   const W0=W;
   const now=new Date(),y=now.getFullYear(),m=now.getMonth(),td=now.getDate(),last=new Date(y,m+1,0).getDate(),id=uid,t0=Date.now();
@@ -3335,10 +3299,8 @@ function finishOnb(){
   (W.customFixed||[]).forEach(f=>{if(f.name&&num(f.amt))addFixed(f.name,f.cat||'otros',num(f.amt),f.day||1,'otro')});
   FIXED.forEach(([k,l,c])=>{const f=W.fixed[k];if(f&&f.on&&num(f.amt))addFixed(l,c,num(f.amt),f.day,k)});
   n.catBudget=suggestBudget().b;
-  if(W.mailOn){const items=mailItems().filter(it=>it.ref.on!==false).map(it=>({name:it.name,last4:it.last4||it.l4in||''})).filter(x=>/^\d{4}$/.test(x.last4));n.mail=Object.assign({},S.mail,{watch:items})}
   S=n;delete S.onbDraft;save();W=null;$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open');
   view='resumen';render();window.scrollTo({top:0});toast(S.name?`Listo, ${S.name}. Este es tu resumen.`:'Listo. Este es tu resumen.');
-  if(W0.mailOn)setTimeout(openMailConnect,700);
 }
 
 /* ---------- Cuenta y sincronización en la nube (Supabase) ---------- */
@@ -3439,10 +3401,7 @@ function openAccount(){
       <div class="field" id="aLinkBox" hidden><label for="aLink">Mantén presionado el botón del correo, copia el enlace y pégalo aquí</label><input id="aLink" type="url" autocomplete="off" placeholder="https://…"></div>
       <div class="err" id="err" role="alert"></div><button class="btn" type="submit">Entrar</button>
       <div class="two"><button class="btn ghost" type="button" id="aResend">Reenviar código</button><button class="btn ghost" type="button" id="aBack">Cambiar correo</button></div>`
-    :`<p class="lead-s">Guarda tus datos en tu cuenta y úsalos en cualquier teléfono o computadora.</p>
-      <button class="sso" type="button" id="aGoogle">${G_LOGO}<span>Iniciar sesión con Google</span></button>
-      <button class="sso" type="button" id="aOutlook">${MS_LOGO}<span>Iniciar sesión con Outlook</span></button>
-      <p class="or-sep"><span>o con tu correo</span></p>
+    :`<p class="lead-s">${signup?'Con tu cuenta, tus datos quedan guardados y los ves en cualquier teléfono o computadora.':'Entra con tu correo y tu contraseña.'}</p>
       ${accMode==='otp'?'':`<div class="seg tiny acc-tabs" role="group" aria-label="Cuenta"><button type="button" data-am="pw" aria-pressed="${!signup}">Ya tengo cuenta</button><button type="button" data-am="new" aria-pressed="${signup}">Crear cuenta</button></div>`}
       <div class="field"><label for="aEmail">Correo electrónico</label><input id="aEmail" type="email" inputmode="email" autocomplete="email" value="${esc(accStep.email)}" placeholder="tu@correo.com"></div>
       ${accMode==='otp'?'':`<div class="field"><label for="aPass">Contraseña</label><div class="pw"><input id="aPass" type="password" autocomplete="${signup?'new-password':'current-password'}" placeholder="${signup?'Al menos 8 caracteres':'Tu contraseña'}"><button type="button" class="pw-eye" id="aEye" aria-label="Mostrar contraseña" aria-pressed="false">Ver</button></div></div>
@@ -3455,7 +3414,6 @@ function openAccount(){
   const err=m=>{$('#err').textContent=m};
   const send=async email=>{const c=await sbClient();const {error}=await c.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:APP_URL}});if(error)throw error};
   const pv=$('#aPriv');if(pv)pv.onclick=openPrivacy;
-  const gg=$('#aGoogle');if(gg)gg.onclick=()=>oauth('google',$('#err'));const ol=$('#aOutlook');if(ol)ol.onclick=()=>oauth('azure',$('#err'));
   document.querySelectorAll('[data-am]').forEach(b=>b.onclick=()=>{accStep.email=$('#aEmail').value.trim();accMode=b.dataset.am;openAccount()});
   const sw=$('#aSwap');if(sw)sw.onclick=()=>{accStep.email=($('#aEmail')||{value:''}).value.trim();accMode=accMode==='otp'?'pw':'otp';accStep.sent=false;openAccount()};
   const eye=$('#aEye');if(eye)eye.onclick=()=>{const i=$('#aPass'),on=i.type==='password';i.type=on?'text':'password';eye.textContent=on?'Ocultar':'Ver';eye.setAttribute('aria-pressed',on)};
@@ -3515,10 +3473,9 @@ function friendlyAuth(e){
 }
 function openPrivacy(){
   sheet(`<h3>Privacidad</h3><div class="form priv">
-  <p><b>Qué guardamos.</b> Lo que registras en la app: ingresos, gastos, ahorros, tarjetas, préstamos, metas y ajustes. Sin cuenta, se guarda solo en este teléfono. Con cuenta, además se guarda una copia en la nube (Supabase, servidores en EE. UU.), cifrada en tránsito y en reposo.</p>
-  <p><b>Qué no guardamos.</b> Tu cédula (solo se usa en tu teléfono para abrir PDF protegidos), contraseñas (entras con un código) ni el contenido de tus correos: del correo solo quedan los consumos e inversiones que tú confirmas.</p>
+  <p><b>Qué guardamos.</b> Lo que registras en la app: ingresos, gastos, ahorros, tarjetas, préstamos y ajustes. Sin cuenta, se guarda solo en este teléfono. Con cuenta, además se guarda una copia en la nube (Supabase, servidores en EE. UU.), cifrada en tránsito y en reposo.</p>
+  <p><b>Qué no guardamos.</b> Tu cédula ni datos de tus tarjetas o cuentas bancarias. Tu contraseña la guarda cifrada el servicio de cuentas; nosotros no la vemos.</p>
   <p><b>Quién puede ver tus datos.</b> Solo tú. Las reglas de la base de datos impiden que otra cuenta lea o cambie tus datos. No los vendemos ni los compartimos.</p>
-  <p><b>Gmail.</b> El permiso es de solo lectura. Los correos se procesan en tu teléfono y no se envían a nuestros servidores. Puedes quitar el permiso cuando quieras desde tu cuenta de Google.</p>
   <p><b>Tus derechos.</b> Puedes ver y corregir tus datos en la app, y borrar tu cuenta con todos tus datos desde <i>Ajustes → Tu cuenta</i>. Se borran de inmediato. Esto sigue la Ley 172-13 de protección de datos personales de la República Dominicana.</p>
   </div>`,'var(--brand)');
 }
@@ -3657,9 +3614,6 @@ function vResumen(){
       </div>
     </section>
     ${calBtnHTML()}
-    ${S.pending.filter(p=>p.k!=='in').length?`<button class="alert" data-go="gastos:mov"><span class="count num">${S.pending.filter(p=>p.k!=='in').length}</span>${S.pending.filter(p=>p.k!=='in').length===1?'consumo':'consumos'} por confirmar<span aria-hidden="true">›</span></button>`:''}
-    ${S.pending.filter(p=>p.k==='in').length?`<button class="alert" data-go="ingresos"><span class="count num">${S.pending.filter(p=>p.k==='in').length}</span>${S.pending.filter(p=>p.k==='in').length===1?'depósito':'depósitos'} por confirmar<span aria-hidden="true">›</span></button>`:''}
-    ${S.pendingInv.length?`<button class="alert" data-go="ahorros"><span class="count num">${S.pendingInv.length}</span>${S.pendingInv.length===1?'inversión detectada':'inversiones detectadas'} en tu correo<span aria-hidden="true">›</span></button>`:''}
     ${ioPanel()}
     </div><div class="col-b">
     <h2 class="sec">Desglose de movimientos</h2>
@@ -3695,10 +3649,9 @@ function openMore(){
   const it=(id,ic,c,t,s,tag)=>`<button type="button" class="menu-r" id="${id}"><span class="menu-ic" style="--mc:${c}"><svg viewBox="0 0 24 24">${ic}</svg></span><span><b>${t}${tag?' <span class="tag">'+tag+'</span>':''}</b><small>${s}</small></span>${chev}</button>`;
   sheet(`<h3>Más</h3><div class="menu">
     ${it('oMkt',TABS[5].i,'var(--market)','Mercado','Compara tasas de productos y de cambio')}
-    ${it('oMail','<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>','var(--market)','Correo y documentos','Consumos y colocaciones desde tu Gmail')}
     ${it('oSet','<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>','var(--ink-2)','Ajustes','Moneda, tasas de cambio, apariencia y tu cuenta')}
   </div>`,'var(--brand)');
-  $('#oMkt').onclick=()=>{close();goTo('mercado')};$('#oMail').onclick=()=>{close();openMail()};$('#oSet').onclick=()=>{close();openSettings()};
+  $('#oMkt').onclick=()=>{close();goTo('mercado')};$('#oSet').onclick=()=>{close();openSettings()};
 }
 function bindEdit(){
   document.querySelectorAll('[data-edit-e]').forEach(b=>b.onclick=()=>openExpense('gasto',{},b.dataset.editE));
@@ -4129,9 +4082,9 @@ function paydaysHTML(){
     <button type="button" class="set-row" id="addPday"><span class="set-ic">+</span><span class="set-t"><b>${P.length?'Agregar otro cobro fijo':'Agregar un cobro fijo'}</b><small>Salario, pensión, alquiler, remesa…</small></span></button></div>`;
 }
 function vIngresos(){
-  $('#view').innerHTML=pendingHTML('i')+flowView('ingresos',paydaysHTML());
+  $('#view').innerHTML=flowView('ingresos',paydaysHTML());
   $('#heroAdd').onclick=()=>openExpense('ingreso');
-  document.querySelectorAll('[data-pday]').forEach(b=>b.onclick=()=>openPayday(b.dataset.pday));$('#addPday').onclick=()=>openPayday();bindPending();
+  document.querySelectorAll('[data-pday]').forEach(b=>b.onclick=()=>openPayday(b.dataset.pday));$('#addPday').onclick=()=>openPayday();
   bindFlow('ingresos',render);
 }
 
@@ -4142,9 +4095,9 @@ function vGastos(){
   const bindGS=()=>document.querySelectorAll('[data-gs]').forEach(b=>b.onclick=()=>{gastSeg=b.dataset.gs;render()});
   if(gastSeg==='pres'){$('#view').innerHTML=segH+presHTML();bindGS();bindPres();return}
   if(gastSeg==='fijos'){$('#view').innerHTML=segH+fijosHTML();bindGS();bindFijos();return}
-  $('#view').innerHTML=segH+pendingHTML('e')+'<div style="margin-top:14px"></div>'+flowView('gastos')+promoHTML('gastos');
+  $('#view').innerHTML=segH+'<div style="margin-top:14px"></div>'+flowView('gastos')+promoHTML('gastos');
   $('#heroAdd').onclick=()=>openExpense('gasto');
-  bindGS();bindPending();bindFlow('gastos',render);
+  bindGS();bindFlow('gastos',render);
 }
 
 /* ---------- Ahorros e inversiones ---------- */
@@ -4194,7 +4147,6 @@ function vAhorros(){
       <div class="big num" id="liveTotal">${split(T.v,S.base,4)}</div>
       <div class="pace num"><div><small>Ganancia</small><strong id="liveGain">${esc(fmt(T.v-T.p,S.base,0))}</strong></div><div><small>Por día</small><strong>+${esc(fmt(T.ps*86400,S.base))}</strong></div><div><small>Por mes</small><strong>+${esc(fmt(T.ps*86400*30.44,S.base,0))}</strong></div></div>
     </section>
-    ${invInboxHTML()}
     ${S.savings.length?`
     <section class="panel"><div class="panel-h"><b>Por tipo de instrumento</b><span class="panel-s">${S.savings.length} en total</span></div>${donutBlock(types,'Ahorros por tipo de instrumento')}</section>
     <h2 class="sec">Desglose por entidad<span class="sec-note">Toca para ver tus productos</span></h2>
@@ -4412,7 +4364,7 @@ function openSaving(pre={}){
   <p class="hint" id="sSinH">Para cuentas de ahorro, corrientes, efectivo y fondos abiertos: el dinero está disponible siempre y los intereses se suman cada mes.</p>
   <div class="field"><label for="sStart" id="sStartL">Fecha de inicio</label><input type="date" id="sStart" value="${pre.startISO||today()}"></div>
   <label class="check" id="sIsrF"><input type="checkbox" id="sIsr" ${pre.isr===false?'':'checked'}><span>Retener ISR 10 % sobre intereses</span></label>
-  <div class="field" id="s4F"><label for="s4">Últimos 4 dígitos de la tarjeta de débito o de la cuenta <span class="opt">opcional</span></label><input id="s4" inputmode="numeric" maxlength="4" value="${esc(pre.last4||'')}" placeholder="1234"><small class="hint">Sirve para reconocer tus consumos cuando conectes tu correo.</small></div>
+  <div class="field" id="s4F"><label for="s4">Últimos 4 dígitos de la tarjeta de débito o de la cuenta <span class="opt">opcional</span></label><input id="s4" inputmode="numeric" maxlength="4" value="${esc(pre.last4||'')}" placeholder="1234"><small class="hint">Para distinguir tus cuentas del mismo banco.</small></div>
   <label class="check"><input type="checkbox" id="sLiq"><span>Lo puedo usar en una emergencia</span></label>
   <div class="err" id="err"></div><button class="btn" type="submit">${ed?'Guardar cambios':'Guardar'}</button>
   ${ed?`<button type="button" class="link-btn danger del-link" id="sDel">Eliminar ${esc(ed.name)}</button>`:''}</form>`,'var(--brand)');
@@ -4445,7 +4397,7 @@ function openCard(id){
   <div class="field"><label for="cEnt">Entidad</label>${entPick('cEnt',v.entity||'')}</div><div class="field"><label for="cCur">Moneda</label>${curSel('cCur',v.cur||'DOP')}</div>
   <div class="two"><div class="field"><label for="cLim">Límite</label><input id="cLim" data-money="cCur" inputmode="decimal" value="${ed?v.limit:''}" placeholder="0.00"></div><div class="field"><label for="cBal">Consumido hoy</label><input id="cBal" data-money="cCur" inputmode="decimal" value="${ed?+v.balance.toFixed(2):''}" placeholder="0.00"></div></div>
   <div class="two"><div class="field"><label for="cRate">Tasa anual %</label><input id="cRate" inputmode="decimal" value="${ed?v.rate:''}" placeholder="60"></div><div class="field"><label for="cDay">Día límite de pago</label><input id="cDay" inputmode="numeric" value="${ed?v.payDay:''}" placeholder="15"></div></div>
-  <div class="field"><label for="c4">Últimos 4 dígitos <span class="opt">opcional, para reconocer los avisos del correo</span></label><input id="c4" inputmode="numeric" maxlength="4" value="${esc(v.last4||'')}" placeholder="1234"></div>
+  <div class="field"><label for="c4">Últimos 4 dígitos <span class="opt">opcional</span></label><input id="c4" inputmode="numeric" maxlength="4" value="${esc(v.last4||'')}" placeholder="1234"></div>
   <div class="err" id="err"></div><button class="btn" type="submit">${ed?'Guardar cambios':'Guardar'}</button>
   ${ed?`<button type="button" class="link-btn danger del-link" id="cDel">Eliminar tarjeta</button>`:''}</form>`,'var(--brand)');
   if(ed)$('#cDel').onclick=()=>confirmDel(ed.name,delDetail('cards',ed),()=>removeItem('cards',ed.id));
@@ -4512,7 +4464,6 @@ function openSettings(){
     <div class="set-f"><span class="set-l" id="lTheme">Apariencia</span><div aria-labelledby="lTheme">${seg('aTheme',[['','Automática'],['light','Clara'],['dark','Oscura']],S.theme||'')}</div></div>
   </div></section>
   <section class="set-g"><h4>Tus datos</h4><div class="set-card">
-    ${setRow('aMail','mail','Conectar tu correo','Gastos e ingresos que se anotan solos')}
     ${setRow('aCats','tag','Mis categorías','Agrega o quita categorías y tipos de ingreso')}
     ${setRow('aOnb','guide','Organizar mis finanzas paso a paso','Vuelve a la guía inicial')}
   </div></section>
@@ -4533,7 +4484,6 @@ function openSettings(){
   const usd=$('#aUsd'),msg=$('#aUsdMsg');
   usd.onchange=()=>{const u=rate(usd.value);if(!(u>1&&u<1000)){msg.textContent='Escribe un número válido, por ejemplo 60.90.';msg.classList.add('bad');usd.value=S.rates.USD;return}
     S.rates=Object.assign({},S.rates,{USD:u});msg.classList.remove('bad');msg.textContent='Guardado. US$1 = '+fmt(u,'DOP');live()};
-  $('#aMail').onclick=()=>{close();openMail()};
   $('#aAcc').onclick=()=>{close();openAccount()};
   $('#aPrv').onclick=()=>{close();openPrivacy()};
   $('#aCats').onclick=openMyCats;
