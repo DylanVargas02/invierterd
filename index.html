@@ -3045,8 +3045,10 @@ function openWelcome(){
 async function oauth(provider,errEl){
   const name=provider==='google'?'Google':'Outlook',say=m=>{if(errEl)errEl.textContent=m;else toast(m)};
   if(!canCloud()||!isPublished()){say(`Para iniciar sesión con ${name}, abre la app publicada: ${APP_URL}`);return}
+  const off=`El inicio con ${name} todavía no está activado. Por ahora entra con correo y contraseña.`;
+  try{const r=await fetch(SUPABASE_URL+'/auth/v1/settings',{headers:{apikey:SUPABASE_KEY}});if(r.ok){const st=await r.json();if(st.external&&st.external[provider]===false){say(off);return}}}catch(e){}
   try{const c=await sbClient();const {error}=await c.auth.signInWithOAuth({provider,options:{redirectTo:location.origin+location.pathname,scopes:provider==='azure'?'email openid profile':undefined,queryParams:provider==='google'?{prompt:'select_account'}:undefined}});if(error)throw error}
-  catch(e){say(/provider is not enabled|Unsupported provider|validation_failed/i.test(e&&e.message||'')?`El inicio con ${name} todavía no está activado. Por ahora entra con correo y contraseña.`:friendlyAuth(e))}
+  catch(e){say(/provider is not enabled|Unsupported provider|validation_failed/i.test(e&&e.message||'')?off:friendlyAuth(e))}
 }
 /* ---------- Recorrido con datos de ejemplo ---------- */
 const TOUR=[
