@@ -1,0 +1,11 @@
+{
+  "appId": "com.caobafinanzas.app",
+  "appName": "Caoba",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "server": { "androidScheme": "https" }
+}

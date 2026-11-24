@@ -3502,7 +3502,7 @@ const SUPA_JS='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/um
 let sb=null,sbUser=null,syncTimer=null,syncState='idle',accStep={email:'',sent:false},loginFor='',accMode='pw';
 const canCloud=()=>/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(SUPABASE_URL);
 const isPublished=()=>/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
-function persistLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function persistLocal(){let j='';try{j=JSON.stringify(S);localStorage.setItem(KEY,j)}catch(e){}nativeMirror(j)}
 async function sbClient(){
   if(sb)return sb;
   if(!canCloud())throw new Error('Las cuentas todavía no están activadas.');
@@ -4701,6 +4701,8 @@ function openSettings(){
     ${setRow('aProf','user','Perfiles financieros',(S.profiles&&S.profiles.list.length>1?'En uso: '+esc(activeProfile().name)+' · ':'')+'Personal, familiar, compartido o negocio')}
     ${setRow('aPerf','user','Tu perfil','Edad, provincia y ocupación')}
     ${setRow('aCats','tag','Mis categorías','Agrega o quita categorías y tipos de ingreso')}
+    ${setRow('aBkE','shield','Guardar un respaldo','Un archivo con tus datos, para pasarlos a otro teléfono o a la app')}
+    ${setRow('aBkI','shield','Restaurar un respaldo','Carga el archivo de respaldo de Caoba')}
     ${setRow('aOnb','guide','Organizar mis finanzas paso a paso','Vuelve a la guía inicial')}
   </div></section>
   <section class="set-g"><h4>Aprende a usar Caoba</h4><div class="set-card">
@@ -4709,13 +4711,14 @@ function openSettings(){
   </div></section>
   <section class="set-g"><h4>Privacidad y seguridad</h4><div class="set-card">
     ${setRow('aPrv','shield','Privacidad','Qué guardamos y cómo')}
+    ${isNative()?`<label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Ocultar montos en los widgets</b><small>Los widgets de la pantalla de inicio muestran •••• en vez de cifras</small></span><input type="checkbox" id="aWh" role="switch" ${S.wHide?'checked':''}></label>`:''}
     <label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Compartir estadísticas de uso</b><small>Anónimas: qué pantallas se usan. Nunca montos ni datos de tus cuentas.</small></span><input type="checkbox" id="aAn" role="switch" ${anConsent()==='si'?'checked':''}></label>
     ${setRow('aBlank','trash','Borrar todos mis datos','Te pediremos confirmarlo dos veces','danger')}
   </div></section>
   ${isAdm?`<section class="set-g"><h4>Administración</h4><div class="set-card">${setRow('aAdm','shield','Panel de administrador','Cargar tasas del mercado y ver el uso de la app')}</div></section>`:''}
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
-  $('#aProf').onclick=openProfiles;$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
+  $('#aProf').onclick=openProfiles;$('#aBkE').onclick=exportBackup;$('#aBkI').onclick=importBackup;const wh=$('#aWh');if(wh)wh.onchange=()=>{S.wHide=wh.checked;save();widgetSync();toast(wh.checked?'Los widgets ocultan los montos':'Los widgets muestran los montos')};$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});
   document.querySelectorAll('[name=aTheme]').forEach(r=>r.onchange=()=>{S.theme=r.value||null;
@@ -5078,8 +5081,102 @@ async function admHist(){
     document.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>{const o=data.find(x=>x.id===+b.dataset.fix);admTab='cargar';openAdmin();admLoad(Object.assign({},o,{supersedes:o.id,observed_at:new Date().toISOString(),valid_from:o.valid_from,valid_to:o.valid_to}))});
   }catch(x){$('#admBody').innerHTML='<p class="err">No se pudo cargar el historial. Revisa tu conexión.</p>'}
 }
-/* ---------- Widgets nativos (etapa 5): en la web no hace nada; en Android se completa en 21-widgets.js ---------- */
-function widgetSync(){}
+/* ---------- Widgets nativos (etapa 5) ----------
+   En la web no hace nada. En la app Android entrega a los widgets un resumen ya calculado (formato v1):
+   solo totales, nombres de inversiones y tasas del mercado. Nunca movimientos, notas, números de cuenta
+   ni datos de inicio de sesión. El lado nativo lo guarda cifrado con una clave del Android Keystore.
+   iOS usará el mismo formato y la misma interfaz (CaobaWidgets.update / clear). */
+const isNative=()=>!!(window.CAOBA_NATIVE&&window.capacitorExports&&window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
+let CW=null,wsT=null,wsLast='';
+function cwPlugin(){if(!CW&&isNative())CW=capacitorExports.registerPlugin('CaobaWidgets');return CW}
+const both=v=>({d:+conv(v,S.base,'DOP').toFixed(4),u:+conv(v,S.base,'USD').toFixed(6)});
+function widgetSnapshot(){
+  const t=Date.now(),out={v:1,ts:t,base:S.base==='USD'?'USD':'DOP',hideAll:!!S.wHide,prof:S.profiles&&S.profiles.list.length>1?activeProfile().name:'',fin:null,mkt:null};
+  if(!S.example){
+    const F=snapshot(t),Ts=totals(t),L=invList(),Ti=totalsOf(L,t),now=new Date();
+    const inMonth=x=>{const d=new Date(x.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()};
+    const inc=S.incomes.filter(inMonth).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0),exp=S.expenses.filter(inMonth).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0);
+    let next=null;L.forEach(s=>{const d=nextMat(s,t);if(d&&d>t&&(!next||d<next.date))next={name:s.name,date:d}});
+    out.fin={net:both(F.assets-F.debt),assets:both(F.assets),debt:both(F.debt),ps:both(Ts.ps),
+      flow:{label:MESES[now.getMonth()]+' '+now.getFullYear(),inc:both(inc),exp:both(exp)},
+      inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,
+        items:L.map(s=>({id:s.id,name:s.name,ent:s.entity,v:both(conv(savValue(s,t),s.cur,S.base)),rate:s.rate||0})).sort((a,b)=>b.v.d-a.v.d).slice(0,20)}};
+  }
+  if(mkr.rows&&mkr.rows.length){
+    const R=[...mkr.rows].sort((a,b)=>(b.status==='real')-(a.status==='real')||(b.product==='tasa_cambio')-(a.product==='tasa_cambio')||Date.parse(b.observed_at)-Date.parse(a.observed_at));
+    out.mkt={at:mkr.at,rows:R.slice(0,20).map(o=>{const fx=o.product==='tasa_cambio';return {id:String(o.id),inst:o.institution,
+      label:fx?(o.currency==='USD'?'Dólar':o.currency==='EUR'?'Euro':o.currency):(o.product_name||MKR_PROD[o.product]||o.product)+' '+o.currency+(o.term_days?' '+mkrTerm(o.term_days):''),
+      cur:o.currency,rate:+o.rate,rt:MKR_RT[o.rate_type]||o.rate_type,st:o.status,date:Date.parse(o.observed_at)||0,fx}})};
+  }
+  return out;
+}
+/* Se llama después de cada cambio (render). Espera un momento para agrupar cambios seguidos. */
+function widgetSync(){
+  if(!cwPlugin())return;clearTimeout(wsT);
+  wsT=setTimeout(()=>{try{const s=widgetSnapshot(),k=JSON.stringify(Object.assign({},s,{ts:0}));if(k===wsLast)return;wsLast=k;
+    CW.update({snapshot:JSON.stringify(s)}).catch(()=>{})}catch(e){}},900);
+}
+function widgetClear(){wsLast='';if(cwPlugin())CW.clear().catch(()=>{})}
+/* ---------- App Android: botón atrás, abrir una sección desde un widget y copia de seguridad local ---------- */
+/* Copia los datos también en el almacenamiento nativo (Preferences), para no depender solo del navegador interno. */
+let nmT=null;
+function nativeMirror(j){if(!isNative()||!window.capacitorPreferences||!j)return;clearTimeout(nmT);nmT=setTimeout(()=>{capacitorPreferences.Preferences.set({key:KEY,value:j}).catch(()=>{})},400)}
+function openDeep(u){
+  const m=/[?&]seccion=([a-z]+)/.exec(u||'');if(!m)return;
+  const sec={resumen:'resumen',movimientos:'movimientos',inversion:'inversion',mercado:'mercado',cuentas:'cuentas'}[m[1]];if(!sec)return;
+  close();if(!document.documentElement.classList.contains('onb-open'))goTo(sec);track('widget_abierto',{sec});
+}
+(function nativeBoot(){
+  if(!isNative())return;
+  document.documentElement.classList.add('native');
+  setTimeout(()=>loadMarket(),1500);setInterval(()=>loadMarket(),30*60e3);
+  const A=window.capacitorApp&&capacitorApp.App;
+  if(A){
+    A.addListener('appUrlOpen',e=>openDeep(e&&e.url));
+    A.getLaunchUrl().then(r=>{if(r&&r.url)setTimeout(()=>openDeep(r.url),300)}).catch(()=>{});
+    /* Atrás: cierra la ventana abierta; si no hay, vuelve al Resumen; desde el Resumen, sale de la app */
+    A.addListener('backButton',()=>{
+      if($('#tour')){endTour();return}
+      if($('#layer').firstChild){close();return}
+      if(document.documentElement.classList.contains('onb-open')){const l=$('#oLater')||$('#oBack');if(l)l.click();return}
+      if(view!=='resumen'){goTo('resumen');return}
+      A.exitApp();
+    });
+    A.addListener('appStateChange',s=>{if(s&&s.isActive){pullIfNewer();loadMarket()}else{anFlush();widgetSync()}});
+  }
+  /* Si el almacenamiento del navegador interno se borró pero la copia nativa existe, se recupera */
+  try{if(!localStorage.getItem(KEY)&&window.capacitorPreferences)capacitorPreferences.Preferences.get({key:KEY}).then(r=>{if(r&&r.value&&!localStorage.getItem(KEY)){localStorage.setItem(KEY,r.value);location.reload()}}).catch(()=>{})}catch(e){}
+})();
+/* ---------- Respaldo: exportar e importar tus datos en un archivo ----------
+   Sirve para pasar los datos de la web a la app Android sin crear cuenta, y como copia de seguridad.
+   El archivo contiene tus finanzas: guárdalo en un lugar seguro. */
+function backupJSON(){const d=JSON.parse(JSON.stringify(S));delete d.onbDraft;delete d._owner;delete d._synced;return JSON.stringify({app:'caoba',formato:1,exportado:new Date().toISOString(),datos:d},null,1)}
+async function exportBackup(){
+  if(S.example){toast('Estás viendo datos de ejemplo: no hay nada que respaldar');return}
+  const name='caoba-respaldo-'+isoLocal(new Date())+'.json',txt=backupJSON();
+  if(isNative()){try{await cwPlugin().shareFile({text:txt,name});track('respaldo_exportado')}catch(e){toast('No se pudo crear el respaldo')}return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Respaldo descargado: '+name);track('respaldo_exportado');
+}
+function importBackup(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='application/json,.json';
+  inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;if(f.size>5e6){toast('Ese archivo es demasiado grande para ser un respaldo de Caoba');return}
+    const r=new FileReader();r.onload=()=>{let o;try{o=JSON.parse(r.result)}catch(e){toast('Ese archivo no es un respaldo de Caoba');return}
+      const d=o&&o.app==='caoba'&&o.datos;
+      if(!d||!Array.isArray(d.savings)||!Array.isArray(d.expenses)||!Array.isArray(d.incomes)){toast('Ese archivo no es un respaldo de Caoba');return}
+      const n=d.savings.length+d.cards.length+(d.loans||[]).length,m=d.expenses.length+d.incomes.length;
+      sheet(`<div class="confirm"><h3>¿Restaurar este respaldo?</h3><p class="lead-s">Creado el ${esc(dtFmt.format(new Date(o.exportado)))}: ${n} cuentas, tarjetas, préstamos e inversiones, y ${m} movimientos.</p>
+        <p class="lead-s">Reemplaza los datos de este teléfono. ${S.example?'':'Podrás deshacerlo justo después.'}</p>
+        <div class="form"><button class="btn" type="button" id="bkYes">Sí, restaurar</button><button class="btn ghost" type="button" id="bkNo">Cancelar</button></div></div>`,'var(--brand)');
+      $('#bkNo').onclick=close;
+      $('#bkYes').onclick=()=>{const prev=S.example?null:JSON.stringify(S),keep={theme:S.theme};S=Object.assign({},d,{example:false,theme:d.theme!==undefined?d.theme:keep.theme,onbDismissed:true});
+        normalizeS();S._upd=Date.now();save();close();closeOnbLayer();setView('resumen');render();track('respaldo_importado');
+        if(prev){const t=document.createElement('div');t.className='toast';t.innerHTML='Respaldo restaurado <button type="button" class="link-btn" id="bkUndo">Deshacer</button>';document.body.appendChild(t);
+          $('#bkUndo').onclick=()=>{S=JSON.parse(prev);normalizeS();save();render();t.remove();toast('Se recuperaron tus datos anteriores')};setTimeout(()=>t.remove(),9000)}
+        else toast('Respaldo restaurado')}};
+    r.readAsText(f)};
+  inp.click();
+}
 /* ---------- Arranque: siempre al final; cierra el bloque abierto en 00-estado.js ---------- */
 normalizeS();
 try{if(getCed())S.mail.keepCed=true}catch(e){}

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Caoba</string>
+    <string name="title_activity_main">Caoba</string>
+    <string name="package_name">com.caobafinanzas.app</string>
+    <string name="custom_url_scheme">com.caobafinanzas.app</string>
+    <string name="w_net_title">Patrimonio neto</string>
+    <string name="w_flow_title">Ingresos y gastos</string>
+    <string name="w_inv_title">Inversiones</string>
+    <string name="w_mkt_title">Mercado · tasas verificadas</string>
+    <string name="w_net_desc">Tu patrimonio neto: lo que tienes menos lo que debes</string>
+    <string name="w_flow_desc">Ingresos, gastos y balance del mes</string>
+    <string name="w_inv_desc">Valor de tu cartera, ganancia y próximo vencimiento</string>
+    <string name="w_mkt_desc">Tasas del mercado con su fuente y su fecha</string>
+</resources>

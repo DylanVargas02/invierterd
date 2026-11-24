@@ -94,3 +94,25 @@ with zipfile.ZipFile(ROOT / 'tools' / 'Caoba-app.zip', 'w', zipfile.ZIP_DEFLATED
         if (ROOT / f).exists():
             z.write(ROOT / f, f'Caoba/{f}')
 print('versión', version, '·', len(files), 'archivos')
+
+# ---------- App Android (Capacitor): la misma app, sin service worker y con todo incluido ----------
+if '--native' in sys.argv:
+    import shutil
+    WWW = ROOT / 'www'
+    if WWW.exists(): shutil.rmtree(WWW)
+    (WWW / 'vendor').mkdir(parents=True)
+    NM = ROOT / 'node_modules'
+    for src, dst in [('@capacitor/core/dist/capacitor.js', 'capacitor.js'), ('@capacitor/app/dist/plugin.js', 'cap-app.js'),
+                     ('@capacitor/preferences/dist/plugin.js', 'cap-preferences.js')]:
+        shutil.copy(NM / src, WWW / 'vendor' / dst)
+    for f in (NM / '@supabase/supabase-js/dist/umd').glob('*.js'):
+        shutil.copy(f, WWW / 'vendor' / f.name)
+    nbody = body.replace("const SUPA_JS='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';", "const SUPA_JS='vendor/supabase.js';")
+    assert nbody != body, 'no se encontró SUPA_JS'
+    nhead = head.replace('<link rel="manifest" href="manifest.webmanifest">\n', '').replace(
+        '<meta name="apple-mobile-web-app-capable" content="yes">',
+        '<meta name="apple-mobile-web-app-capable" content="yes">\n<script>window.CAOBA_NATIVE=true</script>\n<script src="vendor/capacitor.js"></script>\n<script src="vendor/cap-app.js"></script>\n<script src="vendor/cap-preferences.js"></script>')
+    (WWW / 'index.html').write_text(nhead + nbody + '\n</body>\n</html>\n', encoding='utf-8')
+    for f in ['icons/icon-192.png', 'icons/favicon-32.png']:
+        (WWW / 'icons').mkdir(exist_ok=True); shutil.copy(ROOT / f, WWW / f)
+    print('www/ lista para Capacitor ·', sum(1 for _ in WWW.rglob('*') if _.is_file()), 'archivos')

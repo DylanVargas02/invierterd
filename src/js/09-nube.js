@@ -5,7 +5,7 @@ const SUPA_JS='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/um
 let sb=null,sbUser=null,syncTimer=null,syncState='idle',accStep={email:'',sent:false},loginFor='',accMode='pw';
 const canCloud=()=>/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(SUPABASE_URL);
 const isPublished=()=>/(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
-function persistLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function persistLocal(){let j='';try{j=JSON.stringify(S);localStorage.setItem(KEY,j)}catch(e){}nativeMirror(j)}
 async function sbClient(){
   if(sb)return sb;
   if(!canCloud())throw new Error('Las cuentas todavía no están activadas.');

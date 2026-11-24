@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/w_bg"
+    android:padding="14dp">
+
+    <TextView android:id="@+id/w_label" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="#C9DCEA" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" android:text="Caoba" />
+
+    <TextView android:id="@+id/w_value" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="#F7F9F8" android:textSize="28sp" android:textStyle="bold" android:maxLines="1"
+        android:autoSizeTextType="uniform" android:autoSizeMinTextSize="14sp" android:autoSizeMaxTextSize="30sp" android:text="Abre Caoba" />
+
+    <TextView android:id="@+id/w_sub" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="#E3F7EA" android:textSize="13sp" android:maxLines="2" android:text="" />
+
+    <ProgressBar android:id="@+id/w_bar" style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="8dp"
+        android:max="100" android:progress="0" android:progressDrawable="@drawable/w_bar" android:visibility="gone" />
+
+    <LinearLayout android:id="@+id/w_r1" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:orientation="horizontal" android:visibility="gone">
+        <TextView android:id="@+id/w_r1l" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="#C9DCEA" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/w_r1v" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#F7F9F8" android:textSize="13sp" android:textStyle="bold" android:layout_marginStart="8dp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/w_r2" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:orientation="horizontal" android:visibility="gone">
+        <TextView android:id="@+id/w_r2l" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="#C9DCEA" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/w_r2v" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#F7F9F8" android:textSize="13sp" android:textStyle="bold" android:layout_marginStart="8dp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/w_r3" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:orientation="horizontal" android:visibility="gone">
+        <TextView android:id="@+id/w_r3l" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="#C9DCEA" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/w_r3v" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#F7F9F8" android:textSize="13sp" android:textStyle="bold" android:layout_marginStart="8dp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/w_r4" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:orientation="horizontal" android:visibility="gone">
+        <TextView android:id="@+id/w_r4l" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="#C9DCEA" android:textSize="13sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/w_r4v" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#F7F9F8" android:textSize="13sp" android:textStyle="bold" android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/w_foot" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:gravity="bottom" android:textColor="#9BE3B5" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" android:layout_marginTop="6dp" android:text="" />
+</LinearLayout>

@@ -1,0 +1,20 @@
+{
+  "name": "caoba",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Caoba · app de organización financiera e inversión (web y Android)",
+  "scripts": {
+    "build:web": "python3 tools/build.py",
+    "build:native": "python3 tools/build.py --native && npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/preferences": "8.0.1",
+    "@supabase/supabase-js": "2.45.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.2"
+  }
+}

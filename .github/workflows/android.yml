@@ -1,0 +1,76 @@
+# Compila la app Android de Caoba (Capacitor) y publica un APK de prueba.
+# Descarga: https://github.com/DylanVargas02/invierterd/releases/tag/android-prueba
+name: App Android
+
+on:
+  push:
+    branches: [main, master]
+    paths: ['src/**', 'android/**', 'tools/**', 'package.json', 'package-lock.json', 'capacitor.config.json', '.github/workflows/android.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir la app web para Android
+        run: |
+          python3 tools/build.py --native
+          npx cap sync android
+
+      - name: Compilar el APK de prueba
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk ../caoba-prueba.apk
+
+      - name: Revisar el código Android (lint)
+        working-directory: android
+        continue-on-error: true
+        run: ./gradlew --no-daemon lintDebug
+
+      - name: Guardar el informe de lint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-lint
+          path: android/app/build/reports/lint-results-debug.html
+          if-no-files-found: ignore
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: caoba-prueba-apk
+          path: caoba-prueba.apk
+
+      - name: Publicar el APK de prueba
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete android-prueba --yes --cleanup-tag || true
+          gh release create android-prueba caoba-prueba.apk --prerelease \
+            --title "Caoba para Android · versión de prueba" \
+            --notes "APK de prueba compilado desde ${GITHUB_SHA::7}. Para instalarlo, permite «instalar apps desconocidas» en tu navegador. No es la versión de Play Store."
