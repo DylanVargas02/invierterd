@@ -5,7 +5,8 @@ function render(){
   $('#view').className='v-'+view;renderTabs(); renderNotice(); paintAcc();
   const pf=S.profiles&&S.profiles.list.length>1?activeProfile():null;$('#brandSmall').innerHTML=(S.name&&view==='resumen'?'Hola, '+esc(S.name):'Caoba')+(pf?' · '+esc(pf.name):'');
   ({resumen:vResumen,movimientos:vMovimientos,cuentas:vCuentas,inversion:vInversion,mercado:vMercado})[view]();
-  bindPromos(); tickLive(); fitBig(); fitText();
+  bindPromos(); tickLive(); fitBig(); fitText(); trackView(); widgetSync();
+  if(!document.documentElement.classList.contains('onb-open')&&!document.documentElement.classList.contains('tour-open'))setTimeout(askConsent,1500);
 }
 const X=(attr,id)=>`<button class="x" ${attr}="${id}" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></button>`;
 const empty=(txt,id,acc)=>`<div class="empty">${txt}<button class="btn" id="${id}" style="--accent:${acc}">Agregar</button></div>`;

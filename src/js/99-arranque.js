@@ -3,6 +3,7 @@ normalizeS();
 try{if(getCed())S.mail.keepCed=true}catch(e){}
 render();
 showSplash();
+track('app_abierta');
 if(!S.onboarded&&!S.onbDismissed)openWelcome();
 if(isPublished()&&canCloud()){let has=false;try{has=!!localStorage.getItem(KEY+'.auth')}catch(e){}if(/access_token=|error_description=/.test(location.hash||''))sessionFromUrl();else if(has)sbClient().catch(()=>{})}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullIfNewer()});

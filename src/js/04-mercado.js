@@ -24,17 +24,19 @@ const MK_D=365;
 const rateHist=p=>mkSeries(p.id+p.e,p.r,MK_D,p.t==='pre'?.5:.35,.05).map(v=>Math.max(.05,v));
 function fxNow(e,cur){const base=cur==='USD'?(S.rates.USD||60.9):(S.rates.EUR||70.6),R=seeded(e[0]+cur),off=(R()-.5)*.3,sp=e[2]*(cur==='EUR'?1.4:1);return {buy:+(base+off-sp).toFixed(2),sell:+(base+off+sp).toFixed(2)}}
 function fxHist(e,cur){const n=fxNow(e,cur),b=mkSeries(e[0]+cur+'fx',n.buy,MK_D,cur==='USD'?.18:.24,.7);const sp=n.sell-n.buy;return {buy:b,sell:b.map(v=>+(v+sp).toFixed(2))}}
-let mk={seg:'prod',t:'cert',ent:'',cur:'',plazo:'',sort:'',fx:'USD',fxk:'',amt:'',dir:'vendo',cmp:[]};
-try{Object.assign(mk,JSON.parse(localStorage.getItem(KEY+'.mk')||'{}'));mk.cmp=[]}catch(e){}
+let mk={seg:'real',t:'cert',ent:'',cur:'',plazo:'',sort:'',fx:'USD',fxk:'',amt:'',dir:'vendo',cmp:[]};
+try{Object.assign(mk,JSON.parse(localStorage.getItem(KEY+'.mk')||'{}'));mk.cmp=[];if(!mk.v2){mk.seg='real';mk.v2=1}}catch(e){}
 const mkKeep=()=>{try{const {cmp,...o}=mk;localStorage.setItem(KEY+'.mk',JSON.stringify(o))}catch(e){}};
 const plazoTxt=p=>p.m===0?(p.x||'Libre'):p.m<12?p.m+(p.m===1?' mes':' meses'):p.m%12===0?(p.m/12)+(p.m===12?' año':' años'):p.m+' meses';
 function sparkL(h,col){const v=h.slice(-60),mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;const d='M'+v.map((y,i)=>(i/(v.length-1)*64).toFixed(1)+' '+(22-(y-mn)/r*20).toFixed(1)).join(' L');return `<svg class="spk" viewBox="0 0 64 24" aria-hidden="true"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
 function vMercado(){
-  const seg=`<div class="seg" role="group" aria-label="Sección"><button data-mks="prod" aria-pressed="${mk.seg==='prod'}">Productos y tasas</button><button data-mks="fx" aria-pressed="${mk.seg==='fx'}">Tasas de cambio</button></div>`;
-  const note=`<p class="mk-note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>Prototipo con datos simulados. Pronto con tasas reales de cada entidad.</p>`;
-  $('#view').innerHTML=`<p class="mk-lead">Compara y descubre dónde te conviene ahorrar, invertir o cambiar tus dólares.</p>${seg}${note}${mk.seg==='fx'?fxHTML():prodHTML()}${promoHTML('mercado')}`;
-  document.querySelectorAll('[data-mks]').forEach(b=>b.onclick=()=>{mk.seg=b.dataset.mks;mkKeep();render()});
-  if(mk.seg==='fx')bindFx();else bindProd();
+  if(!['real','prod','fx'].includes(mk.seg))mk.seg='real';
+  const seg=`<div class="seg seg-top" role="group" aria-label="Sección"><button data-mks="real" aria-pressed="${mk.seg==='real'}">Tasas verificadas</button><button data-mks="prod" aria-pressed="${mk.seg==='prod'}">Productos</button><button data-mks="fx" aria-pressed="${mk.seg==='fx'}">Cambio</button></div>`;
+  const note=`<p class="mk-note sim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span><b>Datos simulados.</b> Esta sección es un prototipo para mostrar cómo funcionará la comparación; sus tasas no son reales. Las tasas verificadas están en la primera pestaña.</span></p>`;
+  $('#view').innerHTML=`<p class="mk-lead">Compara y descubre dónde te conviene ahorrar, invertir o cambiar tus dólares.</p>${seg}${mk.seg==='real'?realHTML():note+(mk.seg==='fx'?fxHTML():prodHTML())}${promoHTML('mercado')}`;
+  document.querySelectorAll('[data-mks]').forEach(b=>b.onclick=()=>{mk.seg=b.dataset.mks;mkKeep();render();track('mercado_'+mk.seg)});
+  document.querySelectorAll('[data-mkr]').forEach(b=>b.onclick=()=>{mkr.prod=b.dataset.mkr;render()});
+  if(mk.seg==='fx')bindFx();else if(mk.seg==='prod')bindProd();
 }
 function prodHTML(){
   const L0=MK.filter(p=>p.t===mk.t),ents=[...new Set(L0.map(p=>p.e))].sort(),loan=mk.t==='pre';

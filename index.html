@@ -2010,6 +2010,43 @@ nav.tabs .side-brand .rd{color:inherit}
 .prof-ok{color:var(--brand);font-weight:800;font-size:18px;padding-right:6px}
 .mvf2{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .mvf2 select{width:100%}
+
+/* ===== Etapa 4: mercado con datos verificables y administración ===== */
+.mk-note.sim{background:var(--debt-soft);color:var(--ink);border-radius:12px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start}
+.mk-note.sim svg{flex:none;width:18px;height:18px;stroke:var(--debt)}
+.mk-note.warn{background:var(--debt-soft);border-radius:12px;padding:10px 12px}
+.mkr-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.mkr-r{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+.mkr-h{display:flex;align-items:center;gap:10px}
+.mkr-t{flex:1;min-width:0;display:flex;flex-direction:column}.mkr-t b{font-size:15px}.mkr-t small{color:var(--ink-2);font-size:12.5px}
+.mkr-v{text-align:right;display:flex;flex-direction:column}.mkr-v b{font-family:var(--f-display);font-size:19px;font-weight:800}.mkr-v small{color:var(--ink-2);font-size:12px}
+.mkr-m{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:12.5px;color:var(--ink-2)}
+.mkr-m a{color:var(--brand);font-weight:700}
+.mkr-st{font-weight:800;border-radius:999px;padding:1px 9px}
+.st-real .mkr-st{background:var(--grow-soft);color:var(--grow)}
+.st-por_verificar .mkr-st{background:var(--debt-soft);color:var(--debt)}
+.st-simulado .mkr-st{background:var(--surface-2);color:var(--ink-2)}
+.mkr-n{margin:8px 0 0;font-size:13px;color:var(--ink-2)}
+.mkr-cmp{margin-top:6px}
+.mkr-cmp-r{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.mkr-cmp-r>span{display:flex;flex-direction:column;min-width:0}.mkr-cmp-r>span:last-child{text-align:right}
+.mkr-cmp-r small{font-size:12px;color:var(--ink-2);font-weight:500}
+.mkr-cmp-r .up{color:var(--grow);font-weight:800}.mkr-cmp-r .eq{color:var(--ink);font-weight:700}
+.adm-h.old{opacity:.6}
+.adm-a{display:flex;justify-content:space-between;align-items:center;padding:6px 4px 0;font-size:12.5px;color:var(--ink-2)}
+.adm-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 8px}
+.adm-kpi>div{background:var(--surface-2);border-radius:12px;padding:10px}.adm-kpi small{display:block;font-size:11.5px;color:var(--ink-2)}.adm-kpi b{font-size:20px;font-family:var(--f-display)}
+.adm-bars{display:flex;align-items:flex-end;gap:3px;height:90px;padding:6px 0;border-bottom:1px solid var(--line)}
+.adm-bars span{flex:1;height:var(--h);min-height:2px;background:var(--brand);border-radius:3px 3px 0 0}
+.adm-bx{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-2)}
+.adm-t{width:100%;border-collapse:collapse;font-size:14px}.adm-t th,.adm-t td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left}.adm-t .num{text-align:right}
+
+/* Aviso de estadísticas */
+.an-bar{position:fixed;z-index:30;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));max-width:460px;margin:0 auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 16px 40px -18px rgb(14 44 68 / .5)}
+.an-bar p{margin:0 0 10px;font-size:14px;line-height:1.45}
+.an-bar div{display:flex;gap:8px}.an-bar .btn{flex:1;padding:10px}
+@media (min-width:1000px){.an-bar{left:auto;right:24px;bottom:24px}}
+.set-sw{cursor:pointer}.set-sw input{width:44px;height:26px;flex:none;accent-color:var(--brand)}
 /* ===== Estabilidad (etapa 1): reglas que corrigen desajustes en cualquier tamaño ===== */
 
 /* Campos: 16 px o más para que iPhone no haga zoom al tocarlos */
@@ -2513,7 +2550,8 @@ function render(){
   $('#view').className='v-'+view;renderTabs(); renderNotice(); paintAcc();
   const pf=S.profiles&&S.profiles.list.length>1?activeProfile():null;$('#brandSmall').innerHTML=(S.name&&view==='resumen'?'Hola, '+esc(S.name):'Caoba')+(pf?' · '+esc(pf.name):'');
   ({resumen:vResumen,movimientos:vMovimientos,cuentas:vCuentas,inversion:vInversion,mercado:vMercado})[view]();
-  bindPromos(); tickLive(); fitBig(); fitText();
+  bindPromos(); tickLive(); fitBig(); fitText(); trackView(); widgetSync();
+  if(!document.documentElement.classList.contains('onb-open')&&!document.documentElement.classList.contains('tour-open'))setTimeout(askConsent,1500);
 }
 const X=(attr,id)=>`<button class="x" ${attr}="${id}" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></button>`;
 const empty=(txt,id,acc)=>`<div class="empty">${txt}<button class="btn" id="${id}" style="--accent:${acc}">Agregar</button></div>`;
@@ -2588,17 +2626,19 @@ const MK_D=365;
 const rateHist=p=>mkSeries(p.id+p.e,p.r,MK_D,p.t==='pre'?.5:.35,.05).map(v=>Math.max(.05,v));
 function fxNow(e,cur){const base=cur==='USD'?(S.rates.USD||60.9):(S.rates.EUR||70.6),R=seeded(e[0]+cur),off=(R()-.5)*.3,sp=e[2]*(cur==='EUR'?1.4:1);return {buy:+(base+off-sp).toFixed(2),sell:+(base+off+sp).toFixed(2)}}
 function fxHist(e,cur){const n=fxNow(e,cur),b=mkSeries(e[0]+cur+'fx',n.buy,MK_D,cur==='USD'?.18:.24,.7);const sp=n.sell-n.buy;return {buy:b,sell:b.map(v=>+(v+sp).toFixed(2))}}
-let mk={seg:'prod',t:'cert',ent:'',cur:'',plazo:'',sort:'',fx:'USD',fxk:'',amt:'',dir:'vendo',cmp:[]};
-try{Object.assign(mk,JSON.parse(localStorage.getItem(KEY+'.mk')||'{}'));mk.cmp=[]}catch(e){}
+let mk={seg:'real',t:'cert',ent:'',cur:'',plazo:'',sort:'',fx:'USD',fxk:'',amt:'',dir:'vendo',cmp:[]};
+try{Object.assign(mk,JSON.parse(localStorage.getItem(KEY+'.mk')||'{}'));mk.cmp=[];if(!mk.v2){mk.seg='real';mk.v2=1}}catch(e){}
 const mkKeep=()=>{try{const {cmp,...o}=mk;localStorage.setItem(KEY+'.mk',JSON.stringify(o))}catch(e){}};
 const plazoTxt=p=>p.m===0?(p.x||'Libre'):p.m<12?p.m+(p.m===1?' mes':' meses'):p.m%12===0?(p.m/12)+(p.m===12?' año':' años'):p.m+' meses';
 function sparkL(h,col){const v=h.slice(-60),mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;const d='M'+v.map((y,i)=>(i/(v.length-1)*64).toFixed(1)+' '+(22-(y-mn)/r*20).toFixed(1)).join(' L');return `<svg class="spk" viewBox="0 0 64 24" aria-hidden="true"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
 function vMercado(){
-  const seg=`<div class="seg" role="group" aria-label="Sección"><button data-mks="prod" aria-pressed="${mk.seg==='prod'}">Productos y tasas</button><button data-mks="fx" aria-pressed="${mk.seg==='fx'}">Tasas de cambio</button></div>`;
-  const note=`<p class="mk-note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>Prototipo con datos simulados. Pronto con tasas reales de cada entidad.</p>`;
-  $('#view').innerHTML=`<p class="mk-lead">Compara y descubre dónde te conviene ahorrar, invertir o cambiar tus dólares.</p>${seg}${note}${mk.seg==='fx'?fxHTML():prodHTML()}${promoHTML('mercado')}`;
-  document.querySelectorAll('[data-mks]').forEach(b=>b.onclick=()=>{mk.seg=b.dataset.mks;mkKeep();render()});
-  if(mk.seg==='fx')bindFx();else bindProd();
+  if(!['real','prod','fx'].includes(mk.seg))mk.seg='real';
+  const seg=`<div class="seg seg-top" role="group" aria-label="Sección"><button data-mks="real" aria-pressed="${mk.seg==='real'}">Tasas verificadas</button><button data-mks="prod" aria-pressed="${mk.seg==='prod'}">Productos</button><button data-mks="fx" aria-pressed="${mk.seg==='fx'}">Cambio</button></div>`;
+  const note=`<p class="mk-note sim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span><b>Datos simulados.</b> Esta sección es un prototipo para mostrar cómo funcionará la comparación; sus tasas no son reales. Las tasas verificadas están en la primera pestaña.</span></p>`;
+  $('#view').innerHTML=`<p class="mk-lead">Compara y descubre dónde te conviene ahorrar, invertir o cambiar tus dólares.</p>${seg}${mk.seg==='real'?realHTML():note+(mk.seg==='fx'?fxHTML():prodHTML())}${promoHTML('mercado')}`;
+  document.querySelectorAll('[data-mks]').forEach(b=>b.onclick=()=>{mk.seg=b.dataset.mks;mkKeep();render();track('mercado_'+mk.seg)});
+  document.querySelectorAll('[data-mkr]').forEach(b=>b.onclick=()=>{mkr.prod=b.dataset.mkr;render()});
+  if(mk.seg==='fx')bindFx();else if(mk.seg==='prod')bindProd();
 }
 function prodHTML(){
   const L0=MK.filter(p=>p.t===mk.t),ents=[...new Set(L0.map(p=>p.e))].sort(),loan=mk.t==='pre';
@@ -3491,7 +3531,7 @@ function applyRemote(row){
 }
 async function fetchRemote(){const c=await sbClient();const {data,error}=await c.from('app_state').select('data,updated_at').eq('user_id',sbUser.id).maybeSingle();if(error)throw error;return data}
 async function afterLogin(){
-  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;
+  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;checkAdmin();
   try{
     const row=await fetchRemote();
     if(!row){if(!S.example){S._owner=sbUser.id;await pushNow();toast('Tus datos quedaron guardados en tu cuenta')}else{toast('Sesión iniciada. Organicemos tus finanzas.');S.onbDismissed=true;save();openOnboarding(true)}return}
@@ -4521,7 +4561,7 @@ function openExpense(kind='gasto',keep={},editId){
     const base={id:uid(),desc,amt,cur,date:parseDate(dv),via:v};
     const x=inc?{...base,src:catV,nat:(document.querySelector('[name=eNat]:checked')||{}).value||'variable'}:{...base,cat:catV};
     if(ed){x.id=ed.id;Object.assign(ed,x);applyVia(ed,1,k)}else{applyVia(x,1,k);(inc?S.incomes:S.expenses).push(x)}
-    S.lastVia=Object.assign({},S.lastVia||{},{[k]:v});
+    S.lastVia=Object.assign({},S.lastVia||{},{[k]:v});if(!ed)track(inc?'ingreso_registrado':'gasto_registrado');
     save();close();render();toast(ed?'Cambios guardados':inc?'Ingreso guardado':o&&o.k==='c'?'Gasto guardado en la tarjeta':'Gasto guardado')};
 }
 
@@ -4579,7 +4619,7 @@ function openSaving(pre={}){
     else{x.open=true;x.months=1}
     x.name=$('#sName').value.trim()||(ty==='Efectivo'?'Efectivo':(ty==='Sell Buy Back (SBB)'?'SBB':ty)+(ent?' · '+ent:''));
     if(ed){x.id=ed.id;['due','open','vr','intFreq','rateKind','ratePub','rateUntil','issuer','code','renew','status','color'].forEach(k=>delete ed[k]);Object.assign(ed,x);save();close();render();toast('Cambios guardados');return}
-    S.savings.push(x);save();close();if(view!=='resumen')setView(isAcct(x)?'cuentas':'inversion',isAcct(x)?'cuentas':undefined);render();window.scrollTo({top:0});toast('Guardado')};
+    S.savings.push(x);track(isAcct(x)?'cuenta_agregada':'inversion_agregada');save();close();if(view!=='resumen')setView(isAcct(x)?'cuentas':'inversion',isAcct(x)?'cuentas':undefined);render();window.scrollTo({top:0});toast('Guardado')};
 }
 
 function openCard(id){
@@ -4669,11 +4709,13 @@ function openSettings(){
   </div></section>
   <section class="set-g"><h4>Privacidad y seguridad</h4><div class="set-card">
     ${setRow('aPrv','shield','Privacidad','Qué guardamos y cómo')}
+    <label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Compartir estadísticas de uso</b><small>Anónimas: qué pantallas se usan. Nunca montos ni datos de tus cuentas.</small></span><input type="checkbox" id="aAn" role="switch" ${anConsent()==='si'?'checked':''}></label>
     ${setRow('aBlank','trash','Borrar todos mis datos','Te pediremos confirmarlo dos veces','danger')}
   </div></section>
+  ${isAdm?`<section class="set-g"><h4>Administración</h4><div class="set-card">${setRow('aAdm','shield','Panel de administrador','Cargar tasas del mercado y ver el uso de la app')}</div></section>`:''}
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
-  $('#aProf').onclick=openProfiles;$('#aPerf').onclick=openMyProfile;
+  $('#aProf').onclick=openProfiles;$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});
   document.querySelectorAll('[name=aTheme]').forEach(r=>r.onchange=()=>{S.theme=r.value||null;
@@ -4819,8 +4861,60 @@ function openAddMenu(){
   $('#mInc2').onclick=()=>openExpense('ingreso');$('#mExp2').onclick=()=>openExpense('gasto');
   $('#mCash').onclick=()=>openTransfer();$('#mPay').onclick=()=>openPayday();$('#mRem').onclick=()=>openReminder();$('#mAcc').onclick=()=>openSaving({type:'Cuenta de ahorro'});$('#mInv').onclick=()=>openInvChooser(true);$('#mCard').onclick=()=>openCard();$('#mLoan').onclick=()=>openLoan();$('#mFix').onclick=()=>openRecurring();
 }
-/* ---------- Analítica de uso (etapa 6): se completa más abajo; aquí, la función que usan los demás módulos ---------- */
-function track(){}
+/* ---------- Analítica de uso (etapa 6) ----------
+   Solo con tu permiso. Se cuentan pantallas y acciones (por ejemplo «pantalla: mercado» o «gasto registrado»)
+   con un identificador aleatorio del dispositivo. Nunca se envían montos, nombres, cuentas, correos,
+   contraseñas ni lo que escribes en los formularios. Los eventos van a la tabla usage_events de Supabase,
+   que solo el administrador puede leer. */
+const AN_OK=/^[a-z0-9_]{2,40}$/;
+const anGet=k=>{try{return localStorage.getItem(KEY+'.'+k)}catch(e){return null}};
+const anSet=(k,v)=>{try{if(v==null)localStorage.removeItem(KEY+'.'+k);else localStorage.setItem(KEY+'.'+k,v)}catch(e){}};
+const rid=n=>Array.from(crypto.getRandomValues(new Uint8Array(n)),b=>(b%36).toString(36)).join('');
+let anQ=[],anT=null;const anSession=rid(12);
+const anConsent=()=>anGet('consent');
+function anPlatform(){if(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())return Capacitor.getPlatform()==='ios'?'ios':'android';return matchMedia('(display-mode: standalone)').matches||navigator.standalone?'pwa':'web'}
+function track(event,props,screen){
+  if(anConsent()!=='si'||!AN_OK.test(event)||!canCloud())return;
+  let aid=anGet('aid');if(!aid){aid=rid(16);anSet('aid',aid)}
+  const P={};if(props)for(const k in props){const v=props[k];if(/^[a-z_]{1,20}$/.test(k)&&(typeof v==='boolean'||typeof v==='number'&&Math.abs(v)<1000||typeof v==='string'&&/^[a-z0-9_]{0,30}$/.test(v)))P[k]=v}
+  anQ.push({anon_id:aid,session_id:anSession,event,screen:(screen||view||'').replace(/[^a-z0-9_]/g,'').slice(0,30),platform:anPlatform(),app_version:String(APP_VER).slice(0,20),props:Object.keys(P).length?P:null});
+  clearTimeout(anT);anT=setTimeout(anFlush,anQ.length>=20?0:8000);
+}
+async function anFlush(){
+  if(!anQ.length||!navigator.onLine)return;const batch=anQ.splice(0,50);
+  try{const r=await fetch(SUPABASE_URL+'/rest/v1/usage_events',{method:'POST',keepalive:true,headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(batch)});if(!r.ok&&r.status>=500)anQ.unshift(...batch)}catch(e){anQ.unshift(...batch.slice(0,50))}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')anFlush()});addEventListener('pagehide',anFlush);
+let anLastView='';
+function trackView(){if(view+movSeg+cuSeg===anLastView)return;anLastView=view+movSeg+cuSeg;track('pantalla',{sub:view==='movimientos'?movSeg:view==='cuentas'?cuSeg:''})}
+/* Aviso de consentimiento: no bloquea la app y no se vuelve a mostrar después de responder */
+function askConsent(){
+  if(anConsent()||$('#anBar')||!canCloud())return;
+  const d=document.createElement('div');d.id='anBar';d.className='an-bar';d.setAttribute('role','region');d.setAttribute('aria-label','Estadísticas de uso');
+  d.innerHTML=`<p><b>¿Nos ayudas a mejorar Caoba?</b> Contaríamos qué pantallas se usan, de forma anónima. Nunca montos, nombres ni datos de tus cuentas.</p><div><button type="button" class="btn" id="anYes">Sí, ayudar</button><button type="button" class="btn ghost" id="anNo">No, gracias</button></div>`;
+  document.body.appendChild(d);
+  $('#anYes').onclick=()=>{anSet('consent','si');d.remove();track('consentimiento_aceptado');track('app_abierta');trackView()};
+  $('#anNo').onclick=()=>{anSet('consent','no');d.remove()};
+}
+function setConsent(on){anSet('consent',on?'si':'no');if(!on){anQ=[];anSet('aid',null)}}
+
+/* Panel de uso para el administrador: resumen de los últimos 30 días, sin datos personales */
+async function admUsage(){
+  $('#admBody').innerHTML='<p class="hint center">Cargando…</p>';
+  try{const c=await sbClient();const {data,error}=await c.rpc('usage_summary',{days:30});if(error)throw error;
+    if(!data.length){$('#admBody').innerHTML='<p class="hint center">Todavía no hay eventos. Se registran solo de quienes aceptan compartir estadísticas.</p>';return}
+    const byDay={},byEv={},bySc={},byPl={};let tot=0;
+    data.forEach(r=>{tot+=+r.n;byDay[r.day]=byDay[r.day]||{n:0,d:0};byDay[r.day].n+=+r.n;byDay[r.day].d=Math.max(byDay[r.day].d,+r.devices);byEv[r.event]=(byEv[r.event]||0)+(+r.n);if(r.event==='pantalla'&&r.screen)bySc[r.screen]=(bySc[r.screen]||0)+(+r.n);if(r.platform)byPl[r.platform]=(byPl[r.platform]||0)+(+r.n)});
+    const days=Object.keys(byDay).sort(),mx=Math.max(...days.map(d=>byDay[d].n));
+    const tbl=(o,h)=>`<table class="adm-t"><thead><tr><th>${h}</th><th class="num">Veces</th></tr></thead><tbody>${Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="num">${v.toLocaleString('es-DO')}</td></tr>`).join('')}</tbody></table>`;
+    $('#admBody').innerHTML=`<div class="adm-kpi num"><div><small>Eventos · 30 días</small><b>${tot.toLocaleString('es-DO')}</b></div><div><small>Días con uso</small><b>${days.length}</b></div><div><small>Dispositivos en el mejor día</small><b>${Math.max(...days.map(d=>byDay[d].d))}</b></div></div>
+      <h4 class="menu-g">Eventos por día</h4><div class="adm-bars" role="img" aria-label="Eventos por día en los últimos 30 días">${days.map(d=>`<span title="${d}: ${byDay[d].n}" style="--h:${(byDay[d].n/mx*100).toFixed(1)}%"></span>`).join('')}</div><div class="adm-bx num"><span>${esc(days[0])}</span><span>${esc(days[days.length-1])}</span></div>
+      <h4 class="menu-g">Pantallas más vistas</h4>${tbl(bySc,'Pantalla')}
+      <h4 class="menu-g">Acciones</h4>${tbl(byEv,'Evento')}
+      <h4 class="menu-g">Plataforma</h4>${tbl(byPl,'Dónde')}
+      <p class="hint">Solo cuenta a quienes aceptaron compartir estadísticas. No incluye montos, nombres ni datos de cuentas.</p>`;
+  }catch(x){$('#admBody').innerHTML='<p class="err">No se pudo cargar el resumen. Revisa tu conexión.</p>'}
+}
 /* ---------- Perfiles financieros: Personal, Familiar, Compartido o Negocio ----------
    Una sola cuenta de acceso con varios conjuntos de finanzas. El perfil activo vive en S como siempre;
    los demás se guardan completos en S.profiles.store y viajan con la misma sincronización.
@@ -4882,11 +4976,116 @@ function openMyProfile(){
   $('#f').onsubmit=e=>{e.preventDefault();const a=$('#mpAge').value.replace(/\D/g,'');if(a&&(+a<16||+a>110))return $('#err').textContent='Revisa la edad: escribe solo el número de años.';
     S.profile={age:a,prov:$('#mpProv').value,occ:$('#mpOcc').value,sex:(document.querySelector('[name=mpSex]:checked')||{}).value||''};save();close();toast('Perfil guardado')};
 }
+/* ---------- Mercado con datos verificables (etapa 4) ----------
+   Las tasas vienen de la tabla market_observations de Supabase (vista market_latest: el último dato de cada serie).
+   Cada dato muestra institución, producto, tasa, tipo, plazo, mínimo, vigencia, fecha, fuente y estado.
+   Nada se edita ni se borra: una corrección es una fila nueva que reemplaza a la anterior. */
+const MKR_PROD={certificado:'Certificados',cuenta_ahorro:'Cuentas de ahorro',fondo:'Fondos',bono:'Bonos',sbb:'Sell Buy Back',mutuo:'Mutuos',prestamo:'Préstamos',tarjeta:'Tarjetas',tasa_cambio:'Tasa de cambio',referencia:'Tasas de referencia',otro:'Otros'};
+const MKR_RT={nominal:'nominal',efectiva:'efectiva',rendimiento:'rendimiento',compra:'compra',venta:'venta',referencia:'referencia'};
+const MKR_ST={real:'Dato real',por_verificar:'Por verificar',simulado:'Simulado'};
+const MKR_ITYPE={banco:'Banco',asociacion:'Asociación de ahorros',puesto_bolsa:'Puesto de bolsa',afi:'Administradora de fondos',gobierno:'Gobierno o Banco Central',casa_cambio:'Agente de cambio',cooperativa:'Cooperativa',otro:'Otra'};
+/* Equivalencia entre el tipo de inversión de la persona y el producto del mercado */
+const SAV2MK={'Certificado':'certificado','Cuenta de ahorro':'cuenta_ahorro','Fondo de inversión':'fondo','Bono':'bono','Sell Buy Back (SBB)':'sbb','Mutuo':'mutuo'};
+let mkr={rows:null,at:0,err:'',loading:false,prod:''};
+try{const c=JSON.parse(localStorage.getItem(KEY+'.mkr')||'null');if(c&&Array.isArray(c.rows)){mkr.rows=c.rows;mkr.at=c.at}}catch(e){}
+async function loadMarket(force){
+  if(mkr.loading||(!force&&mkr.rows&&Date.now()-mkr.at<10*60e3))return;
+  if(!canCloud())return;mkr.loading=true;
+  try{const r=await fetch(SUPABASE_URL+'/rest/v1/market_latest?select=*&order=observed_at.desc&limit=1000',{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY}});
+    if(!r.ok)throw new Error('HTTP '+r.status);mkr.rows=await r.json();mkr.at=Date.now();mkr.err='';
+    try{localStorage.setItem(KEY+'.mkr',JSON.stringify({rows:mkr.rows,at:mkr.at}))}catch(e){}
+    widgetSync();
+  }catch(e){mkr.err=mkr.rows?'Sin conexión: mostrando los datos guardados el '+dtFmt.format(new Date(mkr.at))+'.':'No se pudieron cargar las tasas. Revisa tu conexión.'}
+  mkr.loading=false;if(view==='mercado'&&mk.seg==='real')render();
+}
+const mkrTerm=d=>d==null?'Sin plazo':d===0?'A la vista':d%365===0?d/365+(d/365===1?' año':' años'):d%30===0?d/30+(d/30===1?' mes':' meses'):d+' días';
+const mkrDate=v=>v?dateFmt.format(new Date(String(v).length<=10?v+'T12:00:00':v)):'';
+function mkrRow(o){
+  const fx=o.product==='tasa_cambio';
+  return `<article class="mkr-r st-${o.status}">
+    <div class="mkr-h">${inst(o.institution,1)}<span class="mkr-t"><b>${esc(o.institution)}</b><small>${esc(o.product_name||MKR_PROD[o.product]||o.product)} · ${esc(o.currency)}${fx?'':' · '+esc(mkrTerm(o.term_days))}${o.min_amount?' · desde '+esc(fmt(+o.min_amount,o.currency,0)):''}</small></span>
+      <span class="mkr-v num"><b>${fx?'RD$'+(+o.rate).toFixed(4):(+o.rate).toFixed(2)+' %'}</b><small>${esc(MKR_RT[o.rate_type]||o.rate_type)}</small></span></div>
+    <div class="mkr-m"><span class="mkr-st">${esc(MKR_ST[o.status]||o.status)}</span><span>Actualizado ${esc(mkrDate(o.observed_at))}</span>${o.valid_to?`<span>Vigente hasta ${esc(mkrDate(o.valid_to))}</span>`:''}
+      <span>Fuente: ${o.source_url?`<a href="${esc(o.source_url)}" target="_blank" rel="noopener">${esc(o.source_name)}</a>`:esc(o.source_name)}</span></div>
+    ${o.notes?`<p class="mkr-n">${esc(o.notes)}</p>`:''}</article>`;
+}
+/* Compara las inversiones de la persona con el mejor dato real cargado del mismo producto y moneda */
+function mkrCompareHTML(rows){
+  const real=rows.filter(o=>o.status==='real'&&o.product!=='tasa_cambio'&&['nominal','efectiva','rendimiento'].includes(o.rate_type));
+  const mine=S.example?[]:S.savings.filter(s=>s.status!=='liquidada'&&SAV2MK[s.type]&&s.rate>0);
+  const out=mine.map(s=>{const L=real.filter(o=>o.product===SAV2MK[s.type]&&o.currency===s.cur);if(!L.length)return '';
+    const best=L.reduce((a,b)=>+b.rate>+a.rate?b:a),d=+best.rate-s.rate;
+    return `<div class="mkr-cmp-r"><span><b>${esc(s.name)}</b><small>Recibes ${s.rate.toFixed(2)} %${s.rateKind==='efectiva'?' efectiva':''}</small></span><span class="num ${d>0.005?'up':'eq'}">${d>0.005?'Hay '+d.toFixed(2)+' puntos más':'Estás en la mejor tasa cargada'}<small>${esc(best.institution)} · ${(+best.rate).toFixed(2)} % ${esc(MKR_RT[best.rate_type])} · ${esc(mkrDate(best.observed_at))}</small></span></div>`}).filter(Boolean);
+  return out.length?`<section class="panel mkr-cmp"><div class="panel-h"><b>Tus inversiones frente al mercado</b><span class="panel-s">Solo datos reales</span></div>${out.join('')}<p class="hint">Compara tasas del mismo tipo (nominal con nominal). Revisa plazo, monto mínimo y condiciones con la entidad antes de decidir.</p></section>`:'';
+}
+function realHTML(){
+  if(!mkr.rows&&!mkr.err){loadMarket();return '<p class="hint center" style="margin:28px 0">Cargando tasas…</p>'}
+  loadMarket();
+  const rows=mkr.rows||[],prods=[...new Set(rows.map(o=>o.product))];
+  if(mkr.prod&&!prods.includes(mkr.prod))mkr.prod='';
+  const L=rows.filter(o=>!mkr.prod||o.product===mkr.prod).sort((a,b)=>a.product.localeCompare(b.product)||(+b.rate)-(+a.rate));
+  return `${mkr.err?`<p class="mk-note warn">${esc(mkr.err)}</p>`:''}
+    ${rows.length?`${mkrCompareHTML(rows)}<div class="mk-types" role="group" aria-label="Producto"><button type="button" data-mkr="" aria-pressed="${!mkr.prod}">Todos</button>${prods.map(k=>`<button type="button" data-mkr="${k}" aria-pressed="${mkr.prod===k}">${esc(MKR_PROD[k]||k)}</button>`).join('')}</div>
+      <div class="mkr-list">${L.map(mkrRow).join('')}</div>`
+    :`<section class="conn-empty"><h2>Todavía no hay tasas verificadas</h2><p>Aquí aparecerán las tasas de cada entidad con su fuente, su fecha y su estado (dato real o por verificar). Ninguna tasa se inventa ni se sobrescribe.</p><p>Mientras tanto puedes explorar el prototipo, que usa datos simulados y así lo indica.</p><button type="button" class="btn ghost" data-mks="prod">Ver el prototipo simulado</button></section>`}`;
+}
+/* ---------- Administración (etapas 4 y 6): solo para cuentas registradas en la tabla admins ----------
+   La base de datos decide quién es administrador (función is_admin con seguridad por fila);
+   esta pantalla solo se muestra si la base de datos lo confirma. */
+let isAdm=false;
+async function checkAdmin(){isAdm=false;if(!sbUser)return false;try{const c=await sbClient();const {data,error}=await c.rpc('is_admin');isAdm=!error&&data===true}catch(e){}return isAdm}
+let admTab='cargar';
+function openAdmin(){
+  if(!isAdm){toast('Esta sección es solo para administradores');return}
+  sheet(`<h3>Administración</h3><div class="seg seg-top" role="group" aria-label="Sección">${[['cargar','Cargar tasa'],['hist','Historial'],['uso','Uso de la app']].map(([k,l])=>`<button type="button" data-adm="${k}" aria-pressed="${admTab===k}">${l}</button>`).join('')}</div><div id="admBody"></div>`,'var(--brand)');
+  document.querySelectorAll('[data-adm]').forEach(b=>b.onclick=()=>{admTab=b.dataset.adm;openAdmin()});
+  ({cargar:admLoad,hist:admHist,uso:admUsage})[admTab]();
+}
+function admLoad(pre){
+  pre=pre||{};const opt=(o,v)=>Object.entries(o).map(([k,l])=>`<option value="${k}" ${k===v?'selected':''}>${l}</option>`).join('');
+  $('#admBody').innerHTML=`<form class="form" id="admF" novalidate>
+    ${pre.supersedes?`<p class="mk-note">Corrección del dato #${pre.supersedes}. El dato anterior no se borra: queda en el historial marcado como reemplazado.</p>`:'<p class="lead-s">Cada carga se guarda como un dato nuevo, con su fuente y su fecha. Nada se sobrescribe.</p>'}
+    <div class="field"><label for="amI">Institución</label><input id="amI" list="amIL" value="${esc(pre.institution||'')}" maxlength="80"><datalist id="amIL">${ALL_ENTS.map(e=>`<option>${esc(e)}</option>`).join('')}</datalist></div>
+    <div class="two"><div class="field"><label for="amIT">Tipo de institución</label><select id="amIT">${opt(MKR_ITYPE,pre.institution_type||'banco')}</select></div><div class="field"><label for="amP">Producto</label><select id="amP">${opt(MKR_PROD,pre.product||'certificado')}</select></div></div>
+    <div class="field"><label for="amPN">Nombre del producto <span class="opt">opcional</span></label><input id="amPN" value="${esc(pre.product_name||'')}" maxlength="120" placeholder="Ej. Certificado financiero"></div>
+    <div class="two"><div class="field"><label for="amC">Moneda</label><select id="amC">${CURS.map(c=>`<option ${c===(pre.currency||'DOP')?'selected':''}>${c}</option>`).join('')}</select></div><div class="field"><label for="amR">Tasa</label><input id="amR" inputmode="decimal" value="${pre.rate!=null?esc(pre.rate):''}" placeholder="% anual o RD$ por unidad"></div></div>
+    <div class="two"><div class="field"><label for="amRT">Tipo de tasa</label><select id="amRT">${opt(MKR_RT,pre.rate_type||'nominal')}</select></div><div class="field"><label for="amT">Plazo en días <span class="opt">opcional</span></label><input id="amT" inputmode="numeric" value="${pre.term_days!=null?esc(pre.term_days):''}" placeholder="180"></div></div>
+    <div class="field"><label for="amM">Monto mínimo <span class="opt">opcional</span></label><input id="amM" inputmode="decimal" value="${pre.min_amount!=null?esc(pre.min_amount):''}"></div>
+    <div class="two"><div class="field"><label for="amVF">Vigente desde <span class="opt">opcional</span></label><input type="date" id="amVF" value="${esc(pre.valid_from||'')}"></div><div class="field"><label for="amVT">Vigente hasta <span class="opt">opcional</span></label><input type="date" id="amVT" value="${esc(pre.valid_to||'')}"></div></div>
+    <div class="field"><label for="amO">Fecha del dato</label><input type="date" id="amO" value="${esc((pre.observed_at||new Date().toISOString()).slice(0,10))}"></div>
+    <div class="field"><label for="amS">Fuente</label><input id="amS" value="${esc(pre.source_name||'')}" maxlength="120" placeholder="Ej. Banco Central · tasas por entidad"></div>
+    <div class="field"><label for="amU">Enlace de la fuente <span class="opt">recomendado</span></label><input id="amU" type="url" value="${esc(pre.source_url||'')}" placeholder="https://…"></div>
+    <fieldset class="field"><legend>Estado</legend><div class="choice three-c">${Object.entries(MKR_ST).map(([k,l])=>pill('amSt',k,l,(pre.status||'por_verificar')===k)).join('')}</div><small class="hint">«Dato real» solo si lo verificaste en la fuente. Si no, «Por verificar».</small></fieldset>
+    <div class="field"><label for="amN">Notas <span class="opt">opcional</span></label><input id="amN" value="${esc(pre.notes||'')}" maxlength="400"></div>
+    <p class="err" id="err" role="alert"></p><button class="btn" type="submit">Guardar dato</button></form>`;
+  $('#admF').onsubmit=async e=>{e.preventDefault();const err=m=>{$('#err').textContent=m},v=id=>$(id).value.trim();
+    const r=parseFloat(v('#amR').replace(',','.')),st=(document.querySelector('[name=amSt]:checked')||{}).value||'por_verificar';
+    if(v('#amI').length<2)return err('Escribe la institución.');if(!(r>=0&&r<1000))return err('Revisa la tasa: solo números, con punto o coma decimal.');
+    if(v('#amS').length<2)return err('Indica la fuente del dato.');if(v('#amU')&&!/^https?:\/\//.test(v('#amU')))return err('El enlace debe empezar con https://');
+    if(st==='real'&&!v('#amU'))return err('Para marcarlo como dato real, agrega el enlace de la fuente.');
+    const row={institution:v('#amI'),institution_type:v('#amIT'),product:v('#amP'),product_name:v('#amPN')||null,currency:v('#amC'),rate:r,rate_type:v('#amRT'),
+      term_days:v('#amT')?parseInt(v('#amT'),10):null,min_amount:v('#amM')?money(v('#amM')):null,valid_from:v('#amVF')||null,valid_to:v('#amVT')||null,
+      observed_at:new Date(v('#amO')+'T12:00:00').toISOString(),source_name:v('#amS'),source_url:v('#amU')||null,status:st,notes:v('#amN')||null,supersedes:pre.supersedes||null};
+    const b=e.target.querySelector('[type=submit]');b.disabled=true;b.textContent='Guardando…';
+    try{const c=await sbClient();const {error}=await c.from('market_observations').insert(row);if(error)throw error;toast('Dato guardado');track('admin_tasa_cargada');loadMarket(true);admTab='hist';openAdmin()}
+    catch(x){err('No se pudo guardar: '+(x&&x.message||'revisa tu conexión'));b.disabled=false;b.textContent='Guardar dato'}};
+}
+async function admHist(){
+  $('#admBody').innerHTML='<p class="hint center">Cargando…</p>';
+  try{const c=await sbClient();const {data,error}=await c.from('market_observations').select('*').order('created_at',{ascending:false}).limit(60);if(error)throw error;
+    const rep=new Set(data.filter(o=>o.supersedes).map(o=>o.supersedes));
+    $('#admBody').innerHTML=data.length?`<div class="mkr-list">${data.map(o=>`<div class="adm-h${rep.has(o.id)?' old':''}">${mkrRow(o)}<div class="adm-a"><span class="num">#${o.id}${o.supersedes?' · corrige #'+o.supersedes:''}${rep.has(o.id)?' · reemplazado':''}</span>${rep.has(o.id)?'':`<button type="button" class="link-btn" data-fix="${o.id}">Corregir</button>`}</div></div>`).join('')}</div>`:'<p class="hint center">Aún no has cargado datos.</p>';
+    document.querySelectorAll('[data-fix]').forEach(b=>b.onclick=()=>{const o=data.find(x=>x.id===+b.dataset.fix);admTab='cargar';openAdmin();admLoad(Object.assign({},o,{supersedes:o.id,observed_at:new Date().toISOString(),valid_from:o.valid_from,valid_to:o.valid_to}))});
+  }catch(x){$('#admBody').innerHTML='<p class="err">No se pudo cargar el historial. Revisa tu conexión.</p>'}
+}
+/* ---------- Widgets nativos (etapa 5): en la web no hace nada; en Android se completa en 21-widgets.js ---------- */
+function widgetSync(){}
 /* ---------- Arranque: siempre al final; cierra el bloque abierto en 00-estado.js ---------- */
 normalizeS();
 try{if(getCed())S.mail.keepCed=true}catch(e){}
 render();
 showSplash();
+track('app_abierta');
 if(!S.onboarded&&!S.onbDismissed)openWelcome();
 if(isPublished()&&canCloud()){let has=false;try{has=!!localStorage.getItem(KEY+'.auth')}catch(e){}if(/access_token=|error_description=/.test(location.hash||''))sessionFromUrl();else if(has)sbClient().catch(()=>{})}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullIfNewer()});

@@ -28,11 +28,13 @@ function openSettings(){
   </div></section>
   <section class="set-g"><h4>Privacidad y seguridad</h4><div class="set-card">
     ${setRow('aPrv','shield','Privacidad','Qué guardamos y cómo')}
+    <label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Compartir estadísticas de uso</b><small>Anónimas: qué pantallas se usan. Nunca montos ni datos de tus cuentas.</small></span><input type="checkbox" id="aAn" role="switch" ${anConsent()==='si'?'checked':''}></label>
     ${setRow('aBlank','trash','Borrar todos mis datos','Te pediremos confirmarlo dos veces','danger')}
   </div></section>
+  ${isAdm?`<section class="set-g"><h4>Administración</h4><div class="set-card">${setRow('aAdm','shield','Panel de administrador','Cargar tasas del mercado y ver el uso de la app')}</div></section>`:''}
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
-  $('#aProf').onclick=openProfiles;$('#aPerf').onclick=openMyProfile;
+  $('#aProf').onclick=openProfiles;$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});
   document.querySelectorAll('[name=aTheme]').forEach(r=>r.onchange=()=>{S.theme=r.value||null;

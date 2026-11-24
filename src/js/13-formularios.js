@@ -120,7 +120,7 @@ function openExpense(kind='gasto',keep={},editId){
     const base={id:uid(),desc,amt,cur,date:parseDate(dv),via:v};
     const x=inc?{...base,src:catV,nat:(document.querySelector('[name=eNat]:checked')||{}).value||'variable'}:{...base,cat:catV};
     if(ed){x.id=ed.id;Object.assign(ed,x);applyVia(ed,1,k)}else{applyVia(x,1,k);(inc?S.incomes:S.expenses).push(x)}
-    S.lastVia=Object.assign({},S.lastVia||{},{[k]:v});
+    S.lastVia=Object.assign({},S.lastVia||{},{[k]:v});if(!ed)track(inc?'ingreso_registrado':'gasto_registrado');
     save();close();render();toast(ed?'Cambios guardados':inc?'Ingreso guardado':o&&o.k==='c'?'Gasto guardado en la tarjeta':'Gasto guardado')};
 }
 
@@ -178,7 +178,7 @@ function openSaving(pre={}){
     else{x.open=true;x.months=1}
     x.name=$('#sName').value.trim()||(ty==='Efectivo'?'Efectivo':(ty==='Sell Buy Back (SBB)'?'SBB':ty)+(ent?' · '+ent:''));
     if(ed){x.id=ed.id;['due','open','vr','intFreq','rateKind','ratePub','rateUntil','issuer','code','renew','status','color'].forEach(k=>delete ed[k]);Object.assign(ed,x);save();close();render();toast('Cambios guardados');return}
-    S.savings.push(x);save();close();if(view!=='resumen')setView(isAcct(x)?'cuentas':'inversion',isAcct(x)?'cuentas':undefined);render();window.scrollTo({top:0});toast('Guardado')};
+    S.savings.push(x);track(isAcct(x)?'cuenta_agregada':'inversion_agregada');save();close();if(view!=='resumen')setView(isAcct(x)?'cuentas':'inversion',isAcct(x)?'cuentas':undefined);render();window.scrollTo({top:0});toast('Guardado')};
 }
 
 function openCard(id){

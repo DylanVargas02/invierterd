@@ -34,7 +34,7 @@ function applyRemote(row){
 }
 async function fetchRemote(){const c=await sbClient();const {data,error}=await c.from('app_state').select('data,updated_at').eq('user_id',sbUser.id).maybeSingle();if(error)throw error;return data}
 async function afterLogin(){
-  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;
+  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;checkAdmin();
   try{
     const row=await fetchRemote();
     if(!row){if(!S.example){S._owner=sbUser.id;await pushNow();toast('Tus datos quedaron guardados en tu cuenta')}else{toast('Sesión iniciada. Organicemos tus finanzas.');S.onbDismissed=true;save();openOnboarding(true)}return}
