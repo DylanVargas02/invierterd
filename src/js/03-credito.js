@@ -3,7 +3,7 @@ function render(){
   if(S.theme)document.documentElement.setAttribute('data-theme',S.theme);
   const TB=TABS.find(t=>t.id===view);if(!['DOP','USD'].includes(S.base))S.base='DOP';document.querySelectorAll('[data-base]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.base===S.base)); $('#viewName').textContent=matchMedia('(min-width:1000px)').matches?(TB.t||TB.n):TB.n;$('#viewName').classList.toggle('long',!!TB.t);
   $('#view').className='v-'+view;renderTabs(); renderNotice(); paintAcc();
-  $('#brandSmall').innerHTML=S.name&&view==='resumen'?'Hola, '+esc(S.name):'Caoba';
+  const pf=S.profiles&&S.profiles.list.length>1?activeProfile():null;$('#brandSmall').innerHTML=(S.name&&view==='resumen'?'Hola, '+esc(S.name):'Caoba')+(pf?' · '+esc(pf.name):'');
   ({resumen:vResumen,movimientos:vMovimientos,cuentas:vCuentas,inversion:vInversion,mercado:vMercado})[view]();
   bindPromos(); tickLive(); fitBig(); fitText();
 }

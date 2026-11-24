@@ -81,7 +81,7 @@ function sample(){
   };
 }
 
-function blank(){return {example:false,ver:4,mail:S.mail,pendingInv:[],onboarded:S.onboarded,name:S.name||'',profile:S.profile||{},base:S.base,rates:S.rates,theme:S.theme,savings:[],loans:[],cards:[],expenses:[],incomes:[],paydays:[],transfers:[],catBudget:{},recurring:[],goals:[],pending:[],reminders:[],home:{on:false,partner:'',adj:0},customCats:S.customCats,customEnts:S.customEnts,customTypes:S.customTypes,customLoanTypes:S.customLoanTypes,emTarget:S.emTarget||6}}
+function blank(){return {example:false,ver:4,mail:S.mail,pendingInv:[],onboarded:S.onboarded,name:S.name||'',profile:S.profile||{},profiles:S.profiles,base:S.base,rates:S.rates,theme:S.theme,savings:[],loans:[],cards:[],expenses:[],incomes:[],paydays:[],transfers:[],catBudget:{},recurring:[],goals:[],pending:[],reminders:[],home:{on:false,partner:'',adj:0},customCats:S.customCats,customEnts:S.customEnts,customTypes:S.customTypes,customLoanTypes:S.customLoanTypes,emTarget:S.emTarget||6}}
 let S; try{const raw=localStorage.getItem(KEY); S=raw?JSON.parse(raw):sample()}catch(e){S=sample()}
 if(S.example&&(S.ver||0)<4){const keep={base:S.base,rates:S.rates,theme:S.theme};S=Object.assign(sample(),keep)}
 S.cards=S.cards||[];S.incomes=S.incomes||[];S.recurring=S.recurring||[];S.goals=S.goals||[];S.pending=S.pending||[];

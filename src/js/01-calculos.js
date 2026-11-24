@@ -55,14 +55,20 @@ function inst(name,sm){const lk=logoKey(name);if(lk)return `<span class="inst lo
 function instLegend(){return `<div class="inst-legend">${Object.entries(SECTOR).map(([k,v])=>`<span><span class="inst ${k}"></span>${v}</span>`).join('')}</div>`}
 
 /* Ahorro: interés simple con retención ISR opcional y renovación automática al vencer (práctica común en certificados RD) */
-function effRate(s){return s.rate/100*(s.isr?0.9:1)}
+/* Tasa que se aplica en los cálculos. Si la persona la escribió como efectiva anual (TEA), se convierte a la nominal
+   equivalente para el período en que se pagan o capitalizan los intereses. */
+function nomRate(s){const r=(s.rate||0)/100;if(s.rateKind!=='efectiva'||!r)return r;const T=termMs(s)/YEAR;return T>0?(Math.pow(1+r,T)-1)/T:r}
+function effRate(s){return nomRate(s)*(s.isr?0.9:1)}
+/* Estado de una inversión: vigente, renovada, vencida (pasó la fecha y no se renueva) o liquidada (ya no cuenta en tu patrimonio) */
+function invStatus(s,t=Date.now()){if(s.status==='liquidada')return 'liquidada';if(s.open||!s.due&&!s.months)return 'vigente';if(s.renew===false&&t>=s.start+termMs(s))return 'vencida';return s.status==='renovada'||(s.renew!==false&&t>=s.start+termMs(s))?'renovada':'vigente'}
+const activeSav=()=>S.savings.filter(s=>s.status!=='liquidada');
 function savValue(s,t){
-  const r=effRate(s), term=termMs(s), el=Math.max(0,t-s.start);
+  const r=effRate(s), term=termMs(s);let el=Math.max(0,t-s.start);if(s.renew===false&&!s.open)el=Math.min(el,term);
   const n=Math.floor(el/term), rem=el-n*term;
   return s.principal*Math.pow(1+r*term/YEAR,n)*(1+r*rem/YEAR);
 }
-function perSec(s,t){return savValue(s,t)*effRate(s)/(YEAR/1000)}
-function totals(t){return totalsOf(S.savings,t)}
+function perSec(s,t){if(s.status==='liquidada'||(s.renew===false&&!s.open&&t>=s.start+termMs(s)))return 0;return savValue(s,t)*effRate(s)/(YEAR/1000)}
+function totals(t){return totalsOf(activeSav(),t)}
 function totalsOf(L,t){
   let v=0,p=0,ps=0;
   L.forEach(s=>{v+=conv(savValue(s,t),s.cur,S.base);p+=conv(s.principal,s.cur,S.base);ps+=conv(perSec(s,t),s.cur,S.base)});

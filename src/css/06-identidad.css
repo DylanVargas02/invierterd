@@ -95,3 +95,25 @@ nav.tabs .side-brand .rd{color:inherit}
 @media (max-width:360px){.otp{gap:4px}.otp-b{height:46px;font-size:19px!important;border-radius:10px}.otp-b:nth-child(4){margin-right:3px}}
 .otp-exp{margin:0;font-size:13.5px;color:var(--ink-2)}
 .otp-exp.late{color:var(--spend);font-weight:700}
+
+/* ===== Etapa 3: colores de tarjeta, tipo de tasa, estado de inversiones, perfiles, filtros ===== */
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{position:relative;cursor:pointer}
+.sw input{position:absolute;opacity:0;inset:0;margin:0}
+.sw span{display:block;width:40px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 0 0 1px var(--line)}
+.sw input:checked+span{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--brand)}
+.sw input:focus-visible+span{outline:3px solid var(--verde-b);outline-offset:3px}
+.choice.rk{margin-top:8px}
+.choice.three-c{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (max-width:360px){.choice.three-c{grid-template-columns:1fr}}
+.st{font-weight:700;border-radius:999px;padding:1px 8px;font-size:11.5px}
+.st-renovada{background:var(--brand-soft);color:var(--brand)}
+.st-vencida{background:var(--debt-soft);color:var(--debt)}
+.st-liquidada{background:var(--surface-2);color:var(--ink-2)}
+.liq-d{margin-top:16px}
+.prof-r{display:flex;align-items:center;gap:6px}
+.prof-r .menu-r{flex:1}
+.prof-r.on .menu-r{background:var(--brand-soft)}
+.prof-ok{color:var(--brand);font-weight:800;font-size:18px;padding-right:6px}
+.mvf2{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mvf2 select{width:100%}

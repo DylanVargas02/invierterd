@@ -17,6 +17,8 @@ function openSettings(){
     <div class="set-f"><span class="set-l" id="lTheme">Apariencia</span><div aria-labelledby="lTheme">${seg('aTheme',[['','Automática'],['light','Clara'],['dark','Oscura']],S.theme||'')}</div></div>
   </div></section>
   <section class="set-g"><h4>Tus datos</h4><div class="set-card">
+    ${setRow('aProf','user','Perfiles financieros',(S.profiles&&S.profiles.list.length>1?'En uso: '+esc(activeProfile().name)+' · ':'')+'Personal, familiar, compartido o negocio')}
+    ${setRow('aPerf','user','Tu perfil','Edad, provincia y ocupación')}
     ${setRow('aCats','tag','Mis categorías','Agrega o quita categorías y tipos de ingreso')}
     ${setRow('aOnb','guide','Organizar mis finanzas paso a paso','Vuelve a la guía inicial')}
   </div></section>
@@ -30,6 +32,7 @@ function openSettings(){
   </div></section>
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
+  $('#aProf').onclick=openProfiles;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});
   document.querySelectorAll('[name=aTheme]').forEach(r=>r.onchange=()=>{S.theme=r.value||null;

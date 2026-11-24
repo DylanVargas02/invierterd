@@ -39,7 +39,8 @@ function holdGroup(g){
     </div></details>`;
 }
 /* ---- Lista única de gastos e ingresos con filtros ---- */
-let movF={per:'d30',type:'all',ent:'',from:'',to:'',lim:6};
+let movF={per:'d30',type:'all',ent:'',cat:'',cur:'',from:'',to:'',lim:6};
+const NAT={fijo:'Fijo',variable:'Variable',extra:'Extraordinario'};
 const APP_VER='0.9 beta';window.__swUpdated=()=>undoToast('Hay una versión nueva de la app',()=>location.reload(),'Actualizar');
 function movRange(){const n=new Date(),sod=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),end=sod+DAY-1;
   if(movF.per==='m3')return [new Date(n.getFullYear(),n.getMonth()-3,n.getDate()).getTime(),end];
@@ -52,19 +53,23 @@ function movListHTML(){
   let L=[...(movF.type==='inc'?[]:S.expenses.map(x=>({x,k:'e'}))),...(movF.type==='exp'?[]:S.incomes.map(x=>({x,k:'i'})))].filter(m=>m.x.date>=R[0]&&m.x.date<=R[1]);
   if(movF.type==='all')L=L.concat((S.transfers||[]).filter(x=>x.date>=R[0]&&x.date<=R[1]).map(x=>({x,k:'t'})));
   if(movF.ent)L=L.filter(m=>m.k==='t'?(viaEnt(m.x.from)===movF.ent||viaEnt(m.x.to)===movF.ent):viaEnt(m.x.via)===movF.ent);
+  if(movF.cur)L=L.filter(m=>m.x.cur===movF.cur);
+  if(movF.cat)L=L.filter(m=>m.k==='e'?'e:'+m.x.cat===movF.cat:m.k==='i'?'i:'+m.x.src===movF.cat||'n:'+(m.x.nat||'')===movF.cat:false);
   L.sort((a,b)=>b.x.date-a.x.date);
   const te=L.filter(m=>m.k==='e').reduce((a,m)=>a+conv(m.x.amt,m.x.cur,S.base),0),ti=L.filter(m=>m.k==='i').reduce((a,m)=>a+conv(m.x.amt,m.x.cur,S.base),0);
   const ents=[...new Set([...accts().map(s=>s.entity),...S.cards.map(c=>c.entity)])].sort();
   const show=L.slice(0,movF.lim);let lastDay='';
   const rows=show.map(({x,k})=>{const d=new Date(x.date).toDateString(),hd=d!==lastDay?`<div class="mv-day"><span>${esc(dayShort.format(new Date(x.date)))}</span></div>`:'';lastDay=d;
     if(k==='t')return hd+`<button type="button" class="mvr mid" data-edit-t="${x.id}"><b>${esc(x.desc)}</b><small>${esc(viaName(x.from))} → ${esc(viaName(x.to))}</small><strong class="num">⇄ ${esc(fmt(x.amt,x.cur,2))}</strong></button>`;
-    const sub=k==='e'?(CATS[x.cat]?CATS[x.cat].n:'Otros'):(INC[x.src]||'Ingreso');
+    const sub=k==='e'?(CATS[x.cat]?CATS[x.cat].n:'Otros'):(INC[x.src]||'Ingreso')+(x.nat?' · '+NAT[x.nat]:'');
     return hd+`<button type="button" class="mvr ${k==='e'?'out':'in'}" data-edit-${k}="${x.id}"><b>${esc(x.desc)}</b><small>${esc(sub)} · ${esc(viaName(x.via))}</small><strong class="num">${k==='e'?'−':'+'}${esc(fmt(x.amt,x.cur,2))}</strong></button>`}).join('');
   return `<section class="panel mvp">
     <div class="mv-pl">Últimos</div><div class="per light mv-per" role="group" aria-label="Período">${[['d30','30 días'],['m3','3 meses'],['y1','1 año'],['rango','Rango']].map(([k,l])=>`<button type="button" data-mvp="${k}" aria-pressed="${movF.per===k}">${k==='rango'?'<svg class="cal" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>':''}${l}</button>`).join('')}</div>
     ${movF.per==='rango'?`<div class="per-dates light"><label>Desde<input type="date" data-mvd="from" value="${esc(movF.from)}"></label><label>Hasta<input type="date" data-mvd="to" value="${esc(movF.to)}"></label></div>`:''}
     <div class="mvf"><div class="seg tiny" role="group" aria-label="Tipo">${[['all','Todos'],['exp','Gastos'],['inc','Ingresos']].map(([k,l])=>`<button type="button" data-mvt="${k}" aria-pressed="${movF.type===k}">${l}</button>`).join('')}</div>
       <label class="ym-sel mv-ent"><span class="sr">Entidad</span><select id="mvEnt"><option value="">Todas las entidades</option>${ents.map(e=>`<option ${e===movF.ent?'selected':''}>${esc(e)}</option>`).join('')}<option value="_" ${movF.ent==='_'?'selected':''}>Efectivo u otro</option></select></label></div>
+    <div class="mvf mvf2"><label class="ym-sel"><span class="sr">Categoría</span><select id="mvCat"><option value="">Todas las categorías</option><optgroup label="Gastos">${Object.keys(CATS).map(k=>`<option value="e:${k}" ${movF.cat==='e:'+k?'selected':''}>${esc(CATS[k].n)}</option>`).join('')}</optgroup><optgroup label="Ingresos">${Object.keys(INC).map(k=>`<option value="i:${k}" ${movF.cat==='i:'+k?'selected':''}>${esc(INC[k])}</option>`).join('')}${Object.keys(NAT).map(k=>`<option value="n:${k}" ${movF.cat==='n:'+k?'selected':''}>Ingresos ${NAT[k].toLowerCase()}s</option>`).join('')}</optgroup></select></label>
+      <label class="ym-sel"><span class="sr">Moneda</span><select id="mvCur"><option value="">Todas las monedas</option>${CURS.map(c=>`<option ${movF.cur===c?'selected':''}>${c}</option>`).join('')}</select></label></div>
     <div class="mv-sum num">${movF.type!=='inc'?`<span class="negc">−${esc(fmt(te,S.base,0))}</span>`:'<span></span>'}<span class="mv-n">${L.filter(m=>m.k!=='t').length} ${L.filter(m=>m.k!=='t').length===1?'movimiento':'movimientos'}</span>${movF.type!=='exp'?`<span class="pos">+${esc(fmt(ti,S.base,0))}</span>`:'<span></span>'}</div>
     <div class="mv-list">${rows||'<p class="hint center" style="margin:16px 0">No hay movimientos con estos filtros.</p>'}</div>
     ${L.length>show.length?`<button type="button" class="grp-add" id="mvMore" style="--gc:var(--brand)">Ver ${Math.min(15,L.length-show.length)} más</button>`:''}
@@ -76,6 +81,7 @@ function bindMov(){
   document.querySelectorAll('[data-mvd]').forEach(i=>i.onchange=()=>{movF[i.dataset.mvd]=i.value;r()});
   document.querySelectorAll('[data-mvt]').forEach(b=>b.onclick=()=>{movF.type=b.dataset.mvt;movF.lim=6;r()});
   const s=$('#mvEnt');if(s)s.onchange=()=>{movF.ent=s.value;movF.lim=6;r()};
+  const sc=$('#mvCat');if(sc)sc.onchange=()=>{movF.cat=sc.value;movF.lim=6;r()};const su=$('#mvCur');if(su)su.onchange=()=>{movF.cur=su.value;movF.lim=6;r()};
   const m=$('#mvMore');if(m)m.onclick=()=>{movF.lim+=15;const y=scrollY;r();scrollTo(0,y)};
 }
 
@@ -88,7 +94,7 @@ function calBtnHTML(filter){
 }
 function vResumen(){
   const t=Date.now(),F=snapshot(t),net=netValue(F),neg=net<0,total=OSTEPS.length-2;
-  const A=accts(),avail=A.reduce((a,s)=>a+conv(savValue(s,t),s.cur,S.base),0),inv=S.savings.filter(s=>!isAcct(s));
+  const A=accts(),avail=A.reduce((a,s)=>a+conv(savValue(s,t),s.cur,S.base),0),inv=invList();
   const sameAvail=Math.abs(avail-F.assets)<1;
   const groups=[
     {key:'acc',title:'Cuentas y efectivo',color:'var(--brand)',icon:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/>',unit:['cuenta','cuentas'],add:['addAcc','Agregar cuenta'],empty:'Agrega tus cuentas de ahorro, corrientes o efectivo.',
@@ -169,7 +175,7 @@ function openCardActions(id){
 }
 
 /* ---------- Tasa variable ---------- */
-const rateTxt=s=>(s.vr?'≈ ':'')+s.rate.toFixed(2)+' %'+(s.vr?' variable':'');
+const rateTxt=s=>(s.vr?'≈ ':'')+s.rate.toFixed(2)+' %'+(s.rateKind==='efectiva'?' efectiva':'')+(s.vr?' variable':'');
 
 /* ---------- Cobros fijos (salario): «¿Ya cobraste?» ---------- */
 function payOccs(p){

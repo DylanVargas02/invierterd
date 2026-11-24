@@ -43,7 +43,10 @@ function openInvChooser(onlyInv){
 
 /* ---------- Ahorros e inversiones ---------- */
 let openEnt={};
-const invList=()=>S.savings.filter(s=>!isAcct(s));
+const ST_N={vigente:'Vigente',renovada:'Renovada',vencida:'Vencida',liquidada:'Liquidada'};
+const invList=()=>S.savings.filter(s=>!isAcct(s)&&s.status!=='liquidada');
+function liqHTML(){const L=S.savings.filter(s=>s.status==='liquidada');if(!L.length)return '';
+  return `<details class="sim-d liq-d"><summary><b>Liquidadas · ${L.length}</b><span class="chev rot" aria-hidden="true">›</span></summary><div class="list">${L.map(s=>`<button type="button" class="eg-r rowbtn" data-edit-s="${s.id}"><div class="mid"><b>${esc(s.name)}</b><span class="eg-meta"><span>${esc(s.entity)}</span><span class="num">${esc(fmt(s.principal,s.cur,2))}</span></span></div>${chev}</button>`).join('')}</div></details>`}
 function vInversion(){
   const t=Date.now(),L=invList(),T=totalsOf(L,t);
   const val=s=>conv(savValue(s,t),s.cur,S.base);
@@ -64,12 +67,12 @@ function vInversion(){
     <div class="ents">${ents.map(g=>{const [,sec]=instInfo(g.e);return `<details class="eg2" data-ent="${esc(g.e)}" ${openEnt[g.e]?'open':''}><summary>${inst(g.e)}
       <span class="eg2-t"><b>${esc(g.e)}</b><small>${SECTOR[sec]} · ${g.L.length} ${g.L.length===1?'producto':'productos'}</small></span>
       <span class="eg2-v num"><b>${esc(fmt(g.v,S.base,0))}</b><small>${Math.round(g.v/tot*100)} % del total</small></span><span class="chev rot" aria-hidden="true">›</span></summary>
-      <div class="eg2-in">${g.L.map(s=>{const d=nextMat(s,t),dl=d?Math.ceil((d-t)/DAY):null;return `<button class="eg-r rowbtn" data-edit-s="${s.id}"><div class="mid"><b>${esc(s.name)}</b><span class="eg-meta"><span class="ty" style="--tc:${TYPE_C[s.type]||'var(--c-gray)'}">${esc(s.type==='Sell Buy Back (SBB)'?'SBB':s.type)}</span>${s.rate?`<span class="num">${rateTxt(s)}</span>`:''}<span class="${dl!==null&&dl<=15?'soonc':''}">${esc(matText(s))}${dl!==null&&dl<=30?` · ${dl} d`:''}</span></span></div>
+      <div class="eg2-in">${g.L.map(s=>{const d=nextMat(s,t),dl=d?Math.ceil((d-t)/DAY):null;return `<button class="eg-r rowbtn" data-edit-s="${s.id}"><div class="mid"><b>${esc(s.name)}</b><span class="eg-meta"><span class="ty" style="--tc:${TYPE_C[s.type]||'var(--c-gray)'}">${esc(s.type==='Sell Buy Back (SBB)'?'SBB':s.type)}</span>${(st=>st!=='vigente'?`<span class="st st-${st}">${ST_N[st]}</span>`:'')(invStatus(s,t))}${s.issuer?`<span>${esc(s.issuer)}</span>`:''}${s.ratePub&&s.ratePub!==s.rate?`<span>publicada ${s.ratePub.toFixed(2)} %</span>`:''}${s.rateUntil&&s.rateUntil<Date.now()?'<span class="soonc">revisa la tasa</span>':''}${s.rate?`<span class="num">${rateTxt(s)}</span>`:''}<span class="${dl!==null&&dl<=15?'soonc':''}">${esc(matText(s))}${dl!==null&&dl<=30?` · ${dl} d`:''}</span></span></div>
         <div class="eg-a num"><span data-sv="${s.id}">${esc(fmt(savValue(s,t),s.cur,2))}</span>${s.rate?`<small data-si="${s.id}">+${esc(fmt(savValue(s,t)-s.principal,s.cur,2))}</small>`:''}</div>${chev}</button>`}).join('')}</div></details>`}).join('')}</div>
     ${calBtnHTML(e=>e.g==='inv').replace('Calendario de pagos','Vencimientos y cupones').replace('Agrega gastos fijos, cobros y recordatorios','Cuándo cobras intereses y cuándo vence cada inversión')}
     ${nextPaysHTML(e=>e.g==='inv','inv').replace('Próximos pagos','Próximos cobros')}
-    ${promoHTML('ahorros')}`
-    :`<div class="empty" style="margin-top:14px">Aún no registras inversiones. Agrega un certificado, un bono, un fondo u otro instrumento.<button class="btn" id="emptyS" style="--accent:var(--grow)">Agregar</button></div>`}`;
+    ${liqHTML()}${promoHTML('ahorros')}`
+    :`${liqHTML()}<div class="empty" style="margin-top:14px">Aún no registras inversiones. Agrega un certificado, un bono, un fondo u otro instrumento.<button class="btn" id="emptyS" style="--accent:var(--grow)">Agregar</button></div>`}`;
   $('#heroAdd').onclick=()=>openInvChooser(true);const e=$('#emptyS');if(e)e.onclick=()=>openInvChooser(true);$('#goMkt').onclick=()=>goTo('mercado');
   const co=$('#calOpen');if(co)co.onclick=()=>openCalendar(null,null,null,'inv');
   document.querySelectorAll('details.eg2').forEach(d=>d.ontoggle=()=>{openEnt[d.dataset.ent]=d.open});
@@ -81,13 +84,14 @@ function cardsHTML(){
   if(!S.cards.length)return empty('No tienes tarjetas registradas.','emptyC','var(--brand)');
   return S.cards.map((c,i)=>{
     const u=c.limit?c.balance/c.limit:0, due=dueDate(c), dd=daysTo(due), mp=minPay(c);
-    const intr=Math.max(0,c.balance-mp)*c.rate/1200, art=CARD_ART[i%CARD_ART.length];
+    const intr=Math.max(0,c.balance-mp)*c.rate/1200, art=c.color!=null&&ACARD[c.color]?ACARD[c.color]:CARD_ART[i%CARD_ART.length];
     return `<article class="ccwrap">
       <div class="ccard" style="--c1:${art[0]};--c2:${art[1]}">
-        <div class="cc-top">${inst(c.entity,1)}<div class="cc-id"><b>${esc(c.name)}</b><span>${esc(c.entity)}</span></div><button type="button" class="cc-more" data-cc-more="${c.id}" aria-label="Opciones de ${esc(c.name)}"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button></div>
+        <div class="cc-top">${inst(c.entity,1)}<div class="cc-id"><b>${esc(c.name)}</b><span>${esc(c.entity)}${c.last4?' · •••• '+esc(c.last4):''}</span></div><button type="button" class="cc-more" data-cc-more="${c.id}" aria-label="Opciones de ${esc(c.name)}"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button></div>
         <div class="cc-bal"><small>Saldo</small><strong class="num">${esc(fmt(c.balance,c.cur,2))}</strong></div>
         <div class="cc-bar"><i style="width:${Math.min(100,u*100).toFixed(1)}%;background:${utilColor(u)}"></i></div>
-        <div class="cc-row num"><span>Disponible ${esc(fmt(Math.max(0,c.limit-c.balance),c.cur,0))}</span><span>${Math.round(u*100)} % de ${esc(fmt(c.limit,c.cur,0))}</span></div>
+        <div class="cc-row num"><span>Usado ${esc(fmt(c.balance,c.cur,0))} · Disponible ${esc(fmt(Math.max(0,c.limit-c.balance),c.cur,0))}</span><span>Límite ${esc(fmt(c.limit,c.cur,0))}</span></div>
+        <div class="cc-row num"><span>${c.cutDay?'Corte día '+c.cutDay:'Agrega el día de corte'}</span><span>Pago día ${c.payDay}</span></div>
       </div>
       <div class="cc-info num">
         <div><small>Pago mínimo</small><strong>${esc(fmt(mp,c.cur,0))}</strong></div>

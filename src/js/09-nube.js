@@ -210,6 +210,7 @@ function openPrivacy(){
 }
 
 function normalizeS(){
+  ensureProfiles();
   ['cards','incomes','recurring','goals','pending','savings','loans','expenses','pendingInv','paydays','transfers','reminders'].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});
   if(!S.catBudget)S.catBudget={};S.home={on:false,partner:'',adj:0};
   S.rates=S.rates||{DOP:1,USD:63.5,EUR:73.4};if(!['DOP','USD'].includes(S.base))S.base='DOP';
