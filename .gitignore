@@ -5,3 +5,4 @@ android/.gradle/
 *.keystore
 *.jks
 www/
+tools/caoba-artefacto.html
