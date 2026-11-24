@@ -27,46 +27,6 @@ img{max-width:100%}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
 <style>
 /* Layout: una columna tipo teléfono. El dinero vive en el tercio superior (lectura); las acciones viven abajo, en la zona del pulgar (barra + botón flotante). */
-:root{
-  /* Neutros crema: cálidos y tranquilos */
-  --bg:#F6F1E7; --surface:#FFFCF6; --surface-2:#EEE7D9; --ink:#1E1A14; --ink-2:#655C4E; --line:#E5DBCA;
-  /* Semántica financiera: esmeralda = crecer, coral = dinero que sale, ámbar = deuda, índigo = mercado */
-  --grow:#007A58; --grow-soft:#D9F4E9; --spend:#C93A28; --spend-soft:#FFE5DF;
-  --debt:#9A6200; --debt-soft:#FFEFCF; --market:#4A4FDE; --market-soft:#E6E7FC;
-  /* Pantallas protagonistas: cada sección tiene su tono profundo y su brillo */
-  --grow-deep:#04382B; --grow-deep2:#0B6B4F; --grow-glow:#7CF2C4;
-  --spend-deep:#4A1410; --spend-deep2:#9A3022; --spend-glow:#FFB4A4;
-  --debt-deep:#3B2604; --debt-deep2:#7D5208; --debt-glow:#FFD27A;
-  --on-deep:#FFFFFF;
-  --cart1a:#0D2944; --cart1b:#1E5D93; --cart2a:#2A1242; --cart2b:#6B2D8C; --cart3a:#05302A; --cart3b:#137059; --cart4a:#3A1A0A; --cart4b:#8C4C13;
-  --promo-deep:#1B1C57; --promo-deep2:#4337B8; --promo-glow:#C3B8FF;
-  /* Distintivos de institución por sector */
-  --i-banco:#3A45C2; --i-asoc:#0B8577; --i-afi:#7D3BC4; --i-gov:#3E5560; --i-ink:#FFFFFF;
-  --widget:#04382B; --widget-ink:#EAFBF4; --widget-accent:#7CF2C4;
-  --f-display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
-  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --r-lg:10px; --r-md:8px; --r-sm:6px;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#08110F; --surface:#101C19; --surface-2:#182824; --ink:#E6F2EE; --ink-2:#93AAA3; --line:#20332D;
-  --grow:#2FD39F; --grow-soft:#0F3529; --spend:#FF7A64; --spend-soft:#3A1913;
-  --debt:#F0B341; --debt-soft:#36270C; --market:#8F96FF; --market-soft:#1E214D;
-  --grow-deep:#06322A; --grow-deep2:#0D5A44; --grow-glow:#6EF0BD;
-  --spend-deep:#3A120E; --spend-deep2:#7A2519; --spend-glow:#FFB09E;
-  --debt-deep:#2F1F05; --debt-deep2:#664309; --debt-glow:#FFD27A;
-  --i-banco:#5560E0; --i-asoc:#14A08F; --i-afi:#9555DB; --i-gov:#56717D;
-  --promo-deep:#17174A; --promo-deep2:#3A2F9E; --promo-glow:#C3B8FF;
-  --widget:#06322A; --widget-ink:#E8FAF2; --widget-accent:#6EF0BD; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#08110F; --surface:#101C19; --surface-2:#182824; --ink:#E6F2EE; --ink-2:#93AAA3; --line:#20332D;
-  --grow:#2FD39F; --grow-soft:#0F3529; --spend:#FF7A64; --spend-soft:#3A1913;
-  --debt:#F0B341; --debt-soft:#36270C; --market:#8F96FF; --market-soft:#1E214D;
-  --grow-deep:#06322A; --grow-deep2:#0D5A44; --grow-glow:#6EF0BD;
-  --spend-deep:#3A120E; --spend-deep2:#7A2519; --spend-glow:#FFB09E;
-  --debt-deep:#2F1F05; --debt-deep2:#664309; --debt-glow:#FFD27A;
-  --i-banco:#5560E0; --i-asoc:#14A08F; --i-afi:#9555DB; --i-gov:#56717D;
-  --promo-deep:#17174A; --promo-deep2:#3A2F9E; --promo-glow:#C3B8FF;
-  --widget:#06322A; --widget-ink:#E8FAF2; --widget-accent:#6EF0BD; color-scheme:dark}
 
 *{box-sizing:border-box}
 html,body{background:var(--bg);color:var(--ink)}
@@ -593,27 +553,237 @@ details.adv summary{cursor:pointer;font-weight:700;font-size:14px;padding:12px 0
 a.btn{display:block;text-align:center;text-decoration:none}
 
 
-/* ---- Versión 2: identidad dominicana, pestañas nuevas y gráficos ---- */
+/* Tokens de Caoba: único lugar donde se definen colores, tipografía y radios.
+   Claro por defecto; oscuro por preferencia del sistema o por Ajustes (data-theme). */
 :root{
-  --rd-blue:#002D62; --rd-red:#CE1126;
-  --brand:#0B4A9E; --brand-soft:#E2EBF8; --brand-deep:#061D42; --brand-deep2:#0E3F86; --brand-glow:#A8C8FF;
-  --inv:#08748F; --inv-soft:#D6F0F6; --inv-deep:#05313B; --inv-deep2:#0A6378; --inv-glow:#8AE4F3;
-  --goal:#B0418F; --goal-soft:#F7E0F0; --i-bolsa:#A84A16;
-  --c1:#2a78d6; --c2:#eb6834; --c3:#1baf7a; --c4:#eda100; --c5:#e87ba4; --c6:#008300; --c7:#6250d6; --c8:#e34948; --c-gray:#8A9691;
-  --widget:#05313B; --widget-accent:#8AE4F3;
+  --grow-deep:#04382B;
+  --grow-deep2:#0B6B4F;
+  --grow-glow:#7CF2C4;
+  --spend-deep:#4A1410;
+  --spend-deep2:#9A3022;
+  --spend-glow:#FFB4A4;
+  --debt-deep:#3B2604;
+  --debt-deep2:#7D5208;
+  --debt-glow:#FFD27A;
+  --promo-deep:#1B1C57;
+  --promo-deep2:#4337B8;
+  --promo-glow:#C3B8FF;
+  --i-banco:#3A45C2;
+  --i-asoc:#0B8577;
+  --i-afi:#7D3BC4;
+  --i-gov:#3E5560;
+  --i-ink:#FFFFFF;
+  --r-lg:10px;
+  --r-md:8px;
+  --r-sm:6px;
+  --rd-blue:#002D62;
+  --rd-red:#CE1126;
+  --brand-deep:#061D42;
+  --brand-deep2:#0E3F86;
+  --brand-glow:#A8C8FF;
+  --inv-deep:#05313B;
+  --inv-deep2:#0A6378;
+  --inv-glow:#8AE4F3;
+  --i-bolsa:#A84A16;
+  --caoba:#7B2D1E;
+  --caoba-d:#5A1F14;
+  --hoja:#2E7D4F;
+  --hoja-c:#8FD3A8;
+  --crema:#FBF7F2;
+  --bg:#F7F1EA;
+  --surface:#FFFDFA;
+  --surface-2:#F0E7DD;
+  --ink:#3A2A24;
+  --ink-2:#6B5A52;
+  --line:#E6D9CC;
+  --brand:#7B2D1E;
+  --brand-soft:#F5E6DF;
+  --grow:#2E7D4F;
+  --grow-soft:#E0F1E6;
+  --spend:#B8322B;
+  --spend-soft:#F9E1DE;
+  --debt:#94570B;
+  --debt-soft:#F6E7CF;
+  --inv:#2E7D4F;
+  --inv-soft:#E0F1E6;
+  --market:#5C4A8E;
+  --market-soft:#E9E4F3;
+  --goal:#7B2D1E;
+  --goal-soft:#F5E6DF;
+  --b-resumen:#6E2819;
+  --b-ingresos:#245F3D;
+  --b-gastos:#8A2420;
+  --b-ahorros:#1F5A3C;
+  --b-prestamos:#6F4310;
+  --b-mercado:#433768;
+  --b-metas:#6E2819;
+  --f-display:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --on-deep:#FBF7F2;
+  --c1:#2E7D4F;
+  --c2:#C0662A;
+  --c3:#2F6FA8;
+  --c4:#B88A12;
+  --c5:#A04A78;
+  --c6:#4F8F8A;
+  --c7:#7B2D1E;
+  --c8:#6A5AA8;
+  --c-gray:#93857C;
+  --widget:#5A1F14;
+  --widget-ink:#FBF7F2;
+  --widget-accent:#8FD3A8;
+  --r-card:16px;
+  --r-ctl:12px;
+  --r-in:10px;
+  --cart1a:#5A1F14;
+  --cart1b:#8A3A26;
+  --cart2a:#1C4A30;
+  --cart2b:#2E7D4F;
+  --cart3a:#2B2F4A;
+  --cart3b:#4E5687;
+  --cart4a:#4A2E12;
+  --cart4b:#8C5A22;
+  --trunk:#5A1F14;
+  --leaf1:#2E7D4F;
+  --leaf2:#3E9161;
+  --leaf3:#56A877;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --brand:#86AEFF; --brand-soft:#15233F; --brand-deep:#08193A; --brand-deep2:#123A78; --brand-glow:#A8C8FF;
-  --inv:#4CC8E4; --inv-soft:#0D2D35; --inv-deep:#052930; --inv-deep2:#0A5464; --inv-glow:#8AE4F3;
-  --goal:#E77BCB; --goal-soft:#381730; --i-bolsa:#A84A16;
-  --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500; --c5:#d55181; --c6:#008300; --c7:#9085e9; --c8:#e66767; --c-gray:#7C8B86;
-  --widget:#052930; --widget-accent:#8AE4F3}}
+  --grow-deep:#06322A;
+  --grow-deep2:#0D5A44;
+  --grow-glow:#6EF0BD;
+  --spend-deep:#3A120E;
+  --spend-deep2:#7A2519;
+  --spend-glow:#FFB09E;
+  --debt-deep:#2F1F05;
+  --debt-deep2:#664309;
+  --debt-glow:#FFD27A;
+  --i-banco:#5560E0;
+  --i-asoc:#14A08F;
+  --i-afi:#9555DB;
+  --i-gov:#56717D;
+  --promo-deep:#17174A;
+  --promo-deep2:#3A2F9E;
+  --promo-glow:#C3B8FF;
+  --widget-ink:#E8FAF2;
+  color-scheme:dark;
+  --brand-deep:#08193A;
+  --brand-deep2:#123A78;
+  --brand-glow:#A8C8FF;
+  --inv-deep:#052930;
+  --inv-deep2:#0A5464;
+  --inv-glow:#8AE4F3;
+  --i-bolsa:#A84A16;
+  --bg:#17100C;
+  --surface:#211712;
+  --surface-2:#2C1F18;
+  --ink:#F4EAE2;
+  --ink-2:#BFA99B;
+  --line:#3B2B22;
+  --brand:#E8A08A;
+  --brand-soft:#3A2019;
+  --grow:#8FD3A8;
+  --grow-soft:#16301F;
+  --spend:#FF8F84;
+  --spend-soft:#3B1917;
+  --debt:#E9B25E;
+  --debt-soft:#352409;
+  --inv:#8FD3A8;
+  --inv-soft:#16301F;
+  --market:#B9A6EE;
+  --market-soft:#272040;
+  --goal:#E8A08A;
+  --goal-soft:#3A2019;
+  --b-resumen:#5A1F14;
+  --b-ingresos:#1C4A30;
+  --b-gastos:#6E1C19;
+  --b-ahorros:#1A4630;
+  --b-prestamos:#57350C;
+  --b-mercado:#352B55;
+  --b-metas:#5A1F14;
+  --c1:#6BC08B;
+  --c2:#E08A4E;
+  --c3:#6FA6DA;
+  --c4:#D9B54A;
+  --c5:#D27FAC;
+  --c6:#7FC0BA;
+  --c7:#E8A08A;
+  --c8:#A99BE6;
+  --c-gray:#9C8C82;
+  --widget:#3A160E;
+  --widget-accent:#8FD3A8;
+  --trunk:#A0533A;
+  --leaf1:#2E7D4F;
+  --leaf2:#3E9161;
+  --leaf3:#56A877;
+}}
 :root[data-theme="dark"]{
-  --brand:#86AEFF; --brand-soft:#15233F; --brand-deep:#08193A; --brand-deep2:#123A78; --brand-glow:#A8C8FF;
-  --inv:#4CC8E4; --inv-soft:#0D2D35; --inv-deep:#052930; --inv-deep2:#0A5464; --inv-glow:#8AE4F3;
-  --goal:#E77BCB; --goal-soft:#381730; --i-bolsa:#A84A16;
-  --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500; --c5:#d55181; --c6:#008300; --c7:#9085e9; --c8:#e66767; --c-gray:#7C8B86;
-  --widget:#052930; --widget-accent:#8AE4F3}
+  --grow-deep:#06322A;
+  --grow-deep2:#0D5A44;
+  --grow-glow:#6EF0BD;
+  --spend-deep:#3A120E;
+  --spend-deep2:#7A2519;
+  --spend-glow:#FFB09E;
+  --debt-deep:#2F1F05;
+  --debt-deep2:#664309;
+  --debt-glow:#FFD27A;
+  --i-banco:#5560E0;
+  --i-asoc:#14A08F;
+  --i-afi:#9555DB;
+  --i-gov:#56717D;
+  --promo-deep:#17174A;
+  --promo-deep2:#3A2F9E;
+  --promo-glow:#C3B8FF;
+  --widget-ink:#E8FAF2;
+  color-scheme:dark;
+  --brand-deep:#08193A;
+  --brand-deep2:#123A78;
+  --brand-glow:#A8C8FF;
+  --inv-deep:#052930;
+  --inv-deep2:#0A5464;
+  --inv-glow:#8AE4F3;
+  --i-bolsa:#A84A16;
+  --bg:#17100C;
+  --surface:#211712;
+  --surface-2:#2C1F18;
+  --ink:#F4EAE2;
+  --ink-2:#BFA99B;
+  --line:#3B2B22;
+  --brand:#E8A08A;
+  --brand-soft:#3A2019;
+  --grow:#8FD3A8;
+  --grow-soft:#16301F;
+  --spend:#FF8F84;
+  --spend-soft:#3B1917;
+  --debt:#E9B25E;
+  --debt-soft:#352409;
+  --inv:#8FD3A8;
+  --inv-soft:#16301F;
+  --market:#B9A6EE;
+  --market-soft:#272040;
+  --goal:#E8A08A;
+  --goal-soft:#3A2019;
+  --b-resumen:#5A1F14;
+  --b-ingresos:#1C4A30;
+  --b-gastos:#6E1C19;
+  --b-ahorros:#1A4630;
+  --b-prestamos:#57350C;
+  --b-mercado:#352B55;
+  --b-metas:#5A1F14;
+  --c1:#6BC08B;
+  --c2:#E08A4E;
+  --c3:#6FA6DA;
+  --c4:#D9B54A;
+  --c5:#D27FAC;
+  --c6:#7FC0BA;
+  --c7:#E8A08A;
+  --c8:#A99BE6;
+  --c-gray:#9C8C82;
+  --widget:#3A160E;
+  --widget-accent:#8FD3A8;
+  --trunk:#A0533A;
+}
+/* ---- Versión 2: identidad dominicana, pestañas nuevas y gráficos ---- */
 
 /* Marca */
 .brand-mark{background:none;border-radius:5px;overflow:hidden;width:32px;height:32px;box-shadow:0 2px 6px -2px rgb(0 45 98 / .45)}
@@ -1451,36 +1621,6 @@ small.owe-s,.due,.grp-k,.mv-pl,.inbox-h .tag,.hero-pulse,.cc-bal small,.grp-v sm
    del tronco. Una sola familia: Plus Jakarta Sans (800 marca y títulos,
    500 textos).
    ================================================================ */
-:root{
-  --caoba:#7B2D1E; --caoba-d:#5A1F14; --hoja:#2E7D4F; --hoja-c:#8FD3A8; --crema:#FBF7F2;
-  --bg:#F7F1EA; --surface:#FFFDFA; --surface-2:#F0E7DD; --ink:#3A2A24; --ink-2:#6B5A52; --line:#E6D9CC;
-  --brand:#7B2D1E; --brand-soft:#F5E6DF;
-  --grow:#2E7D4F; --grow-soft:#E0F1E6; --spend:#B8322B; --spend-soft:#F9E1DE;
-  --debt:#94570B; --debt-soft:#F6E7CF; --inv:#2E7D4F; --inv-soft:#E0F1E6; --market:#5C4A8E; --market-soft:#E9E4F3; --goal:#7B2D1E; --goal-soft:#F5E6DF;
-  /* madera de cada sección: la misma veta en tonos distintos */
-  --b-resumen:#6E2819; --b-ingresos:#245F3D; --b-gastos:#8A2420; --b-ahorros:#1F5A3C; --b-prestamos:#6F4310; --b-mercado:#433768; --b-metas:#6E2819;
-  --f-display:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --f-body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --on-deep:#FBF7F2;
-  --c1:#2E7D4F; --c2:#C0662A; --c3:#2F6FA8; --c4:#B88A12; --c5:#A04A78; --c6:#4F8F8A; --c7:#7B2D1E; --c8:#6A5AA8; --c-gray:#93857C;
-  --widget:#5A1F14; --widget-ink:#FBF7F2; --widget-accent:#8FD3A8;
-  --r-card:16px; --r-ctl:12px; --r-in:10px;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#17100C; --surface:#211712; --surface-2:#2C1F18; --ink:#F4EAE2; --ink-2:#BFA99B; --line:#3B2B22;
-  --brand:#E8A08A; --brand-soft:#3A2019;
-  --grow:#8FD3A8; --grow-soft:#16301F; --spend:#FF8F84; --spend-soft:#3B1917;
-  --debt:#E9B25E; --debt-soft:#352409; --inv:#8FD3A8; --inv-soft:#16301F; --market:#B9A6EE; --market-soft:#272040; --goal:#E8A08A; --goal-soft:#3A2019;
-  --b-resumen:#5A1F14; --b-ingresos:#1C4A30; --b-gastos:#6E1C19; --b-ahorros:#1A4630; --b-prestamos:#57350C; --b-mercado:#352B55; --b-metas:#5A1F14;
-  --c1:#6BC08B; --c2:#E08A4E; --c3:#6FA6DA; --c4:#D9B54A; --c5:#D27FAC; --c6:#7FC0BA; --c7:#E8A08A; --c8:#A99BE6; --c-gray:#9C8C82;
-  --widget:#3A160E; --widget-accent:#8FD3A8}}
-:root[data-theme="dark"]{
-  --bg:#17100C; --surface:#211712; --surface-2:#2C1F18; --ink:#F4EAE2; --ink-2:#BFA99B; --line:#3B2B22;
-  --brand:#E8A08A; --brand-soft:#3A2019;
-  --grow:#8FD3A8; --grow-soft:#16301F; --spend:#FF8F84; --spend-soft:#3B1917;
-  --debt:#E9B25E; --debt-soft:#352409; --inv:#8FD3A8; --inv-soft:#16301F; --market:#B9A6EE; --market-soft:#272040; --goal:#E8A08A; --goal-soft:#3A2019;
-  --b-resumen:#5A1F14; --b-ingresos:#1C4A30; --b-gastos:#6E1C19; --b-ahorros:#1A4630; --b-prestamos:#57350C; --b-mercado:#352B55; --b-metas:#5A1F14;
-  --c1:#6BC08B; --c2:#E08A4E; --c3:#6FA6DA; --c4:#D9B54A; --c5:#D27FAC; --c6:#7FC0BA; --c7:#E8A08A; --c8:#A99BE6; --c-gray:#9C8C82;
-  --widget:#3A160E; --widget-accent:#8FD3A8}
 
 body{font-family:var(--f-body);font-size:15.5px;font-weight:500;letter-spacing:-.003em}
 button,input,select,textarea{font-family:inherit}
@@ -1596,9 +1736,6 @@ header.top{background:var(--bg)}
 }
 
 /* ================= Caoba · componentes nuevos ================= */
-:root{--cart1a:#5A1F14;--cart1b:#8A3A26;--cart2a:#1C4A30;--cart2b:#2E7D4F;--cart3a:#2B2F4A;--cart3b:#4E5687;--cart4a:#4A2E12;--cart4b:#8C5A22;--trunk:#5A1F14;--leaf1:#2E7D4F;--leaf2:#3E9161;--leaf3:#56A877}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--trunk:#A0533A;--leaf1:#2E7D4F;--leaf2:#3E9161;--leaf3:#56A877}}
-:root[data-theme="dark"]{--trunk:#A0533A}
 /* íconos de categoría */
 .tx-ic.ic2:not(.zz):not(.zz){background:color-mix(in srgb,var(--ic) 15%,transparent);color:color-mix(in srgb,var(--ic) 78%,var(--ink))!important;display:grid;place-items:center;border-radius:12px}
 .tx-ic.ic2 svg,.cp i svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -1918,6 +2055,35 @@ html.tour-open{overflow:hidden}
 }
 @media (prefers-reduced-motion: reduce){.sp-word,.tg,.o-enter{animation:none!important}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+/* ===== Estabilidad (etapa 1): reglas que corrigen desajustes en cualquier tamaño ===== */
+
+/* Campos: 16 px o más para que iPhone no haga zoom al tocarlos */
+input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px}
+.ym-sel select,.ch-flt select,.mv-ent select,.pend-act select{font-size:16px;line-height:1.25}
+
+/* Textos que antes se cortaban con «…»: ahora pasan a una segunda línea */
+.calbtn-t small{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35}
+
+/* Hojas y ventanas: nunca más altas que la pantalla visible; desplazamiento propio */
+.sheet{max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px));overscroll-behavior:contain}
+@supports not (height:100dvh){.sheet{max-height:88vh}}
+
+/* Pies fijos (Guardar, Continuar): con el teléfono en horizontal o con el teclado abierto
+   pasan a ser parte del contenido, para no tapar los campos */
+@media (orientation:landscape) and (max-height:540px){
+  .mv-save,.onb-foot,.onb2 .o-foot{position:static;box-shadow:none;background:none}
+  .sheet{max-height:calc(100dvh - 8px)}
+  nav.tabs{position:sticky}
+}
+html.kb-open .mv-save,html.kb-open .onb-foot,html.kb-open .onb2 .o-foot{position:static;box-shadow:none;background:none}
+html.kb-open nav.tabs,html.kb-open .fab{display:none}
+
+/* Desgloses plegables: el contenido cerrado no ocupa lugar ni se superpone */
+details:not([open])>:not(summary){display:none}
+
+/* Cifras y nombres completos: en pantallas angostas bajan de tamaño o pasan a otra línea, nunca se cortan */
+.pace strong,.eg2-t b,.ml-n,.mvr small{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+@media (max-width:360px){.pace strong{font-size:13px;letter-spacing:-.01em}.pace small{font-size:11.5px}}
 </style>
 
 <div class="app">
@@ -4536,6 +4702,19 @@ function tickLive(){
 function loop(ts){if(ts-last>(reduce?1000:100)){last=ts;tickLive()}requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 
+/* ---------- Estabilidad: teclado y campos visibles ---------- */
+/* Con el teclado abierto, los pies fijos dejan de flotar y el campo enfocado se centra en la parte visible. */
+(function kb(){
+  const vv=window.visualViewport;if(!vv)return;let base=innerHeight;
+  const upd=()=>{if(!document.activeElement||!document.activeElement.matches('input,select,textarea')){base=Math.max(base,innerHeight)}
+    const open=vv.height<Math.min(base,innerHeight)*0.78&&document.activeElement&&document.activeElement.matches('input:not([type=checkbox]):not([type=radio]),textarea');
+    document.documentElement.classList.toggle('kb-open',!!open)};
+  vv.addEventListener('resize',upd);addEventListener('orientationchange',()=>{base=0;setTimeout(()=>{base=innerHeight;upd()},400)});
+  document.addEventListener('focusin',e=>{const el=e.target;if(!el.matches||!el.matches('input:not([type=checkbox]):not([type=radio]),textarea,select'))return;
+    setTimeout(()=>{upd();if(el.closest('.sheet,.onb,.onb2'))el.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'})},320)});
+  document.addEventListener('focusout',()=>setTimeout(upd,120));
+})();
+/* ---------- Arranque: siempre al final; cierra el bloque abierto en 00-estado.js ---------- */
 normalizeS();
 try{if(getCed())S.mail.keepCed=true}catch(e){}
 render();

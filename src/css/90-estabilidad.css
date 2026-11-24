@@ -1,0 +1,29 @@
+/* ===== Estabilidad (etapa 1): reglas que corrigen desajustes en cualquier tamaño ===== */
+
+/* Campos: 16 px o más para que iPhone no haga zoom al tocarlos */
+input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px}
+.ym-sel select,.ch-flt select,.mv-ent select,.pend-act select{font-size:16px;line-height:1.25}
+
+/* Textos que antes se cortaban con «…»: ahora pasan a una segunda línea */
+.calbtn-t small{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35}
+
+/* Hojas y ventanas: nunca más altas que la pantalla visible; desplazamiento propio */
+.sheet{max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px));overscroll-behavior:contain}
+@supports not (height:100dvh){.sheet{max-height:88vh}}
+
+/* Pies fijos (Guardar, Continuar): con el teléfono en horizontal o con el teclado abierto
+   pasan a ser parte del contenido, para no tapar los campos */
+@media (orientation:landscape) and (max-height:540px){
+  .mv-save,.onb-foot,.onb2 .o-foot{position:static;box-shadow:none;background:none}
+  .sheet{max-height:calc(100dvh - 8px)}
+  nav.tabs{position:sticky}
+}
+html.kb-open .mv-save,html.kb-open .onb-foot,html.kb-open .onb2 .o-foot{position:static;box-shadow:none;background:none}
+html.kb-open nav.tabs,html.kb-open .fab{display:none}
+
+/* Desgloses plegables: el contenido cerrado no ocupa lugar ni se superpone */
+details:not([open])>:not(summary){display:none}
+
+/* Cifras y nombres completos: en pantallas angostas bajan de tamaño o pasan a otra línea, nunca se cortan */
+.pace strong,.eg2-t b,.ml-n,.mvr small{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+@media (max-width:360px){.pace strong{font-size:13px;letter-spacing:-.01em}.pace small{font-size:11.5px}}

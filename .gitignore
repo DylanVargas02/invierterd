@@ -1,0 +1,6 @@
+tools/Caoba-app.zip
+node_modules/
+android/app/build/
+android/.gradle/
+*.keystore
+*.jks
