@@ -20,9 +20,9 @@ head = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Caoba</title>
-<meta name="description" content="Caoba: donde tus ahorros perduran y crecen. Organiza tus finanzas y compara tasas en República Dominicana.">
-<meta name="theme-color" content="#F7F1EA" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#17100C" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Caoba, app de organización financiera e inversión. Decide con información completa: organiza tus cuentas e inversiones y compara tasas en República Dominicana.">
+<meta name="theme-color" content="#F7F9F8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1620" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -47,18 +47,21 @@ if('serviceWorker' in navigator){{const had=!!navigator.serviceWorker.controller
 </html>
 '''
 (ROOT / 'index.html').write_text(head + body + tail, encoding='utf-8')
+import shutil
+(ROOT / 'fonts').mkdir(exist_ok=True)
+for f in (ROOT / 'src' / 'fonts').glob('*'): shutil.copy(f, ROOT / 'fonts' / f.name)
 
 manifest = {
-  "name": "Caoba · finanzas e inversión",
+  "name": "Caoba · organización financiera e inversión",
   "short_name": "Caoba",
-  "description": "Donde tus ahorros perduran y crecen. Organiza tus finanzas y compara tasas en RD.",
+  "description": "Decide con información completa. Organiza tus finanzas e inversiones y compara tasas en RD.",
   "lang": "es-DO",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F7F1EA",
-  "theme_color": "#F7F1EA",
+  "background_color": "#F7F9F8",
+  "theme_color": "#123B5C",
   "categories": ["finance"],
   "icons": [
     {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},

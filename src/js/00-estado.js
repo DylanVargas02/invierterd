@@ -10,13 +10,14 @@ const CATS={
 };
 const TABS=[
   {id:'resumen',n:'Resumen',c:'var(--brand)',s:'var(--brand-soft)',i:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>'},
-  {id:'ingresos',n:'Ingresos',c:'var(--grow)',s:'var(--grow-soft)',i:'<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/>'},
-  {id:'gastos',n:'Gastos',c:'var(--spend)',s:'var(--spend-soft)',i:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'},
-  {id:'ahorros',n:'Ahorros',t:'Ahorros e inversiones',c:'var(--inv)',s:'var(--inv-soft)',i:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'},
-  {id:'prestamos',n:'Crédito',c:'var(--debt)',s:'var(--debt-soft)',i:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>'},
+  {id:'movimientos',n:'Movimientos',c:'var(--spend)',s:'var(--spend-soft)',i:'<path d="M7 4v14M3.5 14.5L7 18l3.5-3.5"/><path d="M17 20V6M13.5 9.5L17 6l3.5 3.5"/>'},
+  {id:'cuentas',n:'Cuentas',c:'var(--brand)',s:'var(--brand-soft)',i:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>'},
+  {id:'inversion',n:'Inversión',c:'var(--grow)',s:'var(--grow-soft)',i:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'},
   {id:'mercado',n:'Mercado',c:'var(--market)',s:'var(--market-soft)',i:'<path d="M7 3v18M17 3v18"/><rect x="5" y="7" width="4" height="8" rx="1"/><rect x="15" y="9" width="4" height="7" rx="1"/>'}
 ];
 
+const PROVINCIAS=['Azua','Bahoruco','Barahona','Dajabón','Distrito Nacional','Duarte','El Seibo','Elías Piña','Espaillat','Hato Mayor','Hermanas Mirabal','Independencia','La Altagracia','La Romana','La Vega','María Trinidad Sánchez','Monseñor Nouel','Monte Cristi','Monte Plata','Pedernales','Peravia','Puerto Plata','Samaná','San Cristóbal','San José de Ocoa','San Juan','San Pedro de Macorís','Sánchez Ramírez','Santiago','Santiago Rodríguez','Santo Domingo','Valverde','Vivo fuera del país'];
+const OCUPACIONES=['Empleado(a) del sector privado','Empleado(a) del sector público','Trabajo por cuenta propia','Dueño(a) de negocio','Estudiante','Jubilado(a) o pensionado(a)','Trabajo del hogar no remunerado','Buscando empleo','Otra'];
 const ym=(t=new Date())=>t.getFullYear()+'-'+(t.getMonth()+1);
 /* ---------- Datos de ejemplo ---------- */
 function sample(){
@@ -80,7 +81,7 @@ function sample(){
   };
 }
 
-function blank(){return {example:false,ver:4,mail:S.mail,pendingInv:[],onboarded:S.onboarded,name:S.name||'',base:S.base,rates:S.rates,theme:S.theme,savings:[],loans:[],cards:[],expenses:[],incomes:[],paydays:[],transfers:[],catBudget:{},recurring:[],goals:[],pending:[],reminders:[],home:{on:false,partner:'',adj:0},customCats:S.customCats,customEnts:S.customEnts,customTypes:S.customTypes,customLoanTypes:S.customLoanTypes,emTarget:S.emTarget||6}}
+function blank(){return {example:false,ver:4,mail:S.mail,pendingInv:[],onboarded:S.onboarded,name:S.name||'',profile:S.profile||{},base:S.base,rates:S.rates,theme:S.theme,savings:[],loans:[],cards:[],expenses:[],incomes:[],paydays:[],transfers:[],catBudget:{},recurring:[],goals:[],pending:[],reminders:[],home:{on:false,partner:'',adj:0},customCats:S.customCats,customEnts:S.customEnts,customTypes:S.customTypes,customLoanTypes:S.customLoanTypes,emTarget:S.emTarget||6}}
 let S; try{const raw=localStorage.getItem(KEY); S=raw?JSON.parse(raw):sample()}catch(e){S=sample()}
 if(S.example&&(S.ver||0)<4){const keep={base:S.base,rates:S.rates,theme:S.theme};S=Object.assign(sample(),keep)}
 S.cards=S.cards||[];S.incomes=S.incomes||[];S.recurring=S.recurring||[];S.goals=S.goals||[];S.pending=S.pending||[];
@@ -88,7 +89,10 @@ if(!S.catBudget){S.catBudget={};if(S.budget>0)S.catBudget.otros=S.budget}
 S.home=S.home||{on:false,partner:'',adj:0};
 function save(){S._upd=Date.now();persistLocal();schedulePush()}
 let view='resumen'; try{view=localStorage.getItem(KEY+'.view')||'resumen'}catch(e){}
-if(!['resumen','ingresos','gastos','ahorros','prestamos','mercado'].includes(view))view='resumen';
+let movSeg='gastos', cuSeg='cuentas';
+/* Vistas anteriores a la navegación de 5 pestañas: se llevan a su nuevo lugar */
+const VIEW_ALIAS={ingresos:['movimientos','ingresos'],gastos:['movimientos','gastos'],ahorros:['inversion'],prestamos:['cuentas','credito']};
+if(VIEW_ALIAS[view]){const [v,sg]=VIEW_ALIAS[view];if(v==='movimientos')movSeg=sg;if(v==='cuentas')cuSeg=sg;view=v}
 if(!TABS.find(t=>t.id===view))view='resumen';
 let savSeg='inst', monthOffset=0, loanType='Hipotecario', mktSeg='acciones', prodFilter='Certificado', newsFilter='Todo';
 

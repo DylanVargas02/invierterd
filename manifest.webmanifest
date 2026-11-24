@@ -1,14 +1,14 @@
 {
-  "name": "Caoba · finanzas e inversión",
+  "name": "Caoba · organización financiera e inversión",
   "short_name": "Caoba",
-  "description": "Donde tus ahorros perduran y crecen. Organiza tus finanzas y compara tasas en RD.",
+  "description": "Decide con información completa. Organiza tus finanzas e inversiones y compara tasas en RD.",
   "lang": "es-DO",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F7F1EA",
-  "theme_color": "#F7F1EA",
+  "background_color": "#F7F9F8",
+  "theme_color": "#123B5C",
   "categories": [
     "finance"
   ],

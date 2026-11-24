@@ -72,19 +72,19 @@ function toast(m){clearTimeout(tt);let el=$('.toast');if(!el){el=document.create
 
 /* ---------- Bucles en vivo ---------- */
 let last=0;
-function fitBig(){document.querySelectorAll('.deep .big').forEach(el=>{const n=el.textContent.length;el.style.setProperty('--bs',n>15?`max(26px, calc(min(11.5vw, 50px) * ${(15/n).toFixed(3)}))`:'clamp(38px,11.5vw,50px)')})}
+function fitBig(){document.querySelectorAll('.deep .big').forEach(el=>{el.style.setProperty('--bs','clamp(34px,10.5vw,46px)');const w=el.clientWidth,sw=el.scrollWidth;if(w&&sw>w){const fs=parseFloat(getComputedStyle(el).fontSize);el.style.setProperty('--bs',Math.max(20,Math.floor(fs*w/sw*0.97))+'px')}})}
 let lastLen=0;
 function tickLive(){
   const t=Date.now();
   if(view==='resumen'){const F=snapshot(t),nb=$('#netBig');if(nb){nb.innerHTML=split(netValue(F),S.base,2);if(nb.textContent.length!==lastLen){lastLen=nb.textContent.length;fitBig()}$('#netA').textContent=fmt(F.assets,S.base,0);const nd=$('#netD');if(nd)nd.textContent=fmt(accts().reduce((a,s)=>a+conv(savValue(s,t),s.cur,S.base),0),S.base,0);S.savings.forEach(s=>{const a=document.querySelector(`[data-sv="${s.id}"]`);if(a)a.textContent=fmt(savValue(s,t),s.cur,2)})}return}
-  if(view==='ingresos'&&intR){const it=$('#intTot');if(it){let sum=0;S.savings.forEach(s=>{const v=intOf(s,intR[0],intR[1]);sum+=conv(v,s.cur,S.base);const e=document.querySelector(`[data-int="${s.id}"]`);if(e)e.textContent=fmt(v,s.cur,4)});
+  if(view==='movimientos'&&movSeg==='ingresos'&&intR){const it=$('#intTot');if(it){let sum=0;S.savings.forEach(s=>{const v=intOf(s,intR[0],intR[1]);sum+=conv(v,s.cur,S.base);const e=document.querySelector(`[data-int="${s.id}"]`);if(e)e.textContent=fmt(v,s.cur,4)});
     it.textContent=fmt(sum,S.base,2);const bt=$('#bdnTot');if(bt){if(bt.dataset.b===undefined)bt.dataset.b=String(S.incomes.filter(x=>inR(x,intR)).reduce(sumB,0));bt.textContent=fmt(+bt.dataset.b+sum,S.base,0)}}return}
-  if(view!=='ahorros')return;
-  const T=totals(t), lt=$('#liveTotal'); if(!lt)return;
-  lt.innerHTML=split(T.v,S.base,4);
+  if(view!=='inversion')return;
+  const T=totalsOf(invList(),t), lt=$('#liveTotal'); if(!lt)return;
+  lt.innerHTML=split(T.v,S.base,4);if(lt.textContent.length!==lastLen){lastLen=lt.textContent.length;fitBig()}
   $('#liveGain').textContent=fmt(T.v-T.p,S.base,0);
   const wS=$('#wgS'),wM=$('#wgM');if(wS)wS.firstChild.nodeValue=fmt(T.v,S.base,0);if(wM)wM.firstChild.nodeValue=fmt(T.v,S.base,4);
-  S.savings.forEach(s=>{const v=savValue(s,t),a=document.querySelector(`[data-sv="${s.id}"]`),b=document.querySelector(`[data-si="${s.id}"]`);if(a)a.textContent=fmt(v,s.cur,2);if(b)b.textContent='+'+fmt(v-s.principal,s.cur,2)});
+  invList().forEach(s=>{const v=savValue(s,t),a=document.querySelector(`[data-sv="${s.id}"]`),b=document.querySelector(`[data-si="${s.id}"]`);if(a)a.textContent=fmt(v,s.cur,2);if(b)b.textContent='+'+fmt(v-s.principal,s.cur,2)});
 }
 function loop(ts){if(ts-last>(reduce?1000:100)){last=ts;tickLive()}requestAnimationFrame(loop)}
 requestAnimationFrame(loop);

@@ -74,7 +74,7 @@ h2.sec .sec-note{font-weight:500;font-size:12.5px;color:var(--ink-2)}
 .qa-ic{border-radius:8px}
 .seg,.kind-tog,.cur-seg,.o-cur{border-radius:999px;background:var(--surface-2);box-shadow:none;padding:3px}
 .seg button,.cur-seg button,.kind-tog button,.o-cur button,.set-f .seg span{border-radius:999px}
-.seg button[aria-pressed="true"],.cur-seg button[aria-pressed="true"],.set-f .seg input:checked+span,.o-cur button[aria-checked="true"],.kind-tog.neutral button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(58 42 36 / .18)}
+.seg button[aria-pressed="true"],.cur-seg button[aria-pressed="true"],.set-f .seg input:checked+span,.o-cur button[aria-checked="true"],.kind-tog.neutral button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(14 44 68 / .18)}
 .per button,.per.light button,.date-pick button,.mp-q button{border-radius:999px}
 .per.light button[aria-pressed="true"],.date-pick button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .icon-btn{border-radius:12px;background:var(--surface);border:1px solid var(--line)}
@@ -116,7 +116,7 @@ header.top{background:var(--bg)}
   nav.tabs button[aria-selected="true"]{background:var(--brand-soft);color:var(--brand)}
   nav.tabs button[aria-selected="true"] .ic{background:none!important}
   .side-beta{border-radius:999px}
-  .sheet{border-radius:22px;box-shadow:0 0 0 1px var(--line),0 24px 60px -20px rgb(58 42 36 / .35)}
+  .sheet{border-radius:22px;box-shadow:0 0 0 1px var(--line),0 24px 60px -20px rgb(14 44 68 / .35)}
   .onb-in{border-radius:22px;box-shadow:0 0 0 1px var(--line)}
 }
 

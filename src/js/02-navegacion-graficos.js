@@ -1,10 +1,9 @@
 /* ---------- Tabs y FAB ---------- */
 function renderTabs(){
-  const more={id:'mas',n:'Más',c:'var(--ink)',s:'var(--surface-2)',i:'<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>'};
-  $('#tabs').innerHTML=[...TABS,more].map(t=>{const on=t.id===view||(t.id==='mas'&&view==='mercado');return `<button role="tab" data-tab="${t.id}" aria-selected="${on}" aria-label="${t.t||t.n}" style="--tc:${t.c};--tcs:${t.s}"><span class="ic"><svg viewBox="0 0 24 24">${t.i}</svg></span>${t.n}</button>`}).join('');
+  $('#tabs').innerHTML=TABS.map(t=>{const on=t.id===view;return `<button role="tab" data-tab="${t.id}" aria-selected="${on}" aria-label="${t.t||t.n}" style="--tc:${t.c};--tcs:${t.s}"><span class="ic"><svg viewBox="0 0 24 24">${t.i}</svg></span>${t.n}</button>`}).join('');
 }
-$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;if(b.dataset.tab==='mas'){openMore();return}view=b.dataset.tab;try{localStorage.setItem(KEY+'.view',view)}catch(err){}render();window.scrollTo({top:0})});
-$('#curSeg').addEventListener('click',e=>{const b=e.target.closest('[data-base]');if(!b||b.dataset.base===S.base)return;S.base=b.dataset.base;save();render();toast(S.base==='USD'?'Mostrando todo en dólares':'Mostrando todo en pesos')});
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;setView(b.dataset.tab);render();window.scrollTo({top:0})});
+$('#curSeg').addEventListener('click',e=>{const b=e.target.closest('[data-base]');if(!b)return;if(b.dataset.base===S.base){if(!matchMedia('(max-width:430px)').matches)return;S.base=S.base==='USD'?'DOP':'USD'}else S.base=b.dataset.base;save();render();toast(S.base==='USD'?'Mostrando todo en dólares':'Mostrando todo en pesos')});
 $('#setBtn').addEventListener('click',openSettings);$('#sideSet').addEventListener('click',openSettings);
 $('#accBtn').addEventListener('click',()=>openAccount());
 
@@ -141,6 +140,15 @@ function colsBlock(id,bk,color){
 function bindCols(){document.querySelectorAll('[data-colw]').forEach(w=>w.querySelectorAll('.col').forEach(b=>b.onclick=()=>{
   w.querySelectorAll('.col').forEach(x=>x.setAttribute('aria-pressed',x===b));const c=w.querySelector('.col-cap');c.firstElementChild.textContent=b.dataset.cap;c.lastElementChild.textContent=b.dataset.val}))}
 const heroAdd=label=>`<button class="addb" type="button" id="heroAdd" aria-label="${label}"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`;
-function goTo(v,sg){view=v;if(v==='gastos'&&sg)gastSeg=sg;if(v==='prestamos'&&sg)credSeg=sg;try{localStorage.setItem(KEY+'.view',view)}catch(e){}render();window.scrollTo({top:0})}
+/* Cambia de pestaña. Acepta los nombres anteriores (ingresos, gastos, ahorros, prestamos) y los lleva a su lugar nuevo. */
+function setView(v,sg){
+  if(v==='gastos'||v==='ingresos'){movSeg=v;if(v==='gastos'&&sg)gastSeg=sg;v='movimientos'}
+  else if(v==='prestamos'){cuSeg='credito';if(sg)credSeg=sg;v='cuentas'}
+  else if(v==='ahorros')v='inversion';
+  else if(v==='cuentas'&&sg)cuSeg=sg;
+  if(!TABS.find(t=>t.id===v))v='resumen';
+  view=v;try{localStorage.setItem(KEY+'.view',view)}catch(e){}
+}
+function goTo(v,sg){setView(v,sg);render();window.scrollTo({top:0})}
 function bindGo(){document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const [v,sg]=b.dataset.go.split(':');goTo(v,sg)})}
 

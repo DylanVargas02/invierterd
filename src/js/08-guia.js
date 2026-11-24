@@ -15,11 +15,11 @@ const FX_IC={
 };
 const fxIc=(k,cat)=>`<span class="fx-ic" style="--c:${CATS[cat]?CATS[cat].c:'var(--ink-2)'}" aria-hidden="true"><svg viewBox="0 0 24 24">${FX_IC[k]||FX_IC.otro}</svg></span>`;
 const FIXED=[['alquiler','Alquiler','vivienda',1],['mant','Mantenimiento del edificio','vivienda',5],['luz','Luz','servicios',5],['agua','Agua','servicios',10],['internet','Internet y cable','servicios',10],['celular','Celular','servicios',15],['colegio','Colegio o universidad','educacion',5],['seguro','Seguro médico','salud',20],['gimnasio','Gimnasio','salud',1],['streaming','Plataformas de streaming','ocio',10],['domestica','Ayuda doméstica','vivienda',30]];
-const OSTEPS=['tu','cuentas','ingresos','inversiones','tarjetas','prestamos','fijos','listo'];
+const OSTEPS=['tu','perfil','cuentas','ingresos','inversiones','tarjetas','prestamos','fijos','listo'];
 const SAV_TYPES=['Cuenta de ahorro','Cuenta corriente','Certificado','Bono','Sell Buy Back (SBB)','Mutuo','Fondo de inversión','Acciones','Efectivo'];
 const INV_TYPES=['Certificado','Bono','Sell Buy Back (SBB)','Mutuo','Fondo de inversión','Acciones','Otro'];
 let W=null,oStep=0;
-const newDraft=()=>({v:4,mailOn:false,watchX:[],name:'',base:'DOP',inc:{amt:'',cur:'DOP',src:'salario',freq:'mensual',day:'30',days:['15','30'],acc:0},other:[],
+const newDraft=()=>({v:4,mailOn:false,watchX:[],name:'',base:'DOP',prof:{age:'',prov:'',occ:'',sex:''},inc:{amt:'',cur:'DOP',src:'salario',freq:'mensual',day:'30',days:['15','30'],acc:0},other:[],
   accounts:[{type:'Cuenta de ahorro',entity:'',amt:'',cur:'DOP',last4:''}],has:{inv:null,cards:null,loans:null},savings:[],cards:[],loans:[],fixed:{},customFixed:[]});
 const num=v=>{const n=money(v);return isFinite(n)&&n>0?n:0};
 const dop=(v,c)=>conv(num(v),c||'DOP','DOP');
@@ -31,7 +31,7 @@ function wireCurTog(scope){scope.querySelectorAll('[data-ct]').forEach(b=>b.oncl
 const O_IC={lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',skip:'<path d="M5 12h12M13 6l6 6-6 6"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',back:'<path d="M15 6l-6 6 6 6"/>'};
 const oic=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${O_IC[k]}</svg>`;
 function openOnboarding(restart){
-  if(restart||!W)W=(!restart&&S.onbDraft&&S.onbDraft.W&&S.onbDraft.W.v===4&&S.onbDraft.W)||newDraft();endTour();
+  if(restart||!W)W=(!restart&&S.onbDraft&&S.onbDraft.W&&S.onbDraft.W.v===4&&S.onbDraft.W)||newDraft();W.prof=W.prof||Object.assign({age:'',prov:'',occ:'',sex:''},S.profile||{});endTour();
   oStep=restart?0:Math.min((S.onbDraft&&S.onbDraft.W&&S.onbDraft.W.v===4&&S.onbDraft.step)||0,OSTEPS.length-1);oPrevP=0;
   document.documentElement.classList.add('onb-open');close();renderOnb();
 }
@@ -59,6 +59,14 @@ const OS={
     <div class="field"><label for="oName" class="sr">Tu nombre</label><input id="oName" class="o-big" value="${esc(W.name)}" maxlength="30" autocomplete="given-name" placeholder="Tu nombre"></div>
     <fieldset class="field"><legend>¿En qué moneda prefieres ver tus totales?</legend><div class="choice two-c">${pill('oBase','DOP','Pesos · RD$',W.base!=='USD')}${pill('oBase','USD','Dólares · US$',W.base==='USD')}</div></fieldset></div>`,
     collect:()=>{W.name=$('#oName').value.trim();W.base=(document.querySelector('[name=oBase]:checked')||{}).value||'DOP'}}),
+  perfil:()=>({q:'Cuéntanos un poco de ti',lead:'Así podemos mostrarte información que se ajuste a tu etapa de vida. Todo es opcional y solo lo ves tú.',html:`<div class="form">
+    <div class="two"><div class="field"><label for="oAge">Edad</label><input id="oAge" inputmode="numeric" maxlength="3" value="${esc(W.prof.age)}" placeholder="30"></div>
+    <div class="field"><label for="oProv">Provincia</label><select id="oProv"><option value="">Elige</option>${PROVINCIAS.map(p=>`<option ${p===W.prof.prov?'selected':''}>${p}</option>`).join('')}</select></div></div>
+    <div class="field"><label for="oOcc">Ocupación</label><select id="oOcc"><option value="">Elige</option>${OCUPACIONES.map(p=>`<option ${p===W.prof.occ?'selected':''}>${p}</option>`).join('')}</select></div>
+    <fieldset class="field"><legend>Sexo <span class="opt">opcional</span></legend><div class="o-chips">${[['mujer','Mujer'],['hombre','Hombre'],['nd','Prefiero no decirlo']].map(([k,l])=>pill('oSex',k,l,W.prof.sex===k)).join('')}</div></fieldset>
+    <p class="o-note">${oic('lock')}<span>Estos datos se guardan con tus finanzas, en este teléfono y en tu cuenta si la tienes. No se comparten ni se usan para publicidad.</span></p></div>`,
+    collect:()=>{const a=($('#oAge').value||'').replace(/\D/g,'');W.prof={age:a,prov:$('#oProv').value,occ:$('#oOcc').value,sex:(document.querySelector('[name=oSex]:checked')||{}).value||''}},
+    check:()=>{const a=+W.prof.age;return W.prof.age&&(a<16||a>110)?'Revisa la edad: escribe solo el número de años.':''}}),
   ingresos:()=>{const SRC=[['salario','Salario'],['negocio','Negocio'],['independiente','Independiente'],['remesa','Remesas'],['otros','Otro']],I=W.inc,sal=I.src==='salario',q=I.freq==='quincenal';
     const accOpts=W.accounts.map((a,i)=>[i,a.type==='Efectivo'?'Efectivo':(a.entity||a.type)+(a.last4?' •••• '+a.last4:'')+(a.entity?' · '+a.type.replace('Cuenta de ','').replace('Cuenta ',''):'')]).filter((x,i)=>W.accounts[i].type!=='Efectivo');
     return {q:'¿Cuál es tu ingreso principal?',lead:sal?'Así sabremos cuándo te llega y a qué cuenta.':'Si varía de un mes a otro, pon un promedio.',html:`<div class="form">
@@ -171,7 +179,7 @@ function renderOnb(keepScroll){
   </div></div>`;
   const L=$('#onbLayer');wireMoney(L);wireEnt(L);wireCurTog(L);if(st.wire)st.wire();
   const go=d=>{oStep=Math.max(0,Math.min(OSTEPS.length-1,oStep+d));S.onbDraft={step:oStep,W};save();renderOnb()};
-  const nx=$('#oNext');if(nx)nx.onclick=()=>{collectOnb();if(st.onNext)st.onNext();if(k==='listo')return finishOnb();go(1)};
+  const nx=$('#oNext');if(nx)nx.onclick=()=>{collectOnb();if(st.check){const m=st.check();if(m){let e=$('#oErr');if(!e){e=document.createElement('p');e.id='oErr';e.className='err';e.setAttribute('role','alert');nx.before(e)}e.textContent=m;return}}if(st.onNext)st.onNext();if(k==='listo')return finishOnb();go(1)};
   const G={inversiones:'inv',tarjetas:'cards',prestamos:'loans'},K={inversiones:'savings',tarjetas:'cards',prestamos:'loans'};
   const bk=$('#oBack');if(bk)bk.onclick=()=>{collectOnb();if(oStep===0){S.onbDraft={step:0,W};save();if(!S.onboarded&&!hasRealData())return openWelcome();return leaveOnb()}
     const prev=OSTEPS[oStep-1];if(prev&&W.has[G[prev]]===false)W.has[G[prev]]=null;
@@ -190,7 +198,7 @@ function renderOnb(keepScroll){
 function finishOnb(){
   const W0=W;
   const now=new Date(),y=now.getFullYear(),m=now.getMonth(),td=now.getDate(),last=new Date(y,m+1,0).getDate(),id=uid,t0=Date.now();
-  const n=blank();Object.assign(n,{example:false,onboarded:true,name:W.name,base:W.base,emTarget:6,home:S.home&&S.home.on?S.home:{on:false,partner:'',adj:0},mail:S.mail,pendingInv:[]});
+  const n=blank();Object.assign(n,{example:false,onboarded:true,name:W.name,base:W.base,profile:Object.assign({},W.prof||{}),emTarget:6,home:S.home&&S.home.on?S.home:{on:false,partner:'',adj:0},mail:S.mail,pendingInv:[]});
   const accIds=W.accounts.map(a=>{if(!num(a.amt)&&!(a.type!=='Efectivo'&&a.entity))return null;const cash=a.type==='Efectivo',sid=id();
     const l4=a.last4||a.l4in||'';n.savings.push({id:sid,name:cash?'Efectivo':(a.type+(a.entity?' · '+a.entity:'')),entity:cash?'Efectivo':(a.entity||'Sin entidad'),type:a.type,cur:a.cur,principal:num(a.amt),rate:0,start:t0,months:1,open:true,isr:!cash,liquid:true,last4:!cash&&/^\d{4}$/.test(l4)?l4:undefined});return sid});
   const I=W.inc;if(I.src==='otros'&&I.otro&&I.otro.n){const kk=I.otro.keep?addCustomCat('inc',I.otro.n):null;if(kk)I.src=kk;else I.label=I.otro.n}
@@ -217,6 +225,6 @@ function finishOnb(){
   FIXED.forEach(([k,l,c])=>{const f=W.fixed[k];if(f&&f.on&&num(f.amt))addFixed(l,c,num(f.amt),f.day,k)});
   n.catBudget=suggestBudget().b;
   S=n;delete S.onbDraft;save();W=null;$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open');
-  view='resumen';render();window.scrollTo({top:0});toast(S.name?`Listo, ${S.name}. Este es tu resumen.`:'Listo. Este es tu resumen.');
+  setView('resumen');render();window.scrollTo({top:0});toast(S.name?`Listo, ${S.name}. Este es tu resumen.`:'Listo. Este es tu resumen.');
 }
 

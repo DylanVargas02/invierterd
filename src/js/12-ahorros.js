@@ -1,7 +1,7 @@
 /* ---------- Gastos ---------- */
 let gastSeg='mov';
 function vGastos(){
-  const segH=`<div class="seg" role="group" aria-label="Sección de gastos">${[['mov','Movimientos'],['pres','Presupuesto'],['fijos','Fijos']].map(([k,l])=>`<button data-gs="${k}" aria-pressed="${gastSeg===k}">${l}</button>`).join('')}</div>`;
+  const segH=`<div class="seg" role="group" aria-label="Sección de gastos">${[['mov','Detalle'],['pres','Presupuesto'],['fijos','Fijos']].map(([k,l])=>`<button data-gs="${k}" aria-pressed="${gastSeg===k}">${l}</button>`).join('')}</div>`;
   const bindGS=()=>document.querySelectorAll('[data-gs]').forEach(b=>b.onclick=()=>{gastSeg=b.dataset.gs;render()});
   if(gastSeg==='pres'){$('#view').innerHTML=segH+presHTML();bindGS();bindPres();return}
   if(gastSeg==='fijos'){$('#view').innerHTML=segH+fijosHTML();bindGS();bindFijos();return}
@@ -33,32 +33,33 @@ const INV_GUIDE=[
 const INV_IC={'Cuenta de ahorro':'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/>','Cuenta corriente':'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M7 14h6M7 11h10"/>','Efectivo':'<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/>',
   'Certificado':'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/>','Bono':'<path d="M4 7h16v10H4z"/><circle cx="12" cy="12" r="2.5"/><path d="M7 7v10M17 7v10"/>','Sell Buy Back (SBB)':'<path d="M7 7h13l-3-3M17 17H4l3 3"/>','Mutuo':'<path d="M7 11l4-4 3 3 5-5"/><path d="M4 20h16"/><path d="M4 16h4M10 16h4"/>',
   'Fondo de inversión':'<circle cx="8" cy="9" r="4"/><circle cx="16" cy="9" r="4"/><circle cx="12" cy="15.5" r="4"/>','Acciones':'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>','Otro':'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'};
-function openInvChooser(){
+function openInvChooser(onlyInv){
   const row=([t,d])=>`<button type="button" class="menu-r" data-it="${esc(t)}"><span class="menu-ic" style="--mc:var(--grow)"><svg viewBox="0 0 24 24">${INV_IC[t]||INV_IC.Otro}</svg></span><span><b>${t==='Certificado'?'Certificado financiero':t}</b><small>${d}</small></span>${chev}</button>`;
   sheet(`<h3>¿Qué quieres agregar?</h3><p class="lead-s">Elige el que se parezca más. Puedes cambiarlo después.</p>
-    ${INV_GUIDE.map(([g,L])=>`<h4 class="menu-g">${g}</h4><div class="menu">${L.map(row).join('')}</div>`).join('')}
+    ${INV_GUIDE.filter(([g])=>!(onlyInv&&g==='Dinero disponible')).map(([g,L])=>`<h4 class="menu-g">${g}</h4><div class="menu">${L.map(row).join('')}</div>`).join('')}
     <div class="menu" style="margin-top:12px">${row(['Otro','Algo distinto: escribe qué es y lo agregamos a tus opciones.'])}</div>`,'var(--grow)');
   document.querySelectorAll('[data-it]').forEach(b=>b.onclick=()=>openSaving({type:b.dataset.it}));
 }
 
 /* ---------- Ahorros e inversiones ---------- */
 let openEnt={};
-function vAhorros(){
-  const t=Date.now(),T=totals(t);
+const invList=()=>S.savings.filter(s=>!isAcct(s));
+function vInversion(){
+  const t=Date.now(),L=invList(),T=totalsOf(L,t);
   const val=s=>conv(savValue(s,t),s.cur,S.base);
-  const types=agg(S.savings,s=>s.type,k=>TYPE_PL[k]||k,k=>TYPE_C[k]||'var(--c-gray)',val);
-  const byE={};S.savings.forEach(s=>{(byE[s.entity]=byE[s.entity]||[]).push(s)});
+  const types=agg(L,s=>s.type,k=>TYPE_PL[k]||k,k=>TYPE_C[k]||'var(--c-gray)',val);
+  const byE={};L.forEach(s=>{(byE[s.entity]=byE[s.entity]||[]).push(s)});
   const ents=Object.entries(byE).map(([e,L])=>({e,L,v:L.reduce((a,s)=>a+val(s),0)})).sort((a,b)=>b.v-a.v);
   const tot=T.v||1;
   $('#view').innerHTML=`
     <button type="button" class="mkt-link" id="goMkt"><span class="mkt-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span><b>Descubre y compara oportunidades de inversión</b><small>Tasas de bancos, puestos de bolsa y tasas de cambio</small></span>${chev}</button>
     <section class="deep inv-card">
-      <div class="hero-top"><span class="lbl">Ahorros e inversiones · ${S.base}</span><span class="hero-r"><span class="hero-pulse"><i></i>En vivo</span>${heroAdd('Agregar un ahorro o una inversión')}</span></div>
+      <div class="hero-top"><span class="lbl">Tus inversiones · ${S.base}</span><span class="hero-r"><span class="hero-pulse"><i></i>En vivo</span>${heroAdd('Agregar una inversión')}</span></div>
       <div class="big num" id="liveTotal">${split(T.v,S.base,4)}</div>
       <div class="pace num"><div><small>Ganancia</small><strong id="liveGain">${esc(fmt(T.v-T.p,S.base,0))}</strong></div><div><small>Por día</small><strong>+${esc(fmt(T.ps*86400,S.base))}</strong></div><div><small>Por mes</small><strong>+${esc(fmt(T.ps*86400*30.44,S.base,0))}</strong></div></div>
     </section>
-    ${S.savings.length?`
-    <section class="panel"><div class="panel-h"><b>Por tipo de instrumento</b><span class="panel-s">${S.savings.length} en total</span></div>${donutBlock(types,'Ahorros por tipo de instrumento')}</section>
+    ${L.length?`
+    <section class="panel"><div class="panel-h"><b>Por tipo de instrumento</b><span class="panel-s">${L.length} en total</span></div>${donutBlock(types,'Ahorros por tipo de instrumento')}</section>
     <h2 class="sec">Desglose por entidad<span class="sec-note">Toca para ver tus productos</span></h2>
     <div class="ents">${ents.map(g=>{const [,sec]=instInfo(g.e);return `<details class="eg2" data-ent="${esc(g.e)}" ${openEnt[g.e]?'open':''}><summary>${inst(g.e)}
       <span class="eg2-t"><b>${esc(g.e)}</b><small>${SECTOR[sec]} · ${g.L.length} ${g.L.length===1?'producto':'productos'}</small></span>
@@ -68,8 +69,8 @@ function vAhorros(){
     ${calBtnHTML(e=>e.g==='inv').replace('Calendario de pagos','Vencimientos y cupones').replace('Agrega gastos fijos, cobros y recordatorios','Cuándo cobras intereses y cuándo vence cada inversión')}
     ${nextPaysHTML(e=>e.g==='inv','inv').replace('Próximos pagos','Próximos cobros')}
     ${promoHTML('ahorros')}`
-    :`<div class="empty" style="margin-top:14px">Aún no registras ahorros ni inversiones.<button class="btn" id="emptyS" style="--accent:var(--grow)">Agregar</button></div>`}`;
-  $('#heroAdd').onclick=openInvChooser;const e=$('#emptyS');if(e)e.onclick=openInvChooser;$('#goMkt').onclick=()=>goTo('mercado');
+    :`<div class="empty" style="margin-top:14px">Aún no registras inversiones. Agrega un certificado, un bono, un fondo u otro instrumento.<button class="btn" id="emptyS" style="--accent:var(--grow)">Agregar</button></div>`}`;
+  $('#heroAdd').onclick=()=>openInvChooser(true);const e=$('#emptyS');if(e)e.onclick=()=>openInvChooser(true);$('#goMkt').onclick=()=>goTo('mercado');
   const co=$('#calOpen');if(co)co.onclick=()=>openCalendar(null,null,null,'inv');
   document.querySelectorAll('details.eg2').forEach(d=>d.ontoggle=()=>{openEnt[d.dataset.ent]=d.open});
   bindInv();bindEdit();bindNextPays();

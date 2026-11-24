@@ -162,7 +162,7 @@ function openSaving(pre={}){
     else{x.open=true;x.months=1}
     x.name=$('#sName').value.trim()||(ty==='Efectivo'?'Efectivo':(ty==='Sell Buy Back (SBB)'?'SBB':ty)+(ent?' · '+ent:''));
     if(ed){x.id=ed.id;delete ed.due;delete ed.open;delete ed.vr;delete ed.intFreq;Object.assign(ed,x);save();close();render();toast('Cambios guardados');return}
-    S.savings.push(x);save();close();if(view!=='resumen'){view='ahorros';try{localStorage.setItem(KEY+'.view',view)}catch(err){}}render();window.scrollTo({top:0});toast('Guardado')};
+    S.savings.push(x);save();close();if(view!=='resumen')setView(isAcct(x)?'cuentas':'inversion',isAcct(x)?'cuentas':undefined);render();window.scrollTo({top:0});toast('Guardado')};
 }
 
 function openCard(id){
@@ -180,7 +180,7 @@ function openCard(id){
     if(!name)return $('#err').textContent='Ponle un nombre a la tarjeta.';if(!(lim>0))return $('#err').textContent='Escribe el límite en números, por ejemplo 50000.';if(!(bal>=0))return $('#err').textContent='Lo consumido no puede ser negativo.';if(bal>lim)return $('#err').textContent='Lo consumido no puede ser mayor que el límite.';if(!(r>=0&&r<200))return $('#err').textContent='Revisa la tasa anual.';if(!(day>=1&&day<=31))return $('#err').textContent='El día de pago va de 1 a 31.';
     const x={name,entity:readEnt('cEnt')||'Sin entidad',cur:$('#cCur').value,limit:lim,balance:bal,rate:r,payDay:day,last4:$('#c4').value.replace(/\D/g,'').slice(0,4)};
     if(ed)Object.assign(ed,x);else S.cards.push({id:uid(),...x});
-    save();close();if(view==='prestamos')credSeg='tarjetas';render();toast(ed?'Cambios guardados':'Tarjeta guardada')};
+    save();close();if(view==='cuentas'&&cuSeg==='credito')credSeg='tarjetas';render();toast(ed?'Cambios guardados':'Tarjeta guardada')};
 }
 
 /* ---------- Confirmación fuerte: mantener presionado 5 s y luego confirmar ---------- */

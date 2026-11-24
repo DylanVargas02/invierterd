@@ -104,7 +104,7 @@ function vResumen(){
     <div class="qa" role="group" aria-label="Registrar">
       <button type="button" class="qa-b inc" id="qaInc"><span class="qa-ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Ingreso</button>
       <button type="button" class="qa-b exp" id="qaExp"><span class="qa-ic"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></span>Gasto</button>
-      <button type="button" class="qa-b more" id="qaMore" aria-label="Agregar otra cosa"><span class="qa-ic"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>Otro</button>
+      <button type="button" class="qa-b more" id="qaMore" aria-label="Agregar cuentas, tarjetas, préstamos, inversiones y más"><span class="qa-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8.5v7M8.5 12h7"/></svg></span>Agregar</button>
     </div>
     ${payBannerHTML()}
     <section class="deep hero brandc${neg?' neg':''}">
@@ -134,28 +134,6 @@ function vResumen(){
   bindGo();bindIo();bindMov();bindEdit();bindPay();
 }
 
-function openAddMenu(){
-  const it=(id,ic,c,t,s)=>`<button type="button" class="menu-r" id="${id}"><span class="menu-ic" style="--mc:${c}"><svg viewBox="0 0 24 24">${ic}</svg></span><span><b>${t}</b><small>${s}</small></span>${chev}</button>`;
-  sheet(`<h3>¿Qué quieres agregar?</h3><div class="menu">
-    ${it('mCash','<path d="M7 7h13l-3-3M17 17H4l3 3"/>','var(--ink-2)','Retiro de efectivo o transferencia','Mueve dinero entre tus cuentas')}
-    ${it('mPay','<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>','var(--grow)','Ingreso fijo','Salario, pensión, alquiler o remesa que llega cada mes')}
-    ${it('mRem',CAL_IC.rem,'var(--brand)','Recordatorio','Una fecha que no quieres olvidar')}
-    ${it('mAcc','<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/>','var(--inv)','Cuenta o tarjeta de débito','Ahorro, corriente o efectivo')}
-    ${it('mInv','<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>','var(--grow)','Ahorro o inversión','Certificado, bono, SBB, mutuo o fondo')}
-    ${it('mCard','<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/>','var(--debt)','Tarjeta de crédito','Límite, consumo y fecha de pago')}
-    ${it('mLoan','<path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/>','var(--debt)','Préstamo','Vehículo, vivienda, personal o negocio')}
-    ${it('mFix','<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16"/>','var(--spend)','Gasto fijo','Algo que pagas cada mes')}
-  </div>`,'var(--brand)');
-  $('#mCash').onclick=()=>openTransfer();$('#mPay').onclick=()=>openPayday();$('#mRem').onclick=()=>openReminder();$('#mAcc').onclick=()=>openSaving({type:'Cuenta de ahorro'});$('#mInv').onclick=()=>openInvChooser();$('#mCard').onclick=()=>openCard();$('#mLoan').onclick=()=>openLoan();$('#mFix').onclick=()=>openRecurring();
-}
-function openMore(){
-  const it=(id,ic,c,t,s,tag)=>`<button type="button" class="menu-r" id="${id}"><span class="menu-ic" style="--mc:${c}"><svg viewBox="0 0 24 24">${ic}</svg></span><span><b>${t}${tag?' <span class="tag">'+tag+'</span>':''}</b><small>${s}</small></span>${chev}</button>`;
-  sheet(`<h3>Más</h3><div class="menu">
-    ${it('oMkt',TABS[5].i,'var(--market)','Mercado','Compara tasas de productos y de cambio')}
-    ${it('oSet','<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>','var(--ink-2)','Ajustes','Moneda, tasas de cambio, apariencia y tu cuenta')}
-  </div>`,'var(--brand)');
-  $('#oMkt').onclick=()=>{close();goTo('mercado')};$('#oSet').onclick=()=>{close();openSettings()};
-}
 function bindEdit(){
   document.querySelectorAll('[data-edit-e]').forEach(b=>b.onclick=()=>openExpense('gasto',{},b.dataset.editE));
   document.querySelectorAll('[data-edit-i]').forEach(b=>b.onclick=()=>openExpense('ingreso',{},b.dataset.editI));

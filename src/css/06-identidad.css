@@ -1,0 +1,97 @@
+/* ===== Identidad Caoba (etapa 2): símbolo, arranque y bienvenida ===== */
+
+/* Arranque: los anillos se dibujan y el billete entra */
+.sp-in{gap:14px}
+.sp-logo{width:min(36vw,148px);height:auto;overflow:visible}
+.sp-logo path{stroke-dasharray:1;stroke-dashoffset:1;animation:lgDraw .85s cubic-bezier(.6,.05,.3,1) forwards}
+.sp-logo path:nth-child(2){animation-delay:.22s}
+.sp-logo .lg-bill{opacity:0;transform:translate(10px,-8px);animation:lgBill .55s cubic-bezier(.2,.9,.3,1.15) .85s forwards}
+@keyframes lgDraw{to{stroke-dashoffset:0}}
+@keyframes lgBill{to{opacity:1;transform:none}}
+.sp-word{animation-delay:1s}
+.sp-name{font-size:38px}
+.sp-slogan{font-size:15px;font-weight:600;color:var(--ink-2)}
+@media (prefers-reduced-motion: reduce){.sp-logo path{stroke-dashoffset:0;animation:none}.sp-logo .lg-bill{opacity:1;transform:none;animation:none}}
+
+/* Bienvenida */
+.wel-brand{gap:12px}
+.wel-sym{width:52px;height:52px;flex:none}
+.wel-name{display:flex;flex-direction:column;line-height:1.1}
+.wel-name .wordmark{font-size:30px}
+.wel-name small{font-size:12.5px;font-weight:600;color:var(--ink-2);margin-top:3px}
+.wel h2{margin-top:30px}
+.wel-forgot{align-self:center;font-size:14px;font-weight:600;color:var(--ink-2);padding:6px 10px}
+.wel-mkt{border-color:var(--line);color:var(--ink)}
+.wel-mkt:hover{background:var(--surface-2)}
+.wel-ic{background:var(--menta);color:var(--grow)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wel-ic{background:var(--grow-soft)}}
+:root[data-theme="dark"] .wel-ic{background:var(--grow-soft)}
+
+
+/* ===== Navegación de 5 pestañas ===== */
+nav.tabs .inner{grid-template-columns:repeat(5,1fr)}
+nav.tabs [data-tab="mercado"]{display:flex}
+nav.tabs button{font-size:11.5px;letter-spacing:-.01em}
+@media (max-width:360px){nav.tabs button{font-size:10.5px}}
+nav.tabs .side-brand .rd{color:inherit}
+
+/* Selector superior de cada pestaña (Gastos/Ingresos, Cuentas/Crédito/Conectadas) */
+.seg.seg-top{margin:2px 0 14px;padding:4px;border-radius:14px;background:var(--surface-2);border:0}
+.seg.seg-top button{min-height:40px;border-radius:10px;font-size:14.5px;font-weight:700}
+.seg.seg-top button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgb(14 44 68 / .14)}
+
+/* Tarjeta protagonista de Cuentas */
+.deep.acc-card{--bill:var(--b-resumen)}
+
+/* Tarjetas de cuenta: color elegido por la persona y últimos 4 dígitos */
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.acard{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:12px;min-height:150px;padding:16px;border-radius:18px;color:#F7F9F8;
+  background-image:repeating-radial-gradient(ellipse 120% 100% at 108% -18%,transparent 0 13px,rgb(255 255 255 / .07) 13px 14px),linear-gradient(135deg,var(--c1),var(--c2));
+  box-shadow:0 10px 24px -16px rgb(14 44 68 / .6)}
+.acard:focus-visible{outline:3px solid var(--verde-b);outline-offset:2px}
+.ac-top{display:flex;align-items:center;gap:10px}
+.ac-id{display:flex;flex-direction:column;min-width:0}
+.ac-id b{font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.ac-id small{font-size:12.5px;opacity:.82}
+.ac-cash{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:rgb(255 255 255 / .16)}
+.ac-cash svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9}
+.ac-bal small{display:block;font-size:12px;opacity:.8;font-weight:600}
+.ac-bal strong{font-family:var(--f-display);font-size:25px;font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere}
+.ac-foot{margin-top:auto;display:flex;justify-content:space-between;gap:10px;font-size:13.5px;letter-spacing:.06em;opacity:.9}
+.ac-foot i{font-style:normal;letter-spacing:0;opacity:.75;font-size:12.5px}
+.acc-note{margin:18px 2px 0;font-size:13px;color:var(--ink-2);line-height:1.45}
+
+/* Cuentas conectadas: estado vacío honesto */
+.conn-empty{margin-top:8px;padding:22px 18px;border:1px dashed var(--line);border-radius:18px;background:var(--surface)}
+.conn-empty h2{font-family:var(--f-display);font-size:19px;font-weight:800;letter-spacing:-.02em;margin:12px 0 8px}
+.conn-empty p{margin:0 0 10px;color:var(--ink-2);font-size:14.5px;line-height:1.5}
+.conn-empty .btn{margin-top:6px;width:100%}
+.conn-ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand)}
+.conn-ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+
+/* Botón «Agregar» del resumen */
+.qa-b.more .qa-ic svg{fill:none;stroke:currentColor;stroke-width:2.2}
+
+/* Encabezado: el título de la pestaña siempre cabe; en teléfonos angostos la moneda es un solo botón */
+.brand{min-width:0}
+.brand h1{font-size:clamp(18px,5.2vw,22px);overflow-wrap:anywhere}
+@media (max-width:430px){
+  .cur-seg button[aria-pressed="false"]{display:none}
+  .cur-seg button[aria-pressed="true"]{box-shadow:none;background:none;padding-inline:10px}
+  .cur-seg button[aria-pressed="true"]::after{content:" ⇄";font-weight:600;color:var(--ink-2)}
+}
+.ac-foot>span:first-child{letter-spacing:.08em}.ac-foot>span:last-child{text-align:right;letter-spacing:0}
+
+/* La cifra protagonista se mide y se reduce hasta caber en una sola línea */
+.deep .big{white-space:nowrap;overflow-wrap:normal}
+@media (max-width:360px){.brand .brand-mark{display:none}.brand h1{font-size:18px;overflow-wrap:normal}}
+
+/* ===== Código por correo: 8 casillas ===== */
+.otp{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:4px 0 2px}
+.otp-b{width:100%;min-width:0;height:54px;padding:0!important;text-align:center;font-family:var(--f-display);font-size:22px!important;font-weight:800;
+  border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);caret-color:var(--brand)}
+.otp-b:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
+.otp-b:nth-child(4){margin-right:6px}
+@media (max-width:360px){.otp{gap:4px}.otp-b{height:46px;font-size:19px!important;border-radius:10px}.otp-b:nth-child(4){margin-right:3px}}
+.otp-exp{margin:0;font-size:13.5px;color:var(--ink-2)}
+.otp-exp.late{color:var(--spend);font-weight:700}

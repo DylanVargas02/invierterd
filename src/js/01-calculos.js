@@ -62,9 +62,10 @@ function savValue(s,t){
   return s.principal*Math.pow(1+r*term/YEAR,n)*(1+r*rem/YEAR);
 }
 function perSec(s,t){return savValue(s,t)*effRate(s)/(YEAR/1000)}
-function totals(t){
+function totals(t){return totalsOf(S.savings,t)}
+function totalsOf(L,t){
   let v=0,p=0,ps=0;
-  S.savings.forEach(s=>{v+=conv(savValue(s,t),s.cur,S.base);p+=conv(s.principal,s.cur,S.base);ps+=conv(perSec(s,t),s.cur,S.base)});
+  L.forEach(s=>{v+=conv(savValue(s,t),s.cur,S.base);p+=conv(s.principal,s.cur,S.base);ps+=conv(perSec(s,t),s.cur,S.base)});
   return {v,p,ps};
 }
 /* Préstamos: sistema francés (cuota fija) */

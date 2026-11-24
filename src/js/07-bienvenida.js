@@ -11,13 +11,17 @@ const TREE=[ /* [umbral 0..1, tipo, svg] */
 function treeSVG(p,prev,cls){
   return `<svg class="tree ${cls||''}" viewBox="0 0 120 120" aria-hidden="true">${TREE.map(([t,k,s],i)=>t<=p+1e-6?`<g class="tp tp-${k}${prev!==undefined&&t>prev+1e-6?' tg':''}" style="--d:${prev!==undefined&&t>prev?((t-prev)/(p-prev||1)*.5).toFixed(2):0}s;--i:${i}">${s}</g>`:'').join('')}</svg>`;
 }
+/* Símbolo de Caoba: dos anillos de crecimiento y un billete. Los colores siguen el tema. */
+const LOGO_RINGS='<path d="M72.34 19.26 A38 38 0 1 0 86.87 59.19"/><path d="M61.17 34.63 A19 19 0 1 0 68.44 54.6"/>';
+const LOGO_BILL=g=>`<g transform="rotate(-20 75 42)"><rect x="55" y="30" width="40" height="24" rx="3.5" fill="#3DBE74" stroke="${g}" stroke-width="4.5" paint-order="stroke"/><rect x="59" y="34" width="32" height="16" rx="2" fill="none" stroke="#E3F7EA" stroke-width="1.4"/><circle cx="75" cy="42" r="5" fill="none" stroke="#E3F7EA" stroke-width="1.8"/></g>`;
+function logoSym(cls){return `<svg class="${cls||''}" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="var(--brand)" stroke-width="13" stroke-linecap="round">${LOGO_RINGS.replace(/<path /g,'<path pathLength="1" ')}</g><g class="lg-bill">${LOGO_BILL('var(--bg)')}</g></svg>`}
 function showSplash(){
   if(document.getElementById('splash'))return;
   const d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
-  d.innerHTML=`<div class="sp-in">${treeSVG(1,undefined,'sp-tree')}<div class="sp-word"><span class="sp-name">Caoba</span><span class="sp-slogan">donde tus ahorros perduran y crecen</span></div></div>`;
+  d.innerHTML=`<div class="sp-in">${logoSym('sp-logo')}<div class="sp-word"><span class="sp-name">Caoba</span><span class="sp-slogan">Decide con información completa</span></div></div>`;
   document.body.appendChild(d);
   const end=()=>{if(!d.isConnected)return;d.classList.add('out');setTimeout(()=>d.remove(),450)};
-  d.addEventListener('click',end);setTimeout(end,reduce?700:2500);
+  d.addEventListener('click',end);setTimeout(end,reduce?700:2200);
 }
 /* ---------- Pantalla de bienvenida ---------- */
 const G_LOGO='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.6 28.7A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.7l8-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.2 1.5-5 2.3-8.2 2.3-6.2 0-11.5-4.2-13.4-9.8l-8 6C6.6 42.6 14.6 48 24 48z"/></svg>';
@@ -27,41 +31,41 @@ function closeOnbLayer(){$('#onbLayer').innerHTML='';document.documentElement.cl
 function openWelcome(){
   document.documentElement.classList.add('onb-open');
   $('#onbLayer').innerHTML=`<div class="onb wel" role="dialog" aria-modal="true" aria-labelledby="welT"><div class="wel-in">
-    <div class="wel-brand"><span class="wel-logo">${$('.brand-mark').innerHTML}</span><span class="wordmark">Caoba</span></div>
-    <h2 id="welT" tabindex="-1">Donde tus ahorros perduran y crecen</h2>
-    <p class="wel-lead">Organiza tus finanzas y ten la información completa para invertir mejor.</p>
+    <div class="wel-brand">${logoSym('wel-sym')}<span class="wel-name"><span class="wordmark">Caoba</span><small>App de organización financiera e inversión</small></span></div>
+    <h2 id="welT" tabindex="-1">Decide con información completa</h2>
+    <p class="wel-lead">Ordena tus cuentas, tarjetas, préstamos e inversiones, y compara lo que ofrece el mercado antes de decidir.</p>
     <ul class="wel-f">
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.all}</svg></span><span><b>Todo tu dinero en un solo lugar</b>Cuentas, tarjetas, préstamos e inversiones de cualquier banco.</span></li>
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.fx}</svg></span><span><b>Tasas de cambio al día</b>Compara bancos y casas de cambio.</span></li>
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.rate}</svg></span><span><b>Tasas de productos financieros</b>Con toda la información para decidir.</span></li>
+      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.all}</svg></span><span><b>Todo tu dinero en un solo lugar</b>Lo registras tú: cuentas, tarjetas, préstamos e inversiones de cualquier entidad.</span></li>
+      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.rate}</svg></span><span><b>Tus inversiones al día</b>Cuánto ganas, cuándo vence cada una y cuándo cobras.</span></li>
+      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.fx}</svg></span><span><b>Mercado</b>Tasas de productos y de cambio, con su fuente y su fecha.</span></li>
     </ul>
     <div class="wel-act">
       <button type="button" class="btn wel-start" id="wNew">Crear mi cuenta</button>
       <button type="button" class="sso" id="wLogin"><svg viewBox="0 0 24 24" aria-hidden="true">${W_IC.mail}</svg><span>Ya tengo cuenta · Iniciar sesión</span></button>
-      <p class="wel-note">Con tu correo y una contraseña. Tus datos quedan guardados y los ves en cualquier teléfono.</p>
+      <button type="button" class="o-link wel-forgot" id="wForgot">Olvidé mi contraseña</button>
       <p class="wel-or"><span>o</span></p>
-      <button type="button" class="wel-solo" id="wStart">Empezar sin cuenta</button>
+      <button type="button" class="wel-solo" id="wStart">Continuar sin cuenta</button>
       <p class="wel-note">Tus datos se guardan solo en este teléfono: si lo pierdes, se pierden.</p>
+      <button type="button" class="wel-solo wel-mkt" id="wMkt">Solo quiero ver el mercado</button>
       <button type="button" class="o-link wel-demo" id="wDemo">Prefiero ver un ejemplo</button>
     </div></div></div>`;
   $('#welT').focus({preventScroll:true});
   $('#wStart').onclick=()=>openOnboarding(true);
-  $('#wDemo').onclick=()=>{S.onbDismissed=true;if(!S.example){const keep={base:S.base,rates:S.rates,theme:S.theme,mail:S.mail};S=Object.assign(sample(),keep);normalizeS()}save();closeOnbLayer();view='resumen';render();window.scrollTo({top:0});startTour()};
+  $('#wDemo').onclick=()=>{S.onbDismissed=true;if(!S.example){const keep={base:S.base,rates:S.rates,theme:S.theme,mail:S.mail};S=Object.assign(sample(),keep);normalizeS()}save();closeOnbLayer();setView('resumen');render();window.scrollTo({top:0});startTour()};
   const acc=m=>{closeOnbLayer();S.onbDismissed=true;save();accMode=m;accStep={email:'',sent:false};openAccount()};
-  $('#wNew').onclick=()=>acc('new');$('#wLogin').onclick=()=>acc('pw');
+  $('#wNew').onclick=()=>acc('new');$('#wLogin').onclick=()=>acc('pw');$('#wForgot').onclick=()=>acc('forgot');
+  $('#wMkt').onclick=()=>{S.onbDismissed=true;S.mktOnly=true;save();closeOnbLayer();goTo('mercado');track('ver_mercado_sin_registro')};
 }
 /* ---------- Recorrido con datos de ejemplo ---------- */
 const TOUR=[
   ['resumen','.hero','Tu saldo neto','Lo que tienes menos lo que debes. Se actualiza solo, hasta con los intereses que ganan tus inversiones.'],
-  ['resumen','.qa','Anota en un toque','Registra un ingreso o un gasto. En «Otro» agregas cuentas, tarjetas, préstamos y más.'],
-  ['resumen','#calOpen','Calendario de pagos','Tus fechas de pago, cobros y recordatorios en un solo lugar. Desde ahí agregas gastos e ingresos fijos.'],
+  ['resumen','.qa','Anota en un toque','Registra un ingreso o un gasto. En «Agregar» están las cuentas, tarjetas, préstamos, inversiones y pagos fijos.'],
+  ['resumen','#calOpen','Calendario de pagos','Tus fechas de pago, cobros y recordatorios en un solo lugar.'],
   ['resumen','#ioP','Ingresos y gastos','Cámbialo a diario, semanal, mensual o anual, o elige fechas. Toca una barra para ver ese período.'],
-  ['resumen','.grps','¿Dónde está tu dinero?','Tus cuentas, inversiones y tarjetas, agrupadas por banco.'],
-  ['ingresos','#bdn','Tus ingresos','Toca una parte del círculo para ver qué es. Abajo, el desglose por tipo o por cuenta y tus cobros fijos.'],
-  ['gastos','[data-gs]','Gastos y presupuesto','En Movimientos ves en qué se va tu dinero. En Presupuesto le pones un límite a cada categoría.'],
-  ['ahorros','.inv-card','Ahorros que crecen en vivo','Mira cuánto ganas por día y cuándo vence o paga intereses cada inversión.'],
-  ['prestamos','.debt-card','Tarjetas y préstamos','Registra pagos y abonos a capital. Te decimos cuánto te falta y cuánto ahorras en intereses.'],
-  ['mercado','.mk-types','Mercado','Compara tasas de bancos y puestos de bolsa, y dónde te conviene cambiar dólares.']
+  ['ingresos','[data-ms]','Movimientos','Gastos e ingresos en una sola pestaña. En gastos también están tu presupuesto y tus gastos fijos.'],
+  ['cuentas','.acc-card','Cuentas','Tus cuentas de ahorro, corrientes y efectivo. En «Crédito» están tus tarjetas y préstamos.'],
+  ['inversion','.inv-card','Inversiones que crecen en vivo','Mira cuánto ganas por día y cuándo vence o paga intereses cada inversión.'],
+  ['mercado','.mk-types','Mercado','Compara tasas de productos y de cambio. Cada dato dice su fuente y su fecha.']
 ];
 let tourI=-1;
 function startTour(){tourI=0;tourStep()}
@@ -70,7 +74,7 @@ function tourStep(){
   if(tourI<0)return;let t=$('#tour');if(!t){t=document.createElement('div');t.id='tour';document.body.appendChild(t);document.documentElement.classList.add('tour-open')}
   if(tourI>=TOUR.length){t.innerHTML=`<div class="tour-dim"></div><div class="tour-card end" role="dialog" aria-modal="true" aria-labelledby="tourT">${treeSVG(1,0,'tour-tree')}<h3 id="tourT" tabindex="-1">Ahora coloca tus datos y empieza tu organización financiera</h3><p>Toma unos 5 minutos. Puedes saltar lo que no sepas.</p><button type="button" class="btn" id="tGo">Empezar con mis datos</button><button type="button" class="o-link" id="tStay">Seguir viendo el ejemplo</button></div>`;
     $('#tourT').focus();$('#tGo').onclick=()=>{endTour();openOnboarding(true)};$('#tStay').onclick=endTour;return}
-  const [v,sel,title,text]=TOUR[tourI];if(view!==v){view=v;render()}
+  const [v,sel,title,text]=TOUR[tourI];{const pv=view+movSeg+cuSeg;setView(v);if(view+movSeg+cuSeg!==pv)render()}
   const el=document.querySelector(sel);if(!el){tourI++;return tourStep()}
   el.scrollIntoView({block:'center',behavior:'auto'});
   requestAnimationFrame(()=>{const r=el.getBoundingClientRect(),pad=6,vh=innerHeight,below=r.top+r.height/2<vh/2;

@@ -4,7 +4,7 @@ function render(){
   const TB=TABS.find(t=>t.id===view);if(!['DOP','USD'].includes(S.base))S.base='DOP';document.querySelectorAll('[data-base]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.base===S.base)); $('#viewName').textContent=matchMedia('(min-width:1000px)').matches?(TB.t||TB.n):TB.n;$('#viewName').classList.toggle('long',!!TB.t);
   $('#view').className='v-'+view;renderTabs(); renderNotice(); paintAcc();
   $('#brandSmall').innerHTML=S.name&&view==='resumen'?'Hola, '+esc(S.name):'Caoba';
-  ({resumen:vResumen,ingresos:vIngresos,gastos:vGastos,ahorros:vAhorros,prestamos:vPrestamos,mercado:vMercado})[view]();
+  ({resumen:vResumen,movimientos:vMovimientos,cuentas:vCuentas,inversion:vInversion,mercado:vMercado})[view]();
   bindPromos(); tickLive(); fitBig(); fitText();
 }
 const X=(attr,id)=>`<button class="x" ${attr}="${id}" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></button>`;

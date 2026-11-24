@@ -87,63 +87,97 @@ function openAccount(){
       catch(e){$('#aErr').textContent='No se pudo eliminar la cuenta. Revisa tu conexión e inténtalo de nuevo.';b.disabled=false;b.textContent='Sí, eliminar mi cuenta'}};
     $('#aPriv').onclick=openPrivacy;return;
   }
-  const codeStep=accMode==='otp'&&accStep.sent&&accStep.email;
-  const signup=accMode==='new';
-  sheet(`<h3>${codeStep?'Escribe el código':signup?'Crea tu cuenta':accMode==='otp'?'Entra con un código':'Inicia sesión'}</h3><form class="form" id="f" novalidate>
-    ${codeStep?`<p class="lead-s">Te enviamos un código a <b>${esc(accStep.email)}</b>. Revisa también la carpeta de spam.</p>
-      <div class="field"><label for="aCode">Código</label><input id="aCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
-      <button class="link-btn" type="button" id="aLinkT">¿Te llegó un enlace en vez de un código?</button>
-      <div class="field" id="aLinkBox" hidden><label for="aLink">Mantén presionado el botón del correo, copia el enlace y pégalo aquí</label><input id="aLink" type="url" autocomplete="off" placeholder="https://…"></div>
-      <div class="err" id="err" role="alert"></div><button class="btn" type="submit">Entrar</button>
-      <div class="two"><button class="btn ghost" type="button" id="aResend">Reenviar código</button><button class="btn ghost" type="button" id="aBack">Cambiar correo</button></div>`
-    :`<p class="lead-s">${signup?'Con tu cuenta, tus datos quedan guardados y los ves en cualquier teléfono o computadora.':'Entra con tu correo y tu contraseña.'}</p>
-      ${accMode==='otp'?'':`<div class="seg tiny acc-tabs" role="group" aria-label="Cuenta"><button type="button" data-am="pw" aria-pressed="${!signup}">Ya tengo cuenta</button><button type="button" data-am="new" aria-pressed="${signup}">Crear cuenta</button></div>`}
+  if(accStep.sent&&accStep.email)return openCodeStep();
+  const signup=accMode==='new',forgot=accMode==='forgot',otp=accMode==='otp';
+  sheet(`<h3>${signup?'Crea tu cuenta':forgot?'Recupera tu contraseña':otp?'Entra con un código':'Inicia sesión'}</h3><form class="form" id="f" novalidate>
+      <p class="lead-s">${signup?'Con tu cuenta, tus datos quedan guardados y los ves en cualquier teléfono o computadora.':forgot?'Escribe el correo de tu cuenta. Te enviaremos un código para crear una contraseña nueva.':otp?'Te enviaremos un código de '+OTP_LEN+' dígitos a tu correo.':'Entra con tu correo y tu contraseña.'}</p>
+      ${otp||forgot?'':`<div class="seg tiny acc-tabs" role="group" aria-label="Cuenta"><button type="button" data-am="pw" aria-pressed="${!signup}">Ya tengo cuenta</button><button type="button" data-am="new" aria-pressed="${signup}">Crear cuenta</button></div>`}
       <div class="field"><label for="aEmail">Correo electrónico</label><input id="aEmail" type="email" inputmode="email" autocomplete="email" value="${esc(accStep.email)}" placeholder="tu@correo.com"></div>
-      ${accMode==='otp'?'':`<div class="field"><label for="aPass">Contraseña</label><div class="pw"><input id="aPass" type="password" autocomplete="${signup?'new-password':'current-password'}" placeholder="${signup?'Al menos 8 caracteres':'Tu contraseña'}"><button type="button" class="pw-eye" id="aEye" aria-label="Mostrar contraseña" aria-pressed="false">Ver</button></div></div>
+      ${otp||forgot?'':`<div class="field"><label for="aPass">Contraseña</label><div class="pw"><input id="aPass" type="password" autocomplete="${signup?'new-password':'current-password'}" placeholder="${signup?'Al menos 8 caracteres':'Tu contraseña'}"><button type="button" class="pw-eye" id="aEye" aria-label="Mostrar contraseña" aria-pressed="false">Ver</button></div></div>
       ${signup?'<div class="field"><label for="aPass2">Repite la contraseña</label><input id="aPass2" type="password" autocomplete="new-password"></div>':''}`}
       <div class="err" id="err" role="alert"></div>
-      <button class="btn" type="submit">${accMode==='otp'?'Enviarme un código':signup?'Crear mi cuenta':'Entrar'}</button>
-      <div class="acc-links">${accMode==='pw'?'<button class="link-btn" type="button" id="aForgot">¿Olvidaste tu contraseña?</button>':''}<button class="link-btn" type="button" id="aSwap">${accMode==='otp'?'Usar contraseña':'Prefiero recibir un código por correo'}</button></div>
-      <p class="hint">Si ya registraste datos en este teléfono, se guardan en tu cuenta al entrar. <button class="link-btn" type="button" id="aPriv">Privacidad</button></p>`}
+      <button class="btn" type="submit">${otp?'Enviarme un código':forgot?'Enviarme el código':signup?'Crear mi cuenta':'Entrar'}</button>
+      <div class="acc-links">${accMode==='pw'?'<button class="link-btn" type="button" id="aForgot">¿Olvidaste tu contraseña?</button>':''}${forgot?'<button class="link-btn" type="button" id="aSwap" data-to="pw">Volver a iniciar sesión</button>':`<button class="link-btn" type="button" id="aSwap" data-to="${otp?'pw':'otp'}">${otp?'Usar contraseña':'Prefiero recibir un código por correo'}</button>`}</div>
+      <p class="hint">Si ya registraste datos en este teléfono, se guardan en tu cuenta al entrar. <button class="link-btn" type="button" id="aPriv">Privacidad</button></p>
   </form>`,'var(--brand)');
   const err=m=>{$('#err').textContent=m};
-  const send=async email=>{const c=await sbClient();const {error}=await c.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:APP_URL}});if(error)throw error};
   const pv=$('#aPriv');if(pv)pv.onclick=openPrivacy;
   document.querySelectorAll('[data-am]').forEach(b=>b.onclick=()=>{accStep.email=$('#aEmail').value.trim();accMode=b.dataset.am;openAccount()});
-  const sw=$('#aSwap');if(sw)sw.onclick=()=>{accStep.email=($('#aEmail')||{value:''}).value.trim();accMode=accMode==='otp'?'pw':'otp';accStep.sent=false;openAccount()};
+  const sw=$('#aSwap');if(sw)sw.onclick=()=>{accStep.email=($('#aEmail')||{value:''}).value.trim();accMode=sw.dataset.to;accStep.sent=false;openAccount()};
   const eye=$('#aEye');if(eye)eye.onclick=()=>{const i=$('#aPass'),on=i.type==='password';i.type=on?'text':'password';eye.textContent=on?'Ocultar':'Ver';eye.setAttribute('aria-pressed',on)};
-  const okMail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
-  const fg=$('#aForgot');if(fg)fg.onclick=async()=>{const email=$('#aEmail').value.trim().toLowerCase();if(!okMail(email)){$('#aEmail').focus();return err('Escribe tu correo y te enviamos un enlace para crear una contraseña nueva.')}
-    try{const c=await sbClient();const {error}=await c.auth.resetPasswordForEmail(email,{redirectTo:APP_URL});if(error)throw error;err('');toast('Te enviamos un enlace a '+email+' para cambiar la contraseña')}catch(x){err(friendlyAuth(x))}};
-  if(codeStep){
-    $('#aBack').onclick=()=>{accStep.sent=false;openAccount()};
-    $('#aResend').onclick=async()=>{try{await send(accStep.email);toast('Te enviamos otro código')}catch(e){err(friendlyAuth(e))}};
-    $('#aLinkT').onclick=()=>{$('#aLinkBox').hidden=false;$('#aLinkT').hidden=true;$('#aLink').focus()};
-    $('#f').onsubmit=async e=>{e.preventDefault();const code=$('#aCode').value.replace(/\D/g,''),lk=linkToken($('#aLink').value);
-      if(!lk&&$('#aLink').value.trim())return err('Ese enlace no es el del correo de Caoba. Cópialo completo, desde el botón del correo.');
-      if(!lk&&code.length<6)return err('Escribe el código completo que llegó a tu correo.');
-      const b=e.target.querySelector('[type=submit]');b.disabled=true;b.textContent='Entrando…';
-      try{const c=await sbClient();const {data,error}=await c.auth.verifyOtp(lk?{token_hash:lk.hash,type:lk.type}:{email:accStep.email,token:code,type:'email'});if(error)throw error;sbUser=data.user;accStep={email:'',sent:false};close();paintAcc();toast('Sesión iniciada');afterLogin()}
-      catch(x){err(friendlyAuth(x));b.disabled=false;b.textContent='Entrar'}};
-    return;
-  }
+  const fg=$('#aForgot');if(fg)fg.onclick=()=>{accStep.email=$('#aEmail').value.trim();accMode='forgot';openAccount()};
   $('#f').onsubmit=async e=>{e.preventDefault();const email=$('#aEmail').value.trim().toLowerCase(),b=e.target.querySelector('[type=submit]'),lbl=b.textContent;
     if(!okMail(email))return err('Revisa el correo: debe verse como nombre@correo.com.');
-    if(accMode==='otp'){b.disabled=true;b.textContent='Enviando…';try{await send(email);accStep={email,sent:true};openAccount()}catch(x){err(friendlyAuth(x));b.disabled=false;b.textContent=lbl}return}
+    if(otp||forgot){b.disabled=true;b.textContent='Enviando…';try{await sendCode(otp?'email':'recovery',email);accStep={email,sent:true,kind:otp?'email':'recovery',at:Date.now()};openAccount()}catch(x){err(friendlyAuth(x));b.disabled=false;b.textContent=lbl}return}
     const pw=$('#aPass').value;if(pw.length<(signup?8:1))return err(signup?'La contraseña debe tener al menos 8 caracteres.':'Escribe tu contraseña.');
     if(signup&&pw!==$('#aPass2').value)return err('Las contraseñas no coinciden.');
     b.disabled=true;b.textContent=signup?'Creando…':'Entrando…';
     try{const c=await sbClient();
       if(signup){const {data,error}=await c.auth.signUp({email,password:pw,options:{emailRedirectTo:APP_URL}});if(error)throw error;
-        if(data.session){sbUser=data.user;close();paintAcc();toast('Cuenta creada');afterLogin()}else{accStep.email=email;accMode='pw';close();sheet(`<h3>Revisa tu correo</h3><div class="form"><p class="lead-s">Te enviamos un enlace a <b>${esc(email)}</b> para confirmar tu cuenta. Después vuelve aquí e inicia sesión.</p><button class="btn" type="button" id="aOk">Entendido</button></div>`,'var(--brand)');$('#aOk').onclick=close}}
-      else{const {data,error}=await c.auth.signInWithPassword({email,password:pw});if(error)throw error;sbUser=data.user;accStep={email:'',sent:false};close();paintAcc();toast('Sesión iniciada');afterLogin()}}
-    catch(x){err(/Invalid login credentials/i.test(x&&x.message||'')?'Correo o contraseña incorrectos.':/already registered|already been registered/i.test(x&&x.message||'')?'Ese correo ya tiene cuenta. Toca «Ya tengo cuenta».':friendlyAuth(x));b.disabled=false;b.textContent=lbl}};
+        if(data.session){sbUser=data.user;close();paintAcc();toast('Cuenta creada');track('cuenta_creada');afterLogin()}
+        else{accStep={email,sent:true,kind:'signup',at:Date.now()};track('registro_iniciado');openAccount()}}
+      else{const {data,error}=await c.auth.signInWithPassword({email,password:pw});if(error)throw error;sbUser=data.user;accStep={email:'',sent:false};close();paintAcc();toast('Sesión iniciada');track('sesion_iniciada');afterLogin()}}
+    catch(x){err(/Invalid login credentials/i.test(x&&x.message||'')?'Correo o contraseña incorrectos.':/Email not confirmed/i.test(x&&x.message||'')?'Confirma tu correo primero: escribe el código que te enviamos o toca el enlace del correo.':/already registered|already been registered/i.test(x&&x.message||'')?'Ese correo ya tiene cuenta. Toca «Ya tengo cuenta».':friendlyAuth(x));b.disabled=false;b.textContent=lbl}};
 }
-function openNewPassword(){
+/* ---------- Código por correo: casillas individuales, pegar completo, reenviar y vencimiento ---------- */
+const OTP_LEN=8, OTP_EXP_MIN=60, OTP_RESEND_S=60;
+const okMail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+async function sendCode(kind,email){const c=await sbClient();let r;
+  if(kind==='signup')r=await c.auth.resend({type:'signup',email,options:{emailRedirectTo:APP_URL}});
+  else if(kind==='recovery')r=await c.auth.resetPasswordForEmail(email,{redirectTo:APP_URL});
+  else r=await c.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:APP_URL}});
+  if(r&&r.error)throw r.error}
+let otpTimer=null;
+function openCodeStep(){
+  const k=accStep.kind||'email',email=accStep.email;
+  const T={email:['Escribe el código','para entrar'],signup:['Confirma tu correo','para confirmar tu cuenta'],recovery:['Escribe el código','para crear una contraseña nueva']}[k];
+  sheet(`<h3>${T[0]}</h3><form class="form" id="f" novalidate>
+    <p class="lead-s">Te enviamos un código de ${OTP_LEN} dígitos a <b>${esc(email)}</b> ${T[1]}. Revisa también la carpeta de spam.</p>
+    <div class="otp" id="otp" role="group" aria-label="Código de ${OTP_LEN} dígitos">${Array.from({length:OTP_LEN},(_,i)=>`<input class="otp-b" inputmode="numeric" pattern="[0-9]*" maxlength="${i===0?OTP_LEN:1}" aria-label="Dígito ${i+1} de ${OTP_LEN}" autocomplete="${i===0?'one-time-code':'off'}">`).join('')}</div>
+    <p class="otp-exp num" id="otpExp" aria-live="polite"></p>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn" type="submit">${k==='recovery'?'Continuar':k==='signup'?'Confirmar mi cuenta':'Entrar'}</button>
+    <div class="two"><button class="btn ghost" type="button" id="aResend" disabled>Reenviar código</button><button class="btn ghost" type="button" id="aBack">Cambiar correo</button></div>
+    <button class="link-btn" type="button" id="aLinkT">¿Te llegó un enlace en vez de un código?</button>
+    <div class="field" id="aLinkBox" hidden><label for="aLink">Mantén presionado el botón del correo, copia el enlace y pégalo aquí</label><input id="aLink" type="url" autocomplete="off" placeholder="https://…"></div>
+  </form>`,'var(--brand)');
+  const err=m=>{$('#err').textContent=m};
+  const B=[...document.querySelectorAll('.otp-b')],code=()=>B.map(i=>i.value).join('');
+  const fill=(start,digits)=>{digits.split('').slice(0,OTP_LEN-start).forEach((d,j)=>{B[start+j].value=d});const n=Math.min(OTP_LEN-1,start+digits.length);B[n].focus();if(code().length===OTP_LEN)$('#f').requestSubmit()};
+  B.forEach((inp,i)=>{
+    inp.addEventListener('input',()=>{const d=inp.value.replace(/\D/g,'');if(d.length>1){inp.value='';fill(i,d)}else{inp.value=d;if(d&&i<OTP_LEN-1)B[i+1].focus();if(code().length===OTP_LEN)$('#f').requestSubmit()}err('')});
+    inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&i>0){B[i-1].value='';B[i-1].focus();e.preventDefault()}else if(e.key==='ArrowLeft'&&i>0)B[i-1].focus();else if(e.key==='ArrowRight'&&i<OTP_LEN-1)B[i+1].focus()});
+    inp.addEventListener('paste',e=>{const d=((e.clipboardData||window.clipboardData).getData('text')||'').replace(/\D/g,'');if(d){e.preventDefault();fill(d.length>=OTP_LEN?0:i,d)}});
+    inp.addEventListener('focus',()=>inp.select());
+  });
+  setTimeout(()=>B[0].focus(),60);
+  const sent=accStep.at||Date.now(),rs=$('#aResend');
+  const tick=()=>{if(!document.getElementById('otpExp')){clearInterval(otpTimer);return}
+    const left=sent+OTP_EXP_MIN*60e3-Date.now(),wait=Math.ceil((sent+OTP_RESEND_S*1e3-Date.now())/1e3);
+    const mm=x=>Math.floor(x/60)+':'+String(x%60).padStart(2,'0');
+    $('#otpExp').textContent=left>0?'El código vence en '+mm(Math.ceil(left/1e3)):'Este código ya venció. Pide uno nuevo.';
+    $('#otpExp').classList.toggle('late',left<=0);
+    rs.disabled=wait>0;rs.textContent=wait>0?'Reenviar en '+mm(wait):'Reenviar código'};
+  clearInterval(otpTimer);otpTimer=setInterval(tick,1000);tick();
+  $('#aBack').onclick=()=>{accStep={email,sent:false};openAccount()};
+  rs.onclick=async()=>{rs.disabled=true;try{await sendCode(k,email);accStep.at=Date.now();B.forEach(i=>i.value='');openCodeStep();toast('Te enviamos otro código')}catch(e){err(friendlyAuth(e));rs.disabled=false}};
+  $('#aLinkT').onclick=()=>{$('#aLinkBox').hidden=false;$('#aLinkT').hidden=true;$('#aLink').focus()};
+  $('#f').onsubmit=async e=>{e.preventDefault();const c0=code(),lk=linkToken($('#aLink').value);
+    if(!lk&&$('#aLink').value.trim())return err('Ese enlace no es el del correo de Caoba. Cópialo completo, desde el botón del correo.');
+    if(!lk&&c0.length<OTP_LEN)return err('Escribe los '+OTP_LEN+' dígitos del código.');
+    if(!lk&&Date.now()>sent+OTP_EXP_MIN*60e3)return err('Este código ya venció. Toca «Reenviar código».');
+    const b=e.target.querySelector('[type=submit]'),lbl=b.textContent;if(b.disabled)return;b.disabled=true;b.textContent='Verificando…';
+    try{const c=await sbClient();const {data,error}=await c.auth.verifyOtp(lk?{token_hash:lk.hash,type:lk.type}:{email,token:c0,type:k==='signup'?'signup':k==='recovery'?'recovery':'email'});if(error)throw error;
+      sbUser=data.user;accStep={email:'',sent:false};clearInterval(otpTimer);close();paintAcc();
+      if(k==='recovery'){loginFor=sbUser.id;openNewPassword(true);return}
+      toast(k==='signup'?'Cuenta confirmada':'Sesión iniciada');track(k==='signup'?'cuenta_creada':'sesion_iniciada');afterLogin()}
+    catch(x){err(friendlyAuth(x));B.forEach(i=>i.value='');B[0].focus();b.disabled=false;b.textContent=lbl}};
+}
+function openNewPassword(thenSync){
   sheet(`<h3>Crea tu contraseña nueva</h3><form class="form" id="f" novalidate><div class="field"><label for="nP1">Contraseña nueva</label><input id="nP1" type="password" autocomplete="new-password" placeholder="Al menos 8 caracteres"></div>
     <div class="field"><label for="nP2">Repítela</label><input id="nP2" type="password" autocomplete="new-password"></div><p class="err" id="err" role="alert"></p><button class="btn" type="submit">Guardar contraseña</button></form>`,'var(--brand)');
   $('#f').onsubmit=async e=>{e.preventDefault();const a=$('#nP1').value;if(a.length<8)return $('#err').textContent='Al menos 8 caracteres.';if(a!==$('#nP2').value)return $('#err').textContent='No coinciden.';
-    try{const c=await sbClient();const {error}=await c.auth.updateUser({password:a});if(error)throw error;close();toast('Contraseña actualizada')}catch(x){$('#err').textContent=friendlyAuth(x)}};
+    try{const c=await sbClient();const {error}=await c.auth.updateUser({password:a});if(error)throw error;close();toast('Contraseña actualizada');if(thenSync){loginFor='';afterLogin()}}catch(x){$('#err').textContent=friendlyAuth(x)}};
 }
 function linkToken(v){
   v=String(v||'').trim();if(!v)return null;
