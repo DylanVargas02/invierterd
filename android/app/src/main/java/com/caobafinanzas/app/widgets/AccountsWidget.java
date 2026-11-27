@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-/** Widget nativo de Caoba (Accounts). Se redibuja con cada cambio guardado en la app.
+/** Widget nativo de Caoba (Accounts). Se redibuja con cada cambio guardado en la app. */
 public class AccountsWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context ctx, AppWidgetManager m, int[] ids) {
