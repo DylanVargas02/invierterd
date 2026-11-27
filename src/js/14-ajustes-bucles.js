@@ -14,7 +14,8 @@ function openSettings(){
   <section class="set-g"><h4>Cómo ves tu dinero</h4><div class="set-card set-form">
     <div class="set-f"><span class="set-l" id="lBase">Moneda de tus totales</span><div aria-labelledby="lBase">${seg('aBase',[['DOP','Pesos · RD$'],['USD','Dólares · US$']],S.base==='USD'?'USD':'DOP')}</div></div>
     <div class="set-f"><label for="aUsd">Tasa del dólar</label><div class="set-rate"><span>US$1 =</span><span class="set-rd">RD$</span><input id="aUsd" inputmode="decimal" value="${S.rates.USD}"></div><small class="set-msg" id="aUsdMsg" aria-live="polite">Convierte tus montos en dólares a pesos.</small></div>
-    <div class="set-f"><span class="set-l" id="lTheme">Apariencia</span><div aria-labelledby="lTheme">${seg('aTheme',[['','Automática'],['light','Clara'],['dark','Oscura']],S.theme||'')}</div></div>
+    <div class="set-f"><span class="set-l" id="lSkin">Identidad visual</span><div class="skins" role="radiogroup" aria-labelledby="lSkin">${SKINS.map(([k,n,d,c])=>`<label class="skin"><input type="radio" name="aSkin" value="${k}" ${(S.skin||'azul')===k?'checked':''}><i>${c.map(x=>`<b style="background:${x}"></b>`).join('')}</i><span>${n}</span><small>${d}</small></label>`).join('')}</div></div>
+    <div class="set-f"><span class="set-l" id="lTheme">Apariencia${S.skin==='oscuro'?' · Premium oscuro siempre se ve oscura':''}</span><div aria-labelledby="lTheme">${seg('aTheme',[['','Automática'],['light','Clara'],['dark','Oscura']],S.theme||'')}</div></div>
   </div></section>
   <section class="set-g"><h4>Tus datos</h4><div class="set-card">
     ${setRow('aProf','user','Perfiles financieros',(S.profiles&&S.profiles.list.length>1?'En uso: '+esc(activeProfile().name)+' · ':'')+'Personal, familiar, compartido o negocio')}
@@ -37,6 +38,7 @@ function openSettings(){
   ${isAdm?`<section class="set-g"><h4>Administración</h4><div class="set-card">${setRow('aAdm','shield','Panel de administrador','Cargar tasas del mercado y ver el uso de la app')}</div></section>`:''}
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
+  document.querySelectorAll('[name=aSkin]').forEach(r=>r.onchange=()=>{S.skin=r.value==='azul'?undefined:r.value;applySkin();save();render();widgetSync();track('identidad_cambiada',{skin:r.value});toast('Identidad: '+SKINS.find(s=>s[0]===r.value)[1])});
   $('#aProf').onclick=openProfiles;$('#aBkE').onclick=exportBackup;$('#aBkI').onclick=importBackup;const wh=$('#aWh');if(wh)wh.onchange=()=>{S.wHide=wh.checked;save();widgetSync();toast(wh.checked?'Los widgets ocultan los montos':'Los widgets muestran los montos')};$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});

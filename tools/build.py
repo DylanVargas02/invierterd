@@ -49,7 +49,10 @@ if('serviceWorker' in navigator){{const had=!!navigator.serviceWorker.controller
 (ROOT / 'index.html').write_text(head + body + tail, encoding='utf-8')
 import shutil
 (ROOT / 'fonts').mkdir(exist_ok=True)
-for f in (ROOT / 'src' / 'fonts').glob('*'): shutil.copy(f, ROOT / 'fonts' / f.name)
+for f in (ROOT / 'src' / 'fonts').glob('*'):
+    if f.is_dir(): shutil.copytree(f, ROOT / 'fonts' / f.name, dirs_exist_ok=True)
+    else: shutil.copy(f, ROOT / 'fonts' / f.name)
+for old in (ROOT / 'fonts').glob('plus-jakarta-sans-*'): old.unlink()
 
 manifest = {
   "name": "Caoba · organización financiera e inversión",
@@ -113,6 +116,7 @@ if '--native' in sys.argv:
         '<meta name="apple-mobile-web-app-capable" content="yes">',
         '<meta name="apple-mobile-web-app-capable" content="yes">\n<script>window.CAOBA_NATIVE=true</script>\n<script src="vendor/capacitor.js"></script>\n<script src="vendor/cap-app.js"></script>\n<script src="vendor/cap-preferences.js"></script>')
     (WWW / 'index.html').write_text(nhead + nbody + '\n</body>\n</html>\n', encoding='utf-8')
+    shutil.copytree(ROOT / 'src' / 'fonts' / 'skins', WWW / 'fonts' / 'skins')
     for f in ['icons/icon-192.png', 'icons/favicon-32.png']:
         (WWW / 'icons').mkdir(exist_ok=True); shutil.copy(ROOT / f, WWW / f)
     print('www/ lista para Capacitor ·', sum(1 for _ in WWW.rglob('*') if _.is_file()), 'archivos')

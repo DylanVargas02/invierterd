@@ -27,18 +27,18 @@ function bindPromos(){
 /* ---------- Elegir qué ahorro o inversión agregar ---------- */
 const INV_GUIDE=[
   ['Dinero disponible',[['Cuenta de ahorro','Lo usas cuando quieras. Paga poco interés.'],['Cuenta corriente','Para pagos y cheques. Casi nunca paga interés.'],['Efectivo','Lo que tienes en la mano o en la casa.']]],
-  ['A plazo fijo',[['Certificado','Dejas el dinero en un banco por un plazo y te paga una tasa fija. Ej. 6 meses al 9 %.'],['Bono','Le prestas al Gobierno o a una empresa. Te paga cupones, casi siempre cada 6 meses.'],['Sell Buy Back (SBB)','Un puesto de bolsa te vende un título y te lo recompra en una fecha acordada.'],['Mutuo','Le prestas a un puesto de bolsa por poco tiempo, a una tasa acordada.']]],
+  ['A plazo fijo',[['Certificado','Dejas el dinero en un banco por un plazo y te paga una tasa fija. Ej. 6 meses al 9 %.'],['Depósito a plazo','Parecido al certificado: un monto fijo por un plazo, con intereses al final o periódicos.'],['Bono','Le prestas al Gobierno o a una empresa. Te paga cupones, casi siempre cada 6 meses.'],['Sell Buy Back (SBB)','Un puesto de bolsa te vende un título y te lo recompra en una fecha acordada.'],['Mutuo','Le prestas a un puesto de bolsa por poco tiempo, a una tasa acordada.']]],
   ['Rendimiento variable',[['Fondo de inversión','Tu dinero se junta con el de otros y lo maneja una administradora. La tasa cambia cada día.'],['Acciones','Compras una parte de una empresa. Su precio sube y baja.']]]
 ];
 const INV_IC={'Cuenta de ahorro':'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h3"/>','Cuenta corriente':'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M7 14h6M7 11h10"/>','Efectivo':'<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/>',
   'Certificado':'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/>','Bono':'<path d="M4 7h16v10H4z"/><circle cx="12" cy="12" r="2.5"/><path d="M7 7v10M17 7v10"/>','Sell Buy Back (SBB)':'<path d="M7 7h13l-3-3M17 17H4l3 3"/>','Mutuo':'<path d="M7 11l4-4 3 3 5-5"/><path d="M4 20h16"/><path d="M4 16h4M10 16h4"/>',
   'Fondo de inversión':'<circle cx="8" cy="9" r="4"/><circle cx="16" cy="9" r="4"/><circle cx="12" cy="15.5" r="4"/>','Acciones':'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>','Otro':'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'};
 function openInvChooser(onlyInv){
-  const row=([t,d])=>`<button type="button" class="menu-r" data-it="${esc(t)}"><span class="menu-ic" style="--mc:var(--grow)"><svg viewBox="0 0 24 24">${INV_IC[t]||INV_IC.Otro}</svg></span><span><b>${t==='Certificado'?'Certificado financiero':t}</b><small>${d}</small></span>${chev}</button>`;
-  sheet(`<h3>¿Qué quieres agregar?</h3><p class="lead-s">Elige el que se parezca más. Puedes cambiarlo después.</p>
-    ${INV_GUIDE.filter(([g])=>!(onlyInv&&g==='Dinero disponible')).map(([g,L])=>`<h4 class="menu-g">${g}</h4><div class="menu">${L.map(row).join('')}</div>`).join('')}
-    <div class="menu" style="margin-top:12px">${row(['Otro','Algo distinto: escribe qué es y lo agregamos a tus opciones.'])}</div>`,'var(--grow)');
-  document.querySelectorAll('[data-it]').forEach(b=>b.onclick=()=>openSaving({type:b.dataset.it}));
+  const tile=([t,d])=>`<button type="button" class="itile" data-it="${esc(t)}"><span class="itile-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${INV_IC[t]||INV_IC[t==='Depósito a plazo'?'Certificado':'Otro']}</svg></span><b>${t==='Certificado'?'Certificado financiero':t}</b><small>${d}</small></button>`;
+  sheet(`<h3>${onlyInv?'¿Qué inversión quieres agregar?':'¿Qué quieres agregar?'}</h3><p class="lead-s">Elige el tipo. El formulario se adapta a sus características.</p>
+    ${INV_GUIDE.filter(([g])=>!(onlyInv&&g==='Dinero disponible')).map(([g,L])=>`<h4 class="menu-g">${g}</h4><div class="itiles">${L.map(tile).join('')}</div>`).join('')}
+    <div class="itiles" style="margin-top:12px">${tile(['Otro','Algo distinto: escribe qué es.'])}</div>`,'var(--grow)');
+  document.querySelectorAll('[data-it]').forEach(b=>b.onclick=()=>b.dataset.it==='Bono'?openBond({}):openSaving({type:b.dataset.it}));
 }
 
 /* ---------- Ahorros e inversiones ---------- */

@@ -1,0 +1,67 @@
+/* ===== Componentes según la identidad: radios, texturas y navegación ===== */
+body{font-family:var(--f-body)}
+.deep{border-radius:var(--r-hero)}
+.panel,.calbtn,.grp,.mkr-r,.conn-empty,.item,.eg2,.ent,.loan-c,.mkt-link,.adv-inv,.payq,.onb-cta,.itile,.mvp,.set-card{border-radius:var(--r-card)}
+.acard,.ccard,.cprev{border-radius:var(--r-cardv)}
+.seg,.cur-seg,.kind-tog,.o-cur,.seg button,.cur-seg button,.kind-tog button,.o-cur button,.tyc span,.mk-types button,.chips button,.pill span{border-radius:var(--r-pill)}
+.btn,.qa-b,.grp-add,.wel-solo,.sso,.sec-add{border-radius:var(--r-btn)}
+.sheet{border-radius:var(--r-sheet) var(--r-sheet) 0 0}
+@media (min-width:1000px){.sheet{border-radius:var(--r-sheet)}}
+.form input:not([type=checkbox]):not([type=radio]),.form select,.form textarea,.onb2 input:not([type=checkbox]):not([type=radio]),.onb2 select,.otp-b{border-radius:var(--r-inp)}
+.brand h1,.sheet h3,.deep .big,.wel h2,h2.sec,.ac-bal strong,.cc-bal strong,.mkr-v b,.bd-kv dd,.otp-b{font-family:var(--f-display)}
+
+/* Azul financiero (predeterminada): superficies planas, sin textura, filetes finos */
+:root:not([data-skin]) .deep{background-image:none}
+:root:not([data-skin]) .acard,:root:not([data-skin]) .ccard{background-image:linear-gradient(150deg,var(--c1),var(--c2));box-shadow:none}
+:root:not([data-skin]) nav.tabs button[aria-selected="true"] .ic{background:var(--brand-soft)!important}
+:root:not([data-skin]) .panel,:root:not([data-skin]) .grp,:root:not([data-skin]) .calbtn{box-shadow:none}
+
+/* Pasteles contemporáneos: tarjetas protagonistas en pastel con texto oscuro; barra de navegación flotante */
+:root[data-skin="pastel"] .deep{background-image:none;color:var(--on-deep)}
+:root[data-skin="pastel"] .deep .lbl,:root[data-skin="pastel"] .deep small,:root[data-skin="pastel"] .hrows span{color:color-mix(in srgb,var(--on-deep) 72%,transparent)}
+:root[data-skin="pastel"] .acard,:root[data-skin="pastel"] .ccard{background-image:none}
+:root[data-skin="pastel"] .panel,:root[data-skin="pastel"] .grp,:root[data-skin="pastel"] .calbtn{border:0;box-shadow:0 1px 0 var(--line)}
+@media (max-width:999px){
+  :root[data-skin="pastel"] nav.tabs{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));border-radius:999px;background:#2B2A33;border:0;padding-bottom:0}
+  :root[data-skin="pastel"] nav.tabs button{color:#B8B3C6}
+  :root[data-skin="pastel"] nav.tabs button[aria-selected="true"]{color:#FFFBF5}
+  :root[data-skin="pastel"] nav.tabs button[aria-selected="true"] .ic{background:rgb(255 255 255 / .12)!important}
+}
+
+/* Premium oscuro: grafito con bordes de 1 px; el esmeralda solo en lo que crece */
+:root[data-skin="oscuro"] .deep{background-image:none;border:1px solid var(--line)}
+:root[data-skin="oscuro"] .acard,:root[data-skin="oscuro"] .ccard{background-image:linear-gradient(150deg,#1C232D,#11161D);border:1px solid #26303C}
+:root[data-skin="oscuro"] .panel,:root[data-skin="oscuro"] .grp,:root[data-skin="oscuro"] .calbtn{box-shadow:none}
+
+/* Natural contemporáneo: anillos de madera en la tarjeta principal, esquinas casi rectas */
+:root[data-skin="natural"] .acard,:root[data-skin="natural"] .ccard{background-image:repeating-radial-gradient(ellipse 140% 90% at 110% -20%,transparent 0 12px,rgb(255 255 255 / .08) 12px 13px),linear-gradient(150deg,var(--c1),var(--c2))}
+
+/* Minimalismo editorial: sin tarjetas; filetes negros, cifras en serifa */
+:root[data-skin="editorial"] .deep{background-image:none;color:var(--ink);padding-left:0;padding-right:0;border-bottom:1px solid var(--ink)}
+:root[data-skin="editorial"] .deep .lbl,:root[data-skin="editorial"] .deep small,:root[data-skin="editorial"] .hrows span{color:var(--ink-2)}
+:root[data-skin="editorial"] .deep .pace>div,:root[data-skin="editorial"] .deep .addb{background:none;border:1px solid var(--line);color:var(--ink)}
+:root[data-skin="editorial"] .panel,:root[data-skin="editorial"] .grp,:root[data-skin="editorial"] .calbtn,:root[data-skin="editorial"] .item{box-shadow:none;border:0;border-top:1px solid var(--ink);border-radius:0}
+:root[data-skin="editorial"] nav.tabs{border-top:1px solid var(--ink)}
+:root[data-skin="editorial"] nav.tabs button[aria-selected="true"] .ic{background:none!important}
+:root[data-skin="editorial"] nav.tabs button[aria-selected="true"]{text-decoration:underline;text-underline-offset:4px}
+
+/* Selector de identidad en Ajustes */
+.skins{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.skin{position:relative;border:1px solid var(--line);border-radius:var(--r-card);padding:10px;background:var(--surface);cursor:pointer;display:flex;flex-direction:column;gap:6px;min-height:88px}
+.skin input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.skin:has(input:checked){border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+.skin:has(input:focus-visible){outline:3px solid var(--grow);outline-offset:2px}
+.skin i{display:flex;gap:3px}.skin i b{width:18px;height:18px;border-radius:50%;border:1px solid rgb(0 0 0 / .08)}
+.skin span{font-size:13.5px;font-weight:700;line-height:1.25}
+.skin small{font-size:12px;color:var(--ink-2)}
+
+/* Ajustes finos por identidad */
+:root[data-skin="pastel"] .deep .seg-mini,:root[data-skin="editorial"] .deep .seg-mini{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+:root[data-skin="pastel"] .deep .seg-mini button,:root[data-skin="editorial"] .deep .seg-mini button{color:var(--ink-2)}
+:root[data-skin="pastel"] .deep .seg-mini button[aria-pressed="true"],:root[data-skin="editorial"] .deep .seg-mini button[aria-pressed="true"]{background:var(--surface);color:var(--ink)}
+:root[data-skin="pastel"] .qa-b.inc{background:var(--grow-soft);color:var(--grow)}
+:root[data-skin="pastel"] .qa-b.exp{background:var(--spend-soft);color:var(--spend)}
+:root[data-skin="pastel"] .qa-b .qa-ic{background:rgb(255 255 255 / .6)}
+:root[data-skin="oscuro"] .qa-b.exp{background:var(--surface-2);color:var(--ink)}
+:root[data-skin="oscuro"] .qa-b.inc{color:#04140D}
+:root[data-skin="editorial"] .qa-b.exp{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}

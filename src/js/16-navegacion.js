@@ -13,7 +13,7 @@ const ACARD=[['#123B5C','#1D5A8A'],['#0E2C44','#24506F'],['#17633B','#2BA35E'],[
 const aColor=s=>{if(s.color!=null&&ACARD[s.color])return ACARD[s.color];let h=0;for(const ch of String(s.entity||s.name||''))h=(h*31+ch.charCodeAt(0))>>>0;return ACARD[h%ACARD.length]};
 function acardHTML(s,t){
   const [c1,c2]=aColor(s),v=savValue(s,t),cash=s.type==='Efectivo';
-  return `<button type="button" class="acard" data-edit-s="${s.id}" style="--c1:${c1};--c2:${c2}">
+  return `<button type="button" class="acard" data-edit-s="${s.id}" aria-label="Ver ${esc(s.name)}" style="--c1:${c1};--c2:${c2}">
     <span class="ac-top">${cash?'<span class="ac-cash" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg></span>':inst(s.entity,1)}<span class="ac-id"><b>${esc(cash?s.name:s.entity)}</b><small>${esc(s.type)}${s.rate?' · '+rateTxt(s):''}</small></span></span>
     <span class="ac-bal"><small>Saldo</small><strong class="num">${esc(fmt(v,s.cur,2))}</strong></span>
     <span class="ac-foot num"><span>${cash?'':s.last4?'•••• '+esc(s.last4):'<i>Sin últimos 4 dígitos</i>'}</span><span>${esc(s.name!==s.entity&&!cash?s.name:'')}</span></span>

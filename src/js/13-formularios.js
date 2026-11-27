@@ -124,75 +124,26 @@ function openExpense(kind='gasto',keep={},editId){
     save();close();render();toast(ed?'Cambios guardados':inc?'Ingreso guardado':o&&o.k==='c'?'Gasto guardado en la tarjeta':'Gasto guardado')};
 }
 
-function openSaving(pre={}){
-  const ed=pre.id?S.savings.find(x=>x.id===pre.id):null;
-  if(ed)pre={color:ed.color,issuer:ed.issuer,code:ed.code,renew:ed.renew,status:ed.status,rateKind:ed.rateKind,ratePub:ed.ratePub,rateUntil:ed.rateUntil,last4:ed.last4,entity:ed.entity,name:ed.name,type:ed.type,cur:ed.cur,principal:+ed.principal.toFixed(2),rate:ed.rate,months:ed.months,mode:ed.open?'sin':ed.due?'fecha':'meses',dueISO:ed.due?isoLocal(new Date(ed.due)):'',startISO:isoLocal(new Date(ed.start)),isr:ed.isr,liquid:isLiquid(ed),vr:!!ed.vr,intFreq:ed.intFreq};
-  const type=SAV_T.includes(pre.type)?pre.type:(ed&&pre.type?(SAV_T.splice(SAV_T.length-1,0,pre.type),pre.type):pre.type?'Otro':'Certificado'), mode0=pre.mode||(ACCT_TYPES.includes(type)||type==='Fondo de inversión'?'sin':'fecha');
-  sheet(`<h3>${ed?'Editar '+esc(ed.type==='Sell Buy Back (SBB)'?'SBB':ed.type.toLowerCase()):type==='Certificado'?'Nuevo certificado financiero':ACCT_TYPES.includes(type)?'Nueva cuenta':type==='Otro'?'Nuevo ahorro o inversión':'Nuevo: '+esc(type==='Sell Buy Back (SBB)'?'SBB':type.toLowerCase())}</h3><form class="form" id="f">
-  <div class="two"><div class="field"><label for="sType">Tipo</label><select id="sType">${SAV_T.map(t=>`<option ${t===type?'selected':''}>${t}</option>`).join('')}</select></div><div class="field"><label for="sEnt">Entidad</label>${entPick('sEnt',pre.entity===AD?'':pre.entity)}</div></div>${otroBox('sOtro','Ej. Plan de retiro, criptomonedas',type==='Otro')}
-  <div class="field"><label for="sName">Nombre <span class="opt">opcional</span></label><input id="sName" value="${esc(pre.name||'')}" placeholder="Ej. Certificado de 6 meses" maxlength="50"></div>
-  <div class="two"><div class="field"><label for="sAmt" id="sAmtL">Monto invertido</label><input id="sAmt" data-money="sCur" inputmode="decimal" value="${pre.principal||''}" placeholder="0.00"></div><div class="field"><label for="sCur">Moneda</label>${curSel('sCur',pre.cur||'DOP')}</div></div>
-  <div class="two inv-only" id="sIssF"><div class="field"><label for="sIss">Emisor <span class="opt">opcional</span></label><input id="sIss" value="${esc(pre.issuer||'')}" placeholder="Ej. ENADOM, Hacienda" maxlength="60"></div><div class="field"><label for="sCode">Identificador <span class="opt">opcional</span></label><input id="sCode" value="${esc(pre.code||'')}" placeholder="Ej. código ISIN o del título" maxlength="30" autocomplete="off"></div></div>
-  <div class="field" id="sRateF"><label for="sRate" id="sRateL">${pre.vr?'Rendimiento anual aproximado %':'Tasa anual que recibes %'}</label><input id="sRate" inputmode="decimal" value="${pre.rate||''}" placeholder="9.50">
-    <div class="choice two-c rk" role="radiogroup" aria-label="Tipo de tasa">${pill('sRk','nominal','Nominal',pre.rateKind!=='efectiva')}${pill('sRk','efectiva','Efectiva (TEA)',pre.rateKind==='efectiva')}</div>
-    <small class="hint" id="sRkH"></small>
-    <label class="check" style="margin-top:6px"><input type="checkbox" id="sVr" ${pre.vr?'checked':''}><span>La tasa es variable (cambia con el mercado)</span></label></div>
-  <div class="two"><div class="field"><label for="sPub">Tasa publicada por la entidad % <span class="opt">opcional</span></label><input id="sPub" inputmode="decimal" value="${pre.ratePub||''}" placeholder="Ej. 10.00"></div><div class="field"><label for="sUntil">Tasa vigente hasta <span class="opt">opcional</span></label><input type="date" id="sUntil" value="${pre.rateUntil?isoLocal(new Date(pre.rateUntil)):''}"></div></div>
-  <fieldset class="field"><legend>Vencimiento</legend><div class="choice">${pill('sMode','fecha','Fecha',mode0==='fecha')}${pill('sMode','meses','En meses',mode0==='meses')}${pill('sMode','sin','No vence',mode0==='sin')}</div></fieldset>
-  <div class="field" id="sDateF"><label for="sDue">Fecha de vencimiento</label><input type="date" id="sDue" value="${pre.dueISO!==undefined?pre.dueISO:pre.months?addMonthsISO(pre.months):''}"><small class="hint">Toca para elegir en el calendario o escribe día, mes y año.</small></div>
-  <div class="field" id="sMonF"><label for="sMon">Plazo en meses</label><input id="sMon" inputmode="numeric" value="${pre.months||6}"></div>
-  <div class="field" id="sIntF"><label for="sInt">¿Cuándo te pagan los intereses?</label><select id="sInt">${[[1,'Cada mes'],[3,'Cada 3 meses'],[6,'Cada 6 meses'],[0,'Al vencimiento, junto al capital']].map(([v,l])=>`<option value="${v}" ${(pre.intFreq!==undefined?pre.intFreq:intF({type}))===v?'selected':''}>${l}</option>`).join('')}</select><small class="hint">Así aparecen en tu calendario de pagos.</small></div>
-  <p class="hint" id="sSinH">Para cuentas de ahorro, corrientes, efectivo y fondos abiertos: el dinero está disponible siempre y los intereses se suman cada mes.</p>
-  <div class="field"><label for="sStart" id="sStartL">Fecha de inicio</label><input type="date" id="sStart" value="${pre.startISO||today()}"></div>
-  <label class="check inv-only" id="sRenF"><input type="checkbox" id="sRen" ${pre.renew===false?'':'checked'}><span>Se renueva automáticamente al vencer</span></label>
-  <div class="field inv-only" id="sStF"><label for="sSt">Estado</label><select id="sSt">${[['','Según la fecha (vigente, renovada o vencida)'],['renovada','Renovada'],['liquidada','Liquidada: ya la cobré']].map(([v,l])=>`<option value="${v}" ${(pre.status||'')===v?'selected':''}>${l}</option>`).join('')}</select><small class="hint">Una inversión liquidada deja de sumar en tu patrimonio; el dinero cuenta donde lo depositaste.</small></div>
-  <label class="check" id="sIsrF"><input type="checkbox" id="sIsr" ${pre.isr===false?'':'checked'}><span>Retener ISR 10 % sobre intereses</span></label>
-  <div class="field" id="s4F"><label for="s4">Últimos 4 dígitos de la tarjeta de débito o de la cuenta <span class="opt">opcional</span></label><input id="s4" inputmode="numeric" maxlength="4" value="${esc(pre.last4||'')}" placeholder="1234"><small class="hint">Para distinguir tus cuentas del mismo banco. Nunca escribas el número completo.</small></div>
-  <fieldset class="field" id="sColF"><legend>Color de la tarjeta</legend><div class="swatches">${ACARD.map(([a,b],i)=>`<label class="sw"><input type="radio" name="sCol" value="${i}" ${(pre.color!=null?pre.color===i:i===0)?'checked':''}><span style="--c1:${a};--c2:${b}" aria-label="Color ${i+1}"></span></label>`).join('')}</div></fieldset>
-  <label class="check"><input type="checkbox" id="sLiq"><span>Lo puedo usar en una emergencia</span></label>
-  <div class="err" id="err"></div><button class="btn" type="submit">${ed?'Guardar cambios':'Guardar'}</button>
-  ${ed?`<button type="button" class="link-btn danger del-link" id="sDel">Eliminar ${esc(ed.name)}</button>`:''}</form>`,'var(--brand)');
-  if(ed)$('#sDel').onclick=()=>confirmDel(ed.name,delDetail('savings',ed),()=>removeItem('savings',ed.id));
-  const mode=()=>(document.querySelector('[name=sMode]:checked')||{}).value||'fecha';
-  const rkH=()=>{const r=rate($('#sRate').value||'0'),ef=(document.querySelector('[name=sRk]:checked')||{}).value==='efectiva';$('#sRkH').textContent=r>0?(ef?'Efectiva: ya incluye la capitalización de intereses durante el año.':'Nominal: es la tasa anual sin capitalizar. Equivale a '+((Math.pow(1+r/1200,12)-1)*100).toFixed(2)+' % efectiva si los intereses se suman cada mes.'):''};
-  $('#sRate').addEventListener('input',rkH);document.querySelectorAll('[name=sRk]').forEach(r=>r.onchange=rkH);rkH();
-  const sync=()=>{const ty=$('#sType').value,acc=ACCT_TYPES.includes(ty),cash=ty==='Efectivo',m=mode();$('#s4F').hidden=!acc||cash;$('#sColF').hidden=!acc;document.querySelectorAll('.inv-only').forEach(e=>e.hidden=acc);if(m==='sin')$('#sRenF').hidden=true;
-    $('#sDateF').hidden=m!=='fecha';$('#sIntF').hidden=acc||m==='sin';$('#sMonF').hidden=m!=='meses';$('#sSinH').hidden=m!=='sin';$('#sRateF').hidden=cash;$('#sIsrF').hidden=cash;
-    $('#sAmtL').textContent=acc?'Saldo actual':'Monto invertido';$('#sStartL').textContent=acc?'Desde cuándo':'Fecha de inicio'};
-  const setMode=v=>{const r=document.querySelector(`[name=sMode][value="${v}"]`);if(r)r.checked=true};
-  $('#sLiq').checked=pre.liquid!==undefined?pre.liquid:ACCT_TYPES.includes(type)||type==='Fondo de inversión';
-  $('#sVr').onchange=()=>{$('#sRateL').textContent=$('#sVr').checked?'Rendimiento anual aproximado %':'Tasa anual %'};
-  $('#sType').onchange=()=>{const ty=$('#sType').value;$('#sOtro').hidden=ty!=='Otro';if(!ed){const f0=intF({type:ty});if(f0!==null)$('#sInt').value=String(f0);$('#sVr').checked=['Fondo de inversión','Acciones'].includes(ty);$('#sVr').onchange()}if(ACCT_TYPES.includes(ty))setMode('sin');else if(mode()==='sin'&&ty!=='Fondo de inversión'&&ty!=='Acciones')setMode('fecha');$('#sLiq').checked=ACCT_TYPES.includes(ty)||ty==='Fondo de inversión';sync()};
-  document.querySelectorAll('[name=sMode]').forEach(r=>r.onchange=sync);sync();
-  $('#f').onsubmit=e=>{e.preventDefault();let ty=$('#sType').value;if(ty==='Otro'){const o=otroVal('sOtro');if(o.n)ty=o.keep?addCustomList('customTypes',o.n):o.n}const cash=ty==='Efectivo',P=money($('#sAmt').value),r=cash?0:rate($('#sRate').value||'0'),m=mode(),start=parseDate($('#sStart').value||today()),ent=readEnt('sEnt');
-    if(!(P>0))return $('#err').textContent='Escribe el monto en números, por ejemplo 1500.';if(!(r>=0&&r<100))return $('#err').textContent='La tasa debe estar entre 0 y 100 %.';
-    const l4=$('#s4').value.replace(/\D/g,'').slice(0,4);if(l4&&l4.length!==4&&!$('#s4F').hidden)return $('#err').textContent='Escribe los 4 últimos dígitos completos o deja el campo vacío.';
-    const x={id:uid(),entity:ent||'Sin entidad',type:ty,cur:$('#sCur').value,principal:P,rate:r,start,isr:!cash&&$('#sIsr').checked,liquid:$('#sLiq').checked,last4:ACCT_TYPES.includes(ty)&&ty!=='Efectivo'&&l4?l4:undefined,vr:!cash&&$('#sVr').checked||undefined,intFreq:$('#sIntF').hidden?undefined:+$('#sInt').value};
-    const acc0=ACCT_TYPES.includes(ty);if(acc0)x.color=+((document.querySelector('[name=sCol]:checked')||{}).value||0);
-    x.rateKind=(document.querySelector('[name=sRk]:checked')||{}).value==='efectiva'?'efectiva':undefined;
-    const pub=$('#sPub').value.trim();if(pub){const pr=rate(pub);if(!(pr>=0&&pr<100))return $('#err').textContent='La tasa publicada debe estar entre 0 y 100 %.';x.ratePub=pr}
-    if($('#sUntil').value)x.rateUntil=parseDate($('#sUntil').value);
-    if(!acc0){const iss=$('#sIss').value.trim(),cd=$('#sCode').value.trim();if(iss)x.issuer=iss;if(cd)x.code=cd;if(m!=='sin'&&!$('#sRen').checked)x.renew=false;if($('#sSt').value)x.status=$('#sSt').value}
-    if(m==='fecha'){const dv=$('#sDue').value;if(!dv)return $('#err').textContent='Elige la fecha de vencimiento o marca «No vence».';const due=parseDate(dv);if(!(due>start+DAY/2))return $('#err').textContent='La fecha de vencimiento debe ser posterior a la de inicio.';x.due=due;x.months=Math.max(1,Math.round((due-start)/MONTH))}
-    else if(m==='meses'){const mo=parseInt($('#sMon').value,10);if(!(mo>0))return $('#err').textContent='El plazo debe ser de al menos 1 mes.';x.months=mo}
-    else{x.open=true;x.months=1}
-    x.name=$('#sName').value.trim()||(ty==='Efectivo'?'Efectivo':(ty==='Sell Buy Back (SBB)'?'SBB':ty)+(ent?' · '+ent:''));
-    if(ed){x.id=ed.id;['due','open','vr','intFreq','rateKind','ratePub','rateUntil','issuer','code','renew','status','color'].forEach(k=>delete ed[k]);Object.assign(ed,x);save();close();render();toast('Cambios guardados');return}
-    S.savings.push(x);track(isAcct(x)?'cuenta_agregada':'inversion_agregada');save();close();if(view!=='resumen')setView(isAcct(x)?'cuentas':'inversion',isAcct(x)?'cuentas':undefined);render();window.scrollTo({top:0});toast('Guardado')};
-}
-
+/* openSaving vive ahora en 24-producto.js (formulario por bloques) */
 function openCard(id){
-  const ed=id?S.cards.find(x=>x.id===id):null,v=ed||{};
-  sheet(`<h3>${ed?'Editar tarjeta':'Nueva tarjeta'}</h3><form class="form" id="f">
-  <div class="field"><label for="cName">Nombre</label><input id="cName" value="${esc(v.name||'')}" placeholder="Ej. Tarjeta Platinum" maxlength="40"></div>
-  <div class="field"><label for="cEnt">Entidad</label>${entPick('cEnt',v.entity||'')}</div><div class="field"><label for="cCur">Moneda</label>${curSel('cCur',v.cur||'DOP')}</div>
-  <div class="two"><div class="field"><label for="cLim">Límite</label><input id="cLim" data-money="cCur" inputmode="decimal" value="${ed?v.limit:''}" placeholder="0.00"></div><div class="field"><label for="cBal">Consumido hoy</label><input id="cBal" data-money="cCur" inputmode="decimal" value="${ed?+v.balance.toFixed(2):''}" placeholder="0.00"></div></div>
-  <div class="two"><div class="field"><label for="cRate">Tasa anual %</label><input id="cRate" inputmode="decimal" value="${ed?v.rate:''}" placeholder="60"></div><div class="field"><label for="cCut">Día de corte</label><input id="cCut" inputmode="numeric" value="${ed&&v.cutDay?v.cutDay:''}" placeholder="28"></div></div>
-  <div class="field"><label for="cDay">Día límite de pago</label><input id="cDay" inputmode="numeric" value="${ed?v.payDay:''}" placeholder="15"></div>
-  <fieldset class="field"><legend>Color de la tarjeta</legend><div class="swatches">${ACARD.map(([a,b],i)=>`<label class="sw"><input type="radio" name="cCol" value="${i}" ${(v.color!=null?v.color===i:i===1)?'checked':''}><span style="--c1:${a};--c2:${b}" aria-label="Color ${i+1}"></span></label>`).join('')}</div></fieldset>
-  <div class="field"><label for="c4">Últimos 4 dígitos <span class="opt">opcional</span></label><input id="c4" inputmode="numeric" maxlength="4" value="${esc(v.last4||'')}" placeholder="1234"></div>
-  <div class="err" id="err"></div><button class="btn" type="submit">${ed?'Guardar cambios':'Guardar'}</button>
+  const ed=id?S.cards.find(x=>x.id===id):null,v=ed||{},col=v.color!=null?v.color:1;
+  sheet(`<h3>${ed?'Editar tarjeta':'Nueva tarjeta de crédito'}</h3><div class="fprog" id="cProg"></div><form class="form fblocks" id="f" novalidate>
+  <section class="fb"><h4>Qué tarjeta es</h4><div class="two"><div class="field"><label for="cEnt">Entidad</label>${entPick('cEnt',v.entity||'')}</div><div class="field"><label for="cName">Nombre</label><input id="cName" value="${esc(v.name||'')}" placeholder="Ej. Visa Platinum" maxlength="40"></div></div>
+    <div class="field"><label for="cCur">Moneda</label>${curSel('cCur',v.cur||'DOP')}</div></section>
+  <section class="fb"><h4>Límite y consumo</h4><div class="two"><div class="field"><label for="cLim">Límite</label><input id="cLim" data-money="cCur" inputmode="decimal" value="${ed?v.limit:''}" placeholder="0.00"></div><div class="field"><label for="cBal">Usado hoy</label><input id="cBal" data-money="cCur" inputmode="decimal" value="${ed?+v.balance.toFixed(2):''}" placeholder="0.00"></div></div><p class="calc num" id="cAv"></p></section>
+  <section class="fb"><h4>Fechas y tasa</h4><div class="two"><div class="field"><label for="cCut">Día de corte</label><input id="cCut" inputmode="numeric" value="${ed&&v.cutDay?v.cutDay:''}" placeholder="28"></div><div class="field"><label for="cDay">Día límite de pago</label><input id="cDay" inputmode="numeric" value="${ed?v.payDay:''}" placeholder="15"></div></div>
+    <div class="field"><label for="cRate">Tasa anual %</label><input id="cRate" inputmode="decimal" value="${ed?v.rate:''}" placeholder="60"><small class="hint">Aparece en tu estado de cuenta. Si no la conoces, deja 60 %, que es común en RD.</small></div></section>
+  <section class="fb"><h4>Tu tarjeta en Caoba</h4><div class="cardpick"><div class="cp-fields"><div class="field"><label for="c4">Últimos 4 dígitos <span class="opt">opcional</span></label><input id="c4" inputmode="numeric" maxlength="4" value="${esc(v.last4||'')}" placeholder="1234"><small class="hint">Nunca el número completo ni el CVV.</small></div>
+    <fieldset class="field"><legend>Color</legend>${swatchesHTML('cCol',col)}</fieldset></div>${cardPrev('cPrev',{entity:v.entity,name:v.name,last4:v.last4,cur:v.cur,color:col})}</div></section>
+  <div class="err" id="err" role="alert"></div><button class="btn" type="submit">${ed?'Guardar cambios':'Guardar tarjeta'}</button>
   ${ed?`<button type="button" class="link-btn danger del-link" id="cDel">Eliminar tarjeta</button>`:''}</form>`,'var(--brand)');
+  const upd=()=>{const i=+((document.querySelector('[name=cCol]:checked')||{}).value||1),[c1,c2]=ACARD[i],p=$('#cPrev');p.style.setProperty('--c1',c1);p.style.setProperty('--c2',c2);
+    p.querySelector('.cp-e').textContent=readEnt('cEnt')||'Entidad';p.querySelector('.cp-n').textContent=$('#cName').value.trim()||'Tarjeta de crédito';
+    const l4=$('#c4').value.replace(/\D/g,'').slice(0,4);p.querySelector('.cp-f span').textContent=l4?'•••• '+l4:'••••';p.querySelector('.cp-f span:last-child').textContent=$('#cCur').value;
+    const L=money($('#cLim').value),B=money($('#cBal').value||'0');$('#cAv').textContent=L>0?'Disponible: '+fmt(Math.max(0,L-(B||0)),$('#cCur').value,2)+(B>L?' · lo usado supera el límite':''):'';
+    const miss=[];if(!readEnt('cEnt'))miss.push('entidad');if(!(L>0))miss.push('límite');if(!$('#cDay').value)miss.push('día de pago');
+    $('#cProg').innerHTML=`<span class="fp-bar"><i style="width:${Math.round((3-miss.length)/3*100)}%"></i></span><span>${miss.length?'Falta: '+miss.join(', '):'Datos esenciales completos'}</span>`};
+  $('#f').addEventListener('input',upd);$('#f').addEventListener('change',upd);upd();
   if(ed)$('#cDel').onclick=()=>confirmDel(ed.name,delDetail('cards',ed),()=>removeItem('cards',ed.id));
   $('#f').onsubmit=ev=>{ev.preventDefault();const lim=money($('#cLim').value),bal=money($('#cBal').value||'0'),r=rate($('#cRate').value),day=parseInt($('#cDay').value,10),name=$('#cName').value.trim();
     if(!name)return $('#err').textContent='Ponle un nombre a la tarjeta.';if(!(lim>0))return $('#err').textContent='Escribe el límite en números, por ejemplo 50000.';if(!(bal>=0))return $('#err').textContent='Lo consumido no puede ser negativo.';if(bal>lim)return $('#err').textContent='Lo consumido no puede ser mayor que el límite.';if(!(r>=0&&r<200))return $('#err').textContent='Revisa la tasa anual.';if(!(day>=1&&day<=31))return $('#err').textContent='El día de pago va de 1 a 31.';const cut=parseInt($('#cCut').value,10);if($('#cCut').value&&!(cut>=1&&cut<=31))return $('#err').textContent='El día de corte va de 1 a 31.';

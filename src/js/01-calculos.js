@@ -62,12 +62,23 @@ function effRate(s){return nomRate(s)*(s.isr?0.9:1)}
 /* Estado de una inversión: vigente, renovada, vencida (pasó la fecha y no se renueva) o liquidada (ya no cuenta en tu patrimonio) */
 function invStatus(s,t=Date.now()){if(s.status==='liquidada')return 'liquidada';if(s.open||!s.due&&!s.months)return 'vigente';if(s.renew===false&&t>=s.start+termMs(s))return 'vencida';return s.status==='renovada'||(s.renew!==false&&t>=s.start+termMs(s))?'renovada':'vigente'}
 const activeSav=()=>S.savings.filter(s=>s.status!=='liquidada');
+/* Cuentas que pagan intereses: saldo registrado + intereses estimados desde el último abono del banco.
+   Se calcula por tramos si la tasa cambió (historial), con la capitalización que indicó la persona.
+   Los intereses que el banco acredita se suman al saldo y reinician la estimación: nunca se cuentan dos veces. */
+function acctAccrued(s,t){
+  const from=s.accrFrom||s.start;if(!(s.rate>0)||t<=from)return 0;
+  const segs=(s.rateHist||[]).map(h=>({r:h.rate,k:h.kind,m:h.cap||12,a:h.from,b:h.to})).concat({r:s.rate,k:s.rateKind,m:s.cap||12,a:s.rateFrom||s.start,b:Infinity});
+  let f=1;segs.forEach(g=>{const a=Math.max(g.a,from),b=Math.min(g.b,t);if(b<=a)return;let r=g.r/100;if(g.k==='efectiva')r=g.m*(Math.pow(1+r,1/g.m)-1);r*=s.isr?0.9:1;f*=Math.pow(1+r/g.m,g.m*(b-a)/YEAR)});
+  return s.principal*(f-1);
+}
 function savValue(s,t){
+  if(s.type==='Bono'&&s.bond)return bondValue(s,t);
+  if(ACCT_TYPES.includes(s.type))return s.principal+acctAccrued(s,t);
   const r=effRate(s), term=termMs(s);let el=Math.max(0,t-s.start);if(s.renew===false&&!s.open)el=Math.min(el,term);
   const n=Math.floor(el/term), rem=el-n*term;
   return s.principal*Math.pow(1+r*term/YEAR,n)*(1+r*rem/YEAR);
 }
-function perSec(s,t){if(s.status==='liquidada'||(s.renew===false&&!s.open&&t>=s.start+termMs(s)))return 0;return savValue(s,t)*effRate(s)/(YEAR/1000)}
+function perSec(s,t){if(s.type==='Bono'&&s.bond)return bondPerSec(s,t);if(s.status==='liquidada'||(s.renew===false&&!s.open&&t>=s.start+termMs(s)))return 0;return savValue(s,t)*effRate(s)/(YEAR/1000)}
 function totals(t){return totalsOf(activeSav(),t)}
 function totalsOf(L,t){
   let v=0,p=0,ps=0;

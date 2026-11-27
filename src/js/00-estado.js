@@ -18,6 +18,10 @@ const TABS=[
 
 const PROVINCIAS=['Azua','Bahoruco','Barahona','Dajabón','Distrito Nacional','Duarte','El Seibo','Elías Piña','Espaillat','Hato Mayor','Hermanas Mirabal','Independencia','La Altagracia','La Romana','La Vega','María Trinidad Sánchez','Monseñor Nouel','Monte Cristi','Monte Plata','Pedernales','Peravia','Puerto Plata','Samaná','San Cristóbal','San José de Ocoa','San Juan','San Pedro de Macorís','Sánchez Ramírez','Santiago','Santiago Rodríguez','Santo Domingo','Valverde','Vivo fuera del país'];
 const OCUPACIONES=['Empleado(a) del sector privado','Empleado(a) del sector público','Trabajo por cuenta propia','Dueño(a) de negocio','Estudiante','Jubilado(a) o pensionado(a)','Trabajo del hogar no remunerado','Buscando empleo','Otra'];
+/* Identidades visuales: azul financiero es la predeterminada; la persona puede cambiarla en Ajustes */
+const SKINS=[['azul','Azul financiero','Estable y precisa',['#0B2545','#13505B','#2A9DD8']],['pastel','Pasteles','Clara y amable',['#A9D6F5','#BDEBD3','#CFC6F7']],['oscuro','Premium oscuro','Para analizar a diario',['#0C1016','#1C232D','#10B981']],['natural','Natural','Cálida, con madera',['#F3ECE1','#5E6B3A','#C0643C']],['editorial','Editorial','Orden y claridad',['#FFFFFF','#111111','#1F4D3A']]];
+function applySkin(){const k=SKINS.some(s=>s[0]===S.skin)?S.skin:'azul',r=document.documentElement;if(k==='azul')r.removeAttribute('data-skin');else r.setAttribute('data-skin',k);
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',getComputedStyle(r).getPropertyValue('--bg').trim()||'#F3F5F8')}
 const ym=(t=new Date())=>t.getFullYear()+'-'+(t.getMonth()+1);
 /* ---------- Datos de ejemplo ---------- */
 function sample(){

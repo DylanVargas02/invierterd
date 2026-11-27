@@ -140,10 +140,12 @@ function vResumen(){
   bindGo();bindIo();bindMov();bindEdit();bindPay();
 }
 
+/* Tocar un producto abre su ficha (cuentas y bonos) o su formulario (otras inversiones) */
+function openItem(id){const s=S.savings.find(x=>x.id===id);if(!s)return;if(ACCT_TYPES.includes(s.type))return openAcctDetail(id);if(s.bond)return openBondDetail(id);openSaving({id})}
 function bindEdit(){
   document.querySelectorAll('[data-edit-e]').forEach(b=>b.onclick=()=>openExpense('gasto',{},b.dataset.editE));
   document.querySelectorAll('[data-edit-i]').forEach(b=>b.onclick=()=>openExpense('ingreso',{},b.dataset.editI));
-  document.querySelectorAll('[data-edit-s]').forEach(b=>b.onclick=()=>openSaving({id:b.dataset.editS}));
+  document.querySelectorAll('[data-edit-s]').forEach(b=>b.onclick=()=>openItem(b.dataset.editS));
   document.querySelectorAll('[data-edit-t]').forEach(b=>b.onclick=()=>openTransfer(b.dataset.editT));
   document.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>openCardActions(b.dataset.card));
 }
@@ -287,7 +289,10 @@ function calEvents(a,b){
     push(d,{k:'in',g:'pay',ic:'pay',title:p.name,sub:st==='y'?'Ya cobrado':st==='n'?'No se cobró':'Cobro fijo · '+viaName(p.via),amt:p.amt,cur:p.cur,done:!!st,go:'pay:'+p.id})})));
   (S.reminders||[]).forEach(r=>{const t0=new Date(r.date);const tries=r.rep==='mes'?months.map(([y,m])=>new Date(y,m,Math.min(t0.getDate(),dim(y,m)),12)):r.rep==='ano'?months.filter(([,m])=>m===t0.getMonth()).map(([y,m])=>new Date(y,m,Math.min(t0.getDate(),dim(y,m)),12)):[t0];
     tries.forEach(d=>{if(+d<+t0-DAY/2)return;push(d,{k:r.k==='in'?'in':r.k==='out'?'out':'rem',g:'rem',ic:'rem',title:r.title,sub:'Recordatorio'+(r.rep==='mes'?' · cada mes':r.rep==='ano'?' · cada año':''),amt:r.amt||0,cur:r.cur||'DOP',go:'rem:'+r.id})})});
-  S.savings.filter(s=>!isAcct(s)).forEach(s=>{const f=intF(s),end=s.open?null:(s.due||null),r=effRate(s);
+  S.savings.filter(s=>!isAcct(s)&&s.bond&&s.status!=='liquidada').forEach(s=>{bondSchedule(s).forEach(c=>{if(c.st==='recibido')return;
+      push(new Date(c.d),{k:'in',g:'inv',ic:'int',title:'Cupón · '+s.name,sub:c.st==='por registrar'?'¿Ya lo cobraste? Regístralo':'Cupón esperado',amt:c.exp,cur:s.cur,go:'sav:'+s.id})});
+    if(s.due)push(new Date(s.due),{k:'in',g:'inv',ic:'mat',title:'Vence '+s.name,sub:'Recibes el valor nominal',amt:bN(s.bond),cur:s.cur,go:'sav:'+s.id})});
+  S.savings.filter(s=>!isAcct(s)&&!s.bond&&s.status!=='liquidada').forEach(s=>{const f=intF(s),end=s.open?null:(s.due||null),r=effRate(s);
     if(f&&r){for(let k=1;k<600;k++){const d=addM(s.start,k*f);if(+d>b||(end&&+d>end+DAY/2))break;
       push(d,{k:'in',g:'inv',ic:'int',title:(s.type==='Bono'?'Cupón · ':'Intereses · ')+s.name,sub:(s.vr?'Aproximado · ':'')+(f===1?'Cada mes':'Cada '+f+' meses'),amt:s.principal*r*f/12,cur:s.cur,approx:true,go:'sav:'+s.id})}}
     if(!s.open){let m=nextMat(s,a-1);for(let i=0;m&&m<=b&&i<40;i++){
@@ -297,7 +302,7 @@ function calEvents(a,b){
 const CAL_IC={card:'<rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/>',loan:'<path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/>',fix:'<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16"/>',pay:'<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/>',int:'<path d="M12 21v-8.5"/><path d="M12 12.5c0-4.2 3-7.5 8.5-7.5 0 4.2-3 7.5-8.5 7.5z"/><path d="M12 15c0-3-2.6-5.6-7.5-5.6 0 3.6 2.6 5.6 7.5 5.6z"/>',mat:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',rem:'<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/>'};
 const calRow=e=>`<button type="button" class="cal-r ${e.k}${e.done?' done':''}" data-cgo="${e.go}"><span class="cal-d"><b>${new Date(e.t).getDate()}</b><small>${MESES[new Date(e.t).getMonth()].slice(0,3)}</small></span><span class="cal-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${CAL_IC[e.ic]}</svg></span><span class="cal-t"><b>${esc(e.title)}</b><small>${esc(e.sub)}</small></span><span class="cal-v num">${e.amt?(e.k==='in'?'+':e.k==='out'?'−':'')+(e.approx?'≈ ':'')+esc(fmt(e.amt,e.cur,0)):''}</span></button>`;
 function bindCalGo(){document.querySelectorAll('[data-cgo]').forEach(b=>b.onclick=()=>{const [k,id]=b.dataset.cgo.split(':');
-  if(k==='card')openCardActions(id);else if(k==='sav')openSaving({id});else if(k==='pay')openPayday(id);else if(k==='rem')openReminder(id);else if(k==='loan')openLoanActions(id);else{close();goTo('gastos','fijos')}})}
+  if(k==='card')openCardActions(id);else if(k==='sav')openItem(id);else if(k==='pay')openPayday(id);else if(k==='rem')openReminder(id);else if(k==='loan')openLoanActions(id);else{close();goTo('gastos','fijos')}})}
 function nextPaysHTML(filter,fk){
   const n=new Date(),a=+new Date(n.getFullYear(),n.getMonth(),n.getDate());let E=calEvents(a,a+31*DAY-1).filter(e=>!e.done);if(filter)E=E.filter(filter);
   if(!E.length)return '';
