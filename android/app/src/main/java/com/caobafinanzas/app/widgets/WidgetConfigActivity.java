@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Configuración de cada widget: moneda, ocultar montos y qué inversiones o tasas mostrar.
+ * Configuración de cada widget: moneda, ocultar montos y qué cuentas, inversiones o tasas mostrar.
  * Se abre al agregar el widget y después manteniéndolo presionado (Android 12 o más nuevo).
  */
 public class WidgetConfigActivity extends Activity {
@@ -44,7 +44,7 @@ public class WidgetConfigActivity extends Activity {
         AppWidgetManager m = AppWidgetManager.getInstance(this);
         AppWidgetProviderInfo info = m.getAppWidgetInfo(id);
         String cls = info != null ? info.provider.getClassName() : "";
-        String kind = cls.endsWith("CashFlowWidget") ? WidgetRender.FLOW : cls.endsWith("InvestmentsWidget") ? WidgetRender.INV : cls.endsWith("MarketWidget") ? WidgetRender.MKT : WidgetRender.NET;
+        String kind = cls.endsWith("QuickWidget") ? WidgetRender.QUICK : cls.endsWith("AccountsWidget") ? WidgetRender.ACC : cls.endsWith("CashFlowWidget") ? WidgetRender.FLOW : cls.endsWith("InvestmentsWidget") ? WidgetRender.INV : cls.endsWith("MarketWidget") ? WidgetRender.MKT : WidgetRender.NET;
 
         SharedPreferences cfg = getSharedPreferences(WidgetRender.CFG, MODE_PRIVATE);
         JSONObject snap = WidgetRender.snapshot(this);
@@ -62,7 +62,7 @@ public class WidgetConfigActivity extends Activity {
         col.addView(text("Elige qué ver. Puedes cambiarlo después manteniendo presionado el widget.", 15, false, "#55656F"));
 
         RadioGroup curG = null;
-        if (!WidgetRender.MKT.equals(kind)) {
+        if (!WidgetRender.MKT.equals(kind) && !WidgetRender.ACC.equals(kind)) {
             col.addView(text("Moneda", 16, true, "#1E2A33"));
             curG = new RadioGroup(this);
             curG.setOrientation(RadioGroup.HORIZONTAL);
@@ -86,19 +86,20 @@ public class WidgetConfigActivity extends Activity {
         JSONArray items = null;
         if (snap != null && WidgetRender.INV.equals(kind) && snap.optJSONObject("fin") != null) items = snap.optJSONObject("fin").optJSONObject("inv").optJSONArray("items");
         if (snap != null && WidgetRender.MKT.equals(kind) && snap.optJSONObject("mkt") != null) items = snap.optJSONObject("mkt").optJSONArray("rows");
+        if (snap != null && WidgetRender.ACC.equals(kind) && snap.optJSONObject("fin") != null) items = snap.optJSONObject("fin").optJSONArray("acc");
         if (items != null && items.length() > 0) {
-            col.addView(text(WidgetRender.INV.equals(kind) ? "Inversiones a mostrar (hasta 3)" : "Tasas a mostrar (hasta 4)", 16, true, "#1E2A33"));
+            col.addView(text(WidgetRender.INV.equals(kind) ? "Inversiones a mostrar (hasta 3)" : WidgetRender.ACC.equals(kind) ? "Cuentas a mostrar (hasta 4)" : "Tasas a mostrar (hasta 4)", 16, true, "#1E2A33"));
             for (int i = 0; i < items.length(); i++) {
                 JSONObject o = items.optJSONObject(i);
                 CheckBox c = new CheckBox(this);
-                c.setText(WidgetRender.MKT.equals(kind) ? o.optString("inst") + " · " + o.optString("label") : o.optString("name"));
+                c.setText(WidgetRender.MKT.equals(kind) ? o.optString("inst") + " · " + o.optString("label") : WidgetRender.ACC.equals(kind) ? o.optString("name") + " · " + o.optString("cur") : o.optString("name"));
                 c.setTag(o.optString("id"));
                 c.setTextSize(15);
                 c.setChecked(sel0.contains(o.optString("id")));
                 picks.add(c);
                 col.addView(c);
             }
-            col.addView(text("Si no eliges ninguna, se muestran las primeras.", 13, false, "#55656F"));
+            col.addView(text(WidgetRender.ACC.equals(kind) ? "Si no eliges ninguna, se muestran las primeras. Son cuentas que registraste a mano: el widget no se conecta a tu banco." : "Si no eliges ninguna, se muestran las primeras.", 13, false, "#55656F"));
         } else if (snap == null) {
             col.addView(text("Abre Caoba al menos una vez para que el widget tenga datos.", 14, false, "#55656F"));
         }

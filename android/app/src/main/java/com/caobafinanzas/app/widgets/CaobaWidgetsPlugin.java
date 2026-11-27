@@ -57,8 +57,10 @@ public class CaobaWidgetsPlugin extends Plugin {
     @PluginMethod
     public void shareFile(PluginCall call) {
         String text = call.getString("text");
+        String b64 = call.getString("base64");
         String name = call.getString("name", "caoba-respaldo.json");
-        if (text == null || !name.matches("[a-zA-Z0-9._-]{1,80}")) {
+        String mime = call.getString("mime", "application/json");
+        if ((text == null && b64 == null) || !name.matches("[a-zA-Z0-9._-]{1,80}")) {
             call.reject("Archivo inválido");
             return;
         }
@@ -67,14 +69,14 @@ public class CaobaWidgetsPlugin extends Plugin {
             if (!dir.exists() && !dir.mkdirs()) throw new Exception("sin carpeta");
             File f = new File(dir, name);
             try (FileOutputStream out = new FileOutputStream(f)) {
-                out.write(text.getBytes(StandardCharsets.UTF_8));
+                out.write(b64 != null ? android.util.Base64.decode(b64, android.util.Base64.DEFAULT) : text.getBytes(StandardCharsets.UTF_8));
             }
             Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", f);
             Intent send = new Intent(Intent.ACTION_SEND);
-            send.setType("application/json");
+            send.setType(mime);
             send.putExtra(Intent.EXTRA_STREAM, uri);
             send.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Intent chooser = Intent.createChooser(send, "Guardar o enviar el respaldo");
+            Intent chooser = Intent.createChooser(send, "Guardar o enviar el archivo");
             chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(chooser);
             call.resolve();

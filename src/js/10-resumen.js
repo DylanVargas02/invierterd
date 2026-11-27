@@ -41,7 +41,7 @@ function holdGroup(g){
 /* ---- Lista única de gastos e ingresos con filtros ---- */
 let movF={per:'d30',type:'all',ent:'',cat:'',cur:'',from:'',to:'',lim:6};
 const NAT={fijo:'Fijo',variable:'Variable',extra:'Extraordinario'};
-const APP_VER='0.9 beta';window.__swUpdated=()=>undoToast('Hay una versión nueva de la app',()=>location.reload(),'Actualizar');
+const APP_VER='3.0 beta';window.__swUpdated=()=>undoToast('Hay una versión nueva de la app',()=>location.reload(),'Actualizar');
 function movRange(){const n=new Date(),sod=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),end=sod+DAY-1;
   if(movF.per==='m3')return [new Date(n.getFullYear(),n.getMonth()-3,n.getDate()).getTime(),end];
   if(movF.per==='y1')return [new Date(n.getFullYear()-1,n.getMonth(),n.getDate()).getTime(),end];
@@ -240,7 +240,8 @@ function openTransfer(id,pre={}){
   const bank=A.filter(s=>s.type!=='Efectivo');
   if(!ed&&!bank.length){sheet(`<h3>Retiro o transferencia</h3><p class="lead-s">Primero agrega la cuenta de banco de donde sale el dinero.</p><div class="form" style="margin-top:14px"><button class="btn" type="button" id="trAcc" style="--accent:var(--brand)">Agregar cuenta</button></div>`,'var(--brand)');$('#trAcc').onclick=()=>openSaving({type:'Cuenta de ahorro'});return}
   let kind=ed?(viaObj(ed.to)&&viaObj(ed.to).o.type==='Efectivo'?'cash':'tr'):(pre.kind||'cash');
-  const v=ed?{from:ed.from,to:ed.to,amt:String(ed.amt),date:isoLocal(new Date(ed.date))}:{from:'a:'+bank[0].id,to:cash?'a:'+cash.id:'new',amt:'',date:today()};
+  const pf=pre.from&&bank.find(b=>'a:'+b.id===pre.from);
+  const v=ed?{from:ed.from,to:ed.to,amt:String(ed.amt),date:isoLocal(new Date(ed.date))}:{from:'a:'+(pf||bank[0]).id,to:cash?'a:'+cash.id:'new',amt:'',date:today()};
   const draw=()=>{if($('#trAmt')){v.from=$('#trFrom').value;v.amt=$('#trAmt').value;v.date=$('#trDate').value;if($('#trTo'))v.to=$('#trTo').value}
     const fo=viaObj(v.from),cur=fo?fo.o.cur:'DOP',td=today();
     const toOpts=A.filter(s=>'a:'+s.id!==v.from&&s.type!=='Efectivo').map(s=>`<option value="a:${s.id}" ${v.to==='a:'+s.id?'selected':''}>${esc(s.name)}</option>`).join('');

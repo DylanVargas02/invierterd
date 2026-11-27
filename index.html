@@ -2964,6 +2964,73 @@ body{font-family:var(--f-body)}
 :root[data-skin="oscuro"] .qa-b.exp{background:var(--surface-2);color:var(--ink)}
 :root[data-skin="oscuro"] .qa-b.inc{color:#04140D}
 :root[data-skin="editorial"] .qa-b.exp{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+/* ===== v3: bienvenida, menú de perfil, textos legales, soporte y novedades ===== */
+html.onb-open .scrim{z-index:70}
+
+/* Bienvenida */
+.wel3{max-width:1080px;gap:22px}
+.wel3 .wel-lead{max-width:46ch}
+.wel-strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:4px -20px 0;padding:4px 20px 10px;scrollbar-width:none}
+.wel-strip::-webkit-scrollbar{display:none}
+.wv{flex:0 0 82%;scroll-snap-align:start;margin:0;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-card,12px);padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.wv figcaption{font-weight:700;font-size:14px;color:var(--ink)}
+.wv-hero{background:var(--b-resumen);color:var(--on-deep);border-radius:calc(var(--r-card,12px) - 4px);padding:12px}
+.wv-hero small{display:block;font-size:12px;opacity:.8}.wv-hero b{display:block;font-family:var(--f-display);font-size:24px;letter-spacing:-.02em}
+.wv-hero>span{display:flex;gap:12px;font-size:12px;opacity:.85;flex-wrap:wrap}
+.wv-l{list-style:none;margin:0;padding:0}.wv-l li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}.wv-l li:first-child{border-top:0}
+.wv-l span{min-width:0;display:flex;flex-direction:column}.wv-l b{font-size:13.5px}.wv-l small{font-size:12px;color:var(--ink-2)}.wv-l>li>b{white-space:nowrap}
+.wel-ex{margin:0;font-size:12.5px;color:var(--ink-2)}
+.wel-trust{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px;font-size:13.5px;color:var(--ink-2)}
+.wel-trust li{display:flex;gap:8px;align-items:flex-start}.wel-trust li::before{content:"";flex:none;width:14px;height:14px;margin-top:3px;border-radius:50%;background:var(--grow-soft);box-shadow:inset 0 0 0 4px var(--grow)}
+.wel-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wel-two .wel-solo{min-height:50px;font-size:14.5px}
+.wel-legal{display:flex;justify-content:center;gap:16px;margin:4px 0 0}.wel-legal .link-btn{font-size:13px;color:var(--ink-2)}
+@media (min-width:900px){
+  .wel3{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);align-items:center;column-gap:56px;min-height:100%}
+  .wel3 .wel-strip{flex-direction:column;overflow:visible;margin:8px 0 0;padding:0}
+  .wel3 .wv{flex:none}
+  .wel3 .wel-act{margin-top:0;align-self:center;padding:24px;border:1px solid var(--line);border-radius:var(--r-card,12px);background:var(--surface)}
+}
+@media (max-width:360px){.wel-two{grid-template-columns:1fr}}
+
+/* Menú de la inicial */
+.me-h{display:flex;align-items:center;gap:12px;margin:4px 0 6px}
+.me-av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:var(--surface);font-weight:800;font-size:19px;flex:none}
+.me-id{display:flex;flex-direction:column;min-width:0}.me-id b{font-size:17px}.me-id small{color:var(--ink-2);font-size:13px;overflow-wrap:anywhere}
+.me-profs .menu-r.on{background:var(--brand-soft)}
+.me-note{margin-top:12px;line-height:1.45}
+.menu-r.danger b{color:var(--spend)}
+
+/* Textos legales */
+.lg-toc{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.lg-toc a{font-size:13px;color:var(--brand);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 10px}
+.lg h4{font-family:var(--f-display);font-size:16px;margin:18px 0 6px}
+.lg p,.lg li{font-size:14.5px;line-height:1.55;color:var(--ink)}
+.lg ul{padding-left:18px;margin:6px 0}
+.lg section{scroll-margin-top:12px}
+
+/* Soporte */
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:14.5px}
+.faq p{margin:0 0 12px;color:var(--ink-2);font-size:14px;line-height:1.5}
+textarea{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:var(--r-in,8px);padding:10px 12px;background:var(--bg);color:var(--ink);resize:vertical}
+.tickets{display:flex;flex-direction:column;gap:10px}
+.tk{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface)}
+.tk.st-nuevo{border-left:4px solid var(--brand)}.tk.st-resuelto{opacity:.7}
+.tk-h{display:flex;justify-content:space-between;gap:8px;font-size:13.5px}.tk-s{margin:6px 0 0;font-weight:700}.tk-b{margin:6px 0;white-space:pre-wrap;font-size:14px}
+.tk-st{display:flex;align-items:center;gap:8px;font-size:13px}.tk-st select{width:auto}
+
+/* Novedades */
+.nov-v{margin:0 0 4px;color:var(--ink-2);font-size:13.5px}
+.nov-l{margin:4px 0 0;padding-left:18px}.nov-l li{margin:4px 0;font-size:14.5px;line-height:1.45}
+.nov-s{border-top:1px solid var(--line);padding-top:6px;margin-top:10px}.nov-s:first-of-type{border-top:0}
+.nov-t{font-family:var(--f-display);font-size:16px;margin:6px 0 2px}
+
+/* Exportar a Excel */
+.xl-pick{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+@media (max-width:420px){.xl-pick{grid-template-columns:1fr}}
+.xl-all{display:flex;gap:16px;margin-top:6px}
+.xl-btn{display:block;margin:18px auto 0;border:1px solid var(--line);background:var(--surface);color:var(--brand);font:inherit;font-weight:700;font-size:14px;border-radius:var(--r-btn,8px);padding:10px 16px;min-height:44px;cursor:pointer}
 /* ===== Estabilidad (etapa 1): reglas que corrigen desajustes en cualquier tamaño ===== */
 
 /* Campos: 16 px o más para que iPhone no haga zoom al tocarlos */
@@ -3328,7 +3395,7 @@ function renderTabs(){
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;setView(b.dataset.tab);render();window.scrollTo({top:0})});
 $('#curSeg').addEventListener('click',e=>{const b=e.target.closest('[data-base]');if(!b)return;if(b.dataset.base===S.base){if(!matchMedia('(max-width:430px)').matches)return;S.base=S.base==='USD'?'DOP':'USD'}else S.base=b.dataset.base;save();render();toast(S.base==='USD'?'Mostrando todo en dólares':'Mostrando todo en pesos')});
 $('#setBtn').addEventListener('click',openSettings);$('#sideSet').addEventListener('click',openSettings);
-$('#accBtn').addEventListener('click',()=>openAccount());
+$('#accBtn').addEventListener('click',()=>openMeMenu());
 
 
 /* ---------- Cuentas, tarjetas y medio de pago de cada movimiento ---------- */
@@ -4136,25 +4203,31 @@ const W_IC={all:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 
 function closeOnbLayer(){$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open')}
 function openWelcome(){
   document.documentElement.classList.add('onb-open');
-  $('#onbLayer').innerHTML=`<div class="onb wel" role="dialog" aria-modal="true" aria-labelledby="welT"><div class="wel-in">
-    <div class="wel-brand">${logoSym('wel-sym')}<span class="wel-name"><span class="wordmark">Caoba</span><small>App de organización financiera e inversión</small></span></div>
-    <h2 id="welT" tabindex="-1">Decide con información completa</h2>
-    <p class="wel-lead">Ordena tus cuentas, tarjetas, préstamos e inversiones, y compara lo que ofrece el mercado antes de decidir.</p>
-    <ul class="wel-f">
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.all}</svg></span><span><b>Todo tu dinero en un solo lugar</b>Lo registras tú: cuentas, tarjetas, préstamos e inversiones de cualquier entidad.</span></li>
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.rate}</svg></span><span><b>Tus inversiones al día</b>Cuánto ganas, cuándo vence cada una y cuándo cobras.</span></li>
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.fx}</svg></span><span><b>Mercado</b>Tasas de productos y de cambio, con su fuente y su fecha.</span></li>
-    </ul>
+  const pv=(t,body)=>`<figure class="wv"><figcaption>${t}</figcaption>${body}</figure>`;
+  $('#onbLayer').innerHTML=`<div class="onb wel" role="dialog" aria-modal="true" aria-labelledby="welT"><div class="wel-in wel3">
+    <div class="wel-main">
+      <div class="wel-brand">${logoSym('wel-sym')}<span class="wel-name"><span class="wordmark">Caoba</span><small>Organización financiera e inversión</small></span></div>
+      <h2 id="welT" tabindex="-1">Decide con información completa</h2>
+      <p class="wel-lead">Tus cuentas, tarjetas, préstamos e inversiones en un solo lugar, y las tasas del mercado con su fuente para comparar antes de decidir.</p>
+      <div class="wel-strip" id="welStrip" aria-label="Lo que puedes hacer en Caoba">
+        ${pv('Tu patrimonio, al día',`<div class="wv-hero"><small>Patrimonio neto</small><b class="num">RD$1,284,560</b><span class="num"><span>Tienes RD$1.90 M</span><span>Debes RD$0.62 M</span></span></div>`)}
+        ${pv('Inversiones con fechas reales',`<ul class="wv-l"><li><span><b>Bono Hacienda</b><small>Próximo cupón · 15 dic</small></span><b class="num">RD$16,013</b></li><li><span><b>Certificado</b><small>Vence 14 feb · 9.25 %</small></span><b class="num">RD$252,165</b></li></ul>`)}
+        ${pv('Mercado con fuente y fecha',`<ul class="wv-l"><li><span><b>Certificado 180 días</b><small>Dato real · fuente y fecha</small></span><b class="num">9.75 %</b></li><li><span><b>Dólar · venta</b><small>Por verificar</small></span><b class="num">RD$60.34</b></li></ul>`)}
+      </div>
+      <p class="wel-ex">Cifras de ejemplo.</p>
+      <ul class="wel-trust"><li>Nunca te pedimos claves bancarias</li><li>Sin cuenta, tus datos se quedan en tu teléfono</li><li>Con cuenta, los ves en cualquier dispositivo</li></ul>
+    </div>
     <div class="wel-act">
       <button type="button" class="btn wel-start" id="wNew">Crear mi cuenta</button>
-      <button type="button" class="sso" id="wLogin"><svg viewBox="0 0 24 24" aria-hidden="true">${W_IC.mail}</svg><span>Ya tengo cuenta · Iniciar sesión</span></button>
+      <button type="button" class="sso" id="wLogin"><svg viewBox="0 0 24 24" aria-hidden="true">${W_IC.mail}</svg><span>Iniciar sesión</span></button>
       <button type="button" class="o-link wel-forgot" id="wForgot">Olvidé mi contraseña</button>
       <p class="wel-or"><span>o</span></p>
-      <button type="button" class="wel-solo" id="wStart">Continuar sin cuenta</button>
-      <p class="wel-note">Tus datos se guardan solo en este teléfono: si lo pierdes, se pierden.</p>
-      <button type="button" class="wel-solo wel-mkt" id="wMkt">Solo quiero ver el mercado</button>
-      <button type="button" class="o-link wel-demo" id="wDemo">Prefiero ver un ejemplo</button>
+      <div class="wel-two"><button type="button" class="wel-solo" id="wStart">Continuar sin cuenta</button><button type="button" class="wel-solo wel-mkt" id="wMkt">Explorar el Mercado</button></div>
+      <p class="wel-note">Sin cuenta, tus datos se guardan solo en este teléfono.</p>
+      <button type="button" class="o-link wel-demo" id="wDemo">Conocer Caoba con un ejemplo</button>
+      <p class="wel-legal"><button type="button" class="link-btn" id="wPriv">Privacidad</button><button type="button" class="link-btn" id="wTerms">Términos de uso</button></p>
     </div></div></div>`;
+  $('#wPriv').onclick=openPrivacy;$('#wTerms').onclick=openTerms;
   $('#welT').focus({preventScroll:true});
   $('#wStart').onclick=()=>openOnboarding(true);
   $('#wDemo').onclick=()=>{S.onbDismissed=true;if(!S.example){const keep={base:S.base,rates:S.rates,theme:S.theme,mail:S.mail};S=Object.assign(sample(),keep);normalizeS()}save();closeOnbLayer();setView('resumen');render();window.scrollTo({top:0});startTour()};
@@ -4463,7 +4536,7 @@ function applyRemote(row){
 }
 async function fetchRemote(){const c=await sbClient();const {data,error}=await c.from('app_state').select('data,updated_at').eq('user_id',sbUser.id).maybeSingle();if(error)throw error;return data}
 async function afterLogin(){
-  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;checkAdmin();
+  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;checkAdmin();rememberMail(sbUser.email);
   try{
     const row=await fetchRemote();
     if(!row){if(!S.example){S._owner=sbUser.id;await pushNow();toast('Tus datos quedaron guardados en tu cuenta')}else{toast('Sesión iniciada. Organicemos tus finanzas.');S.onbDismissed=true;save();openOnboarding(true)}return}
@@ -4629,14 +4702,7 @@ function friendlyAuth(e){
   if(/network|fetch|Failed/i.test(m))return 'No hay conexión con el servicio de cuentas. Revisa tu internet.';
   return 'No se pudo completar. '+m;
 }
-function openPrivacy(){
-  sheet(`<h3>Privacidad</h3><div class="form priv">
-  <p><b>Qué guardamos.</b> Lo que registras en la app: ingresos, gastos, ahorros, tarjetas, préstamos y ajustes. Sin cuenta, se guarda solo en este teléfono. Con cuenta, además se guarda una copia en la nube (Supabase, servidores en EE. UU.), cifrada en tránsito y en reposo.</p>
-  <p><b>Qué no guardamos.</b> Tu cédula ni datos de tus tarjetas o cuentas bancarias. Tu contraseña la guarda cifrada el servicio de cuentas; nosotros no la vemos.</p>
-  <p><b>Quién puede ver tus datos.</b> Solo tú. Las reglas de la base de datos impiden que otra cuenta lea o cambie tus datos. No los vendemos ni los compartimos.</p>
-  <p><b>Tus derechos.</b> Puedes ver y corregir tus datos en la app, y borrar tu cuenta con todos tus datos desde <i>Ajustes → Tu cuenta</i>. Se borran de inmediato. Esto sigue la Ley 172-13 de protección de datos personales de la República Dominicana.</p>
-  </div>`,'var(--brand)');
-}
+/* openPrivacy vive en 28-ayuda-legal.js */
 
 function normalizeS(){
   ensureProfiles();
@@ -4697,7 +4763,7 @@ function holdGroup(g){
 /* ---- Lista única de gastos e ingresos con filtros ---- */
 let movF={per:'d30',type:'all',ent:'',cat:'',cur:'',from:'',to:'',lim:6};
 const NAT={fijo:'Fijo',variable:'Variable',extra:'Extraordinario'};
-const APP_VER='0.9 beta';window.__swUpdated=()=>undoToast('Hay una versión nueva de la app',()=>location.reload(),'Actualizar');
+const APP_VER='3.0 beta';window.__swUpdated=()=>undoToast('Hay una versión nueva de la app',()=>location.reload(),'Actualizar');
 function movRange(){const n=new Date(),sod=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),end=sod+DAY-1;
   if(movF.per==='m3')return [new Date(n.getFullYear(),n.getMonth()-3,n.getDate()).getTime(),end];
   if(movF.per==='y1')return [new Date(n.getFullYear()-1,n.getMonth(),n.getDate()).getTime(),end];
@@ -4896,7 +4962,8 @@ function openTransfer(id,pre={}){
   const bank=A.filter(s=>s.type!=='Efectivo');
   if(!ed&&!bank.length){sheet(`<h3>Retiro o transferencia</h3><p class="lead-s">Primero agrega la cuenta de banco de donde sale el dinero.</p><div class="form" style="margin-top:14px"><button class="btn" type="button" id="trAcc" style="--accent:var(--brand)">Agregar cuenta</button></div>`,'var(--brand)');$('#trAcc').onclick=()=>openSaving({type:'Cuenta de ahorro'});return}
   let kind=ed?(viaObj(ed.to)&&viaObj(ed.to).o.type==='Efectivo'?'cash':'tr'):(pre.kind||'cash');
-  const v=ed?{from:ed.from,to:ed.to,amt:String(ed.amt),date:isoLocal(new Date(ed.date))}:{from:'a:'+bank[0].id,to:cash?'a:'+cash.id:'new',amt:'',date:today()};
+  const pf=pre.from&&bank.find(b=>'a:'+b.id===pre.from);
+  const v=ed?{from:ed.from,to:ed.to,amt:String(ed.amt),date:isoLocal(new Date(ed.date))}:{from:'a:'+(pf||bank[0]).id,to:cash?'a:'+cash.id:'new',amt:'',date:today()};
   const draw=()=>{if($('#trAmt')){v.from=$('#trFrom').value;v.amt=$('#trAmt').value;v.date=$('#trDate').value;if($('#trTo'))v.to=$('#trTo').value}
     const fo=viaObj(v.from),cur=fo?fo.o.cur:'DOP',td=today();
     const toOpts=A.filter(s=>'a:'+s.id!==v.from&&s.type!=='Efectivo').map(s=>`<option value="a:${s.id}" ${v.to==='a:'+s.id?'selected':''}>${esc(s.name)}</option>`).join('');
@@ -5314,6 +5381,7 @@ function vInversion(){
   $('#heroAdd').onclick=()=>openInvChooser(true);const e=$('#emptyS');if(e)e.onclick=()=>openInvChooser(true);$('#goMkt').onclick=()=>goTo('mercado');
   const co=$('#calOpen');if(co)co.onclick=()=>openCalendar(null,null,null,'inv');
   document.querySelectorAll('details.eg2').forEach(d=>d.ontoggle=()=>{openEnt[d.dataset.ent]=d.open});
+  if(!S.example&&L.length){$('#view').insertAdjacentHTML('beforeend','<button type="button" class="xl-btn" id="xlInv">Exportar inversiones a Excel</button>');$('#xlInv').onclick=()=>openExport(['inversiones','bonos','pagos'])}
   bindInv();bindEdit();bindNextPays();
 }
 
@@ -5590,16 +5658,20 @@ function openSettings(){
     ${setRow('aProf','user','Perfiles financieros',(S.profiles&&S.profiles.list.length>1?'En uso: '+esc(activeProfile().name)+' · ':'')+'Personal, familiar, compartido o negocio')}
     ${setRow('aPerf','user','Tu perfil','Edad, provincia y ocupación')}
     ${setRow('aCats','tag','Mis categorías','Agrega o quita categorías y tipos de ingreso')}
+    ${setRow('aXl','tag','Exportar a Excel','Una hoja por sección, con filtros y totales')}
     ${setRow('aBkE','shield','Guardar un respaldo','Un archivo con tus datos, para pasarlos a otro teléfono o a la app')}
     ${setRow('aBkI','shield','Restaurar un respaldo','Carga el archivo de respaldo de Caoba')}
     ${setRow('aOnb','guide','Organizar mis finanzas paso a paso','Vuelve a la guía inicial')}
   </div></section>
-  <section class="set-g"><h4>Aprende a usar Caoba</h4><div class="set-card">
+  <section class="set-g"><h4>Ayuda</h4><div class="set-card">
+    ${setRow('aSup','shield','Ayuda y soporte','Preguntas frecuentes, reportar un error o escribirnos')}
+    ${setRow('aNov','play','Novedades de Caoba','Qué trae cada versión')}
     ${setRow('aTut','play','Ver el recorrido','Un paseo corto por cada sección, con datos de ejemplo')}
     ${S.example?'':setRow('aEx','eye','Ver datos de ejemplo','Reemplaza tus datos por los de una familia de muestra')}
   </div></section>
   <section class="set-g"><h4>Privacidad y seguridad</h4><div class="set-card">
-    ${setRow('aPrv','shield','Privacidad','Qué guardamos y cómo')}
+    ${setRow('aPrv','shield','Política de privacidad','Qué guardamos, cómo se protege y cómo borrarlo')}
+    ${setRow('aTer','shield','Términos de uso','Condiciones y alcance de la información')}
     ${isNative()?`<label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Ocultar montos en los widgets</b><small>Los widgets de la pantalla de inicio muestran •••• en vez de cifras</small></span><input type="checkbox" id="aWh" role="switch" ${S.wHide?'checked':''}></label>`:''}
     <label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Compartir estadísticas de uso</b><small>Anónimas: qué pantallas se usan. Nunca montos ni datos de tus cuentas.</small></span><input type="checkbox" id="aAn" role="switch" ${anConsent()==='si'?'checked':''}></label>
     ${setRow('aBlank','trash','Borrar todos mis datos','Te pediremos confirmarlo dos veces','danger')}
@@ -5608,7 +5680,7 @@ function openSettings(){
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
   document.querySelectorAll('[name=aSkin]').forEach(r=>r.onchange=()=>{S.skin=r.value==='azul'?undefined:r.value;applySkin();save();render();widgetSync();track('identidad_cambiada',{skin:r.value});toast('Identidad: '+SKINS.find(s=>s[0]===r.value)[1])});
-  $('#aProf').onclick=openProfiles;$('#aBkE').onclick=exportBackup;$('#aBkI').onclick=importBackup;const wh=$('#aWh');if(wh)wh.onchange=()=>{S.wHide=wh.checked;save();widgetSync();toast(wh.checked?'Los widgets ocultan los montos':'Los widgets muestran los montos')};$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
+  $('#aProf').onclick=openProfiles;$('#aBkE').onclick=exportBackup;$('#aXl').onclick=()=>openExport();$('#aBkI').onclick=importBackup;const wh=$('#aWh');if(wh)wh.onchange=()=>{S.wHide=wh.checked;save();widgetSync();toast(wh.checked?'Los widgets ocultan los montos':'Los widgets muestran los montos')};$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});
   document.querySelectorAll('[name=aTheme]').forEach(r=>r.onchange=()=>{S.theme=r.value||null;
@@ -5617,7 +5689,7 @@ function openSettings(){
   usd.onchange=()=>{const u=rate(usd.value);if(!(u>1&&u<1000)){msg.textContent='Escribe un número válido, por ejemplo 60.90.';msg.classList.add('bad');usd.value=S.rates.USD;return}
     S.rates=Object.assign({},S.rates,{USD:u});msg.classList.remove('bad');msg.textContent='Guardado. US$1 = '+fmt(u,'DOP');live()};
   $('#aAcc').onclick=()=>{close();openAccount()};
-  $('#aPrv').onclick=()=>{close();openPrivacy()};
+  $('#aPrv').onclick=()=>{close();openPrivacy()};$('#aTer').onclick=openTerms;$('#aSup').onclick=()=>openSupport();$('#aNov').onclick=()=>openChangelog(true);
   $('#aCats').onclick=openMyCats;
   $('#aTut').onclick=()=>{close();startTour()};
   $('#aOnb').onclick=()=>{if(!hasRealData()){close();return openOnboarding(true,1)}
@@ -5688,6 +5760,7 @@ function vMovimientos(){
   $('#view').insertAdjacentHTML('afterbegin',`<div class="seg seg-top" role="group" aria-label="Tipo de movimiento">
     <button type="button" data-ms="gastos" aria-pressed="${movSeg==='gastos'}">Gastos</button><button type="button" data-ms="ingresos" aria-pressed="${movSeg==='ingresos'}">Ingresos</button></div>`);
   document.querySelectorAll('[data-ms]').forEach(b=>b.onclick=()=>{if(movSeg===b.dataset.ms)return;movSeg=b.dataset.ms;render()});
+  if(!S.example){$('#view').insertAdjacentHTML('beforeend','<button type="button" class="xl-btn" id="xlMov">Exportar movimientos a Excel</button>');$('#xlMov').onclick=()=>openExport(['movimientos','ingresos','gastos','presupuestos'])}
 }
 
 /* Colores para las tarjetas de cuenta: los elige la persona; no imitamos la marca de ninguna entidad */
@@ -5930,9 +6003,9 @@ async function checkAdmin(){isAdm=false;if(!sbUser)return false;try{const c=awai
 let admTab='cargar';
 function openAdmin(){
   if(!isAdm){toast('Esta sección es solo para administradores');return}
-  sheet(`<h3>Administración</h3><div class="seg seg-top" role="group" aria-label="Sección">${[['cargar','Cargar tasa'],['hist','Historial'],['uso','Uso de la app']].map(([k,l])=>`<button type="button" data-adm="${k}" aria-pressed="${admTab===k}">${l}</button>`).join('')}</div><div id="admBody"></div>`,'var(--brand)');
+  sheet(`<h3>Administración</h3><div class="seg seg-top" role="group" aria-label="Sección">${[['cargar','Cargar tasa'],['hist','Historial'],['uso','Uso'],['soporte','Soporte']].map(([k,l])=>`<button type="button" data-adm="${k}" aria-pressed="${admTab===k}">${l}</button>`).join('')}</div><div id="admBody"></div>`,'var(--brand)');
   document.querySelectorAll('[data-adm]').forEach(b=>b.onclick=()=>{admTab=b.dataset.adm;openAdmin()});
-  ({cargar:admLoad,hist:admHist,uso:admUsage})[admTab]();
+  ({cargar:admLoad,hist:admHist,uso:admUsage,soporte:admSupport})[admTab]();
 }
 function admLoad(pre){
   pre=pre||{};const opt=(o,v)=>Object.entries(o).map(([k,l])=>`<option value="${k}" ${k===v?'selected':''}>${l}</option>`).join('');
@@ -5973,7 +6046,7 @@ async function admHist(){
 }
 /* ---------- Widgets nativos (etapa 5) ----------
    En la web no hace nada. En la app Android entrega a los widgets un resumen ya calculado (formato v1):
-   solo totales, nombres de inversiones y tasas del mercado. Nunca movimientos, notas, números de cuenta
+   solo totales, nombres y saldos de cuentas e inversiones y tasas del mercado (formato v2). Nunca movimientos, notas, números de cuenta
    ni datos de inicio de sesión. El lado nativo lo guarda cifrado con una clave del Android Keystore.
    iOS usará el mismo formato y la misma interfaz (CaobaWidgets.update / clear). */
 const isNative=()=>!!(window.CAOBA_NATIVE&&window.capacitorExports&&window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
@@ -5981,15 +6054,21 @@ let CW=null,wsT=null,wsLast='';
 function cwPlugin(){if(!CW&&isNative())CW=capacitorExports.registerPlugin('CaobaWidgets');return CW}
 const both=v=>({d:+conv(v,S.base,'DOP').toFixed(4),u:+conv(v,S.base,'USD').toFixed(6)});
 function widgetSnapshot(){
-  const t=Date.now(),out={v:1,ts:t,base:S.base==='USD'?'USD':'DOP',hideAll:!!S.wHide,prof:S.profiles&&S.profiles.list.length>1?activeProfile().name:'',fin:null,mkt:null};
+  const t=Date.now(),out={v:2,ts:t,base:S.base==='USD'?'USD':'DOP',hideAll:!!S.wHide,prof:S.profiles&&S.profiles.list.length>1?activeProfile().name:'',fin:null,mkt:null};
   if(!S.example){
     const F=snapshot(t),Ts=totals(t),L=invList(),Ti=totalsOf(L,t),now=new Date();
     const inMonth=x=>{const d=new Date(x.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()};
-    const inc=S.incomes.filter(inMonth).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0),exp=S.expenses.filter(inMonth).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0);
+    const pm=new Date(now.getFullYear(),now.getMonth()-1,1),inPrev=x=>{const d=new Date(x.date);return d.getMonth()===pm.getMonth()&&d.getFullYear()===pm.getFullYear()&&d.getDate()<=now.getDate()};
+    const sum=(A,f)=>A.filter(f).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0);
+    const inc=sum(S.incomes,inMonth),exp=sum(S.expenses,inMonth),pinc=sum(S.incomes,inPrev),pexp=sum(S.expenses,inPrev);
+    let cpn=null;L.filter(s=>s.bond).forEach(s=>{try{const n=bondSchedule(s).find(o=>o.st==='próximo');if(n&&(!cpn||n.d<cpn.date))cpn={name:s.name,date:n.d,amt:both(conv(n.exp,s.cur,S.base))}}catch(e){}});
+    const lastMove=id=>{let m=0;[S.incomes,S.expenses].forEach(A=>A.forEach(x=>{if(x.via==='a:'+id)m=Math.max(m,x.date)}));(S.transfers||[]).forEach(x=>{if(x.from==='a:'+id||x.to==='a:'+id)m=Math.max(m,x.date)});return m};
     let next=null;L.forEach(s=>{const d=nextMat(s,t);if(d&&d>t&&(!next||d<next.date))next={name:s.name,date:d}});
     out.fin={net:both(F.assets-F.debt),assets:both(F.assets),debt:both(F.debt),ps:both(Ts.ps),
-      flow:{label:MESES[now.getMonth()]+' '+now.getFullYear(),inc:both(inc),exp:both(exp)},
-      inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,
+      flow:{label:MESES[now.getMonth()]+' '+now.getFullYear(),inc:both(inc),exp:both(exp),prev:{label:'mismo día de '+MESES[pm.getMonth()],inc:both(pinc),exp:both(pexp)}},
+      acc:accts().map(s=>{const v=savValue(s,t);return {id:s.id,name:s.name,ent:s.type==='Efectivo'?'Efectivo':s.entity||'',cur:s.cur,
+        bal:+v.toFixed(2),cash:s.type==='Efectivo',manual:true,upd:Math.max(lastMove(s.id),s.createdAt||0,s.start||0)}}).slice(0,20),
+      inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,cpn,
         items:L.map(s=>({id:s.id,name:s.name,ent:s.entity,v:both(conv(savValue(s,t),s.cur,S.base)),rate:s.rate||0})).sort((a,b)=>b.v.d-a.v.d).slice(0,20)}};
   }
   if(mkr.rows&&mkr.rows.length){
@@ -6011,10 +6090,23 @@ function widgetClear(){wsLast='';if(cwPlugin())CW.clear().catch(()=>{})}
 /* Copia los datos también en el almacenamiento nativo (Preferences), para no depender solo del navegador interno. */
 let nmT=null;
 function nativeMirror(j){if(!isNative()||!window.capacitorPreferences||!j)return;clearTimeout(nmT);nmT=setTimeout(()=>{capacitorPreferences.Preferences.set({key:KEY,value:j}).catch(()=>{})},400)}
+/* Enlaces de los widgets: caoba://abrir?seccion=resumen  ·  caoba://abrir?accion=ingreso|gasto|transferencia[&cuenta=ID]
+   Una acción abre directo el formulario correspondiente, con la cuenta ya elegida si viene en el enlace. */
+function deepParams(u){const o={};String(u||'').replace(/[?&]([a-z]+)=([^&#]*)/gi,(_,k,v)=>{try{o[k.toLowerCase()]=decodeURIComponent(v)}catch(e){o[k.toLowerCase()]=v}});return o}
 function openDeep(u){
-  const m=/[?&]seccion=([a-z]+)/.exec(u||'');if(!m)return;
-  const sec={resumen:'resumen',movimientos:'movimientos',inversion:'inversion',mercado:'mercado',cuentas:'cuentas'}[m[1]];if(!sec)return;
-  close();if(!document.documentElement.classList.contains('onb-open'))goTo(sec);track('widget_abierto',{sec});
+  const q=deepParams(u);
+  if(document.documentElement.classList.contains('onb-open'))return;
+  const acc=q.cuenta&&accts().find(s=>String(s.id)===q.cuenta),via=acc?'a:'+acc.id:undefined;
+  if(q.accion){
+    const a={ingreso:'ingreso',gasto:'gasto',transferencia:'transferencia'}[q.accion];if(!a)return;
+    close();
+    if(a==='transferencia')openTransfer(null,acc&&acc.type!=='Efectivo'?{kind:'tr',from:via}:{kind:'tr'});
+    else openExpense(a,via?{via}:{});
+    track('widget_accion',{a,cuenta:!!acc});return;
+  }
+  if(!q.seccion)return;
+  const sec={resumen:'resumen',movimientos:'movimientos',inversion:'inversion',mercado:'mercado',cuentas:'cuentas'}[q.seccion];if(!sec)return;
+  close();goTo(sec);track('widget_abierto',{sec});
 }
 (function nativeBoot(){
   if(!isNative())return;
@@ -6392,12 +6484,282 @@ function openCredit(id){
     if(!(a>0))return $('#err').textContent='Escribe el monto acreditado.';if(d<(s.accrFrom||s.start))return $('#err').textContent='La fecha debe ser posterior al último abono registrado.';if(d>Date.now()+DAY)return $('#err').textContent='La fecha no puede estar en el futuro.';
     s.credits=(s.credits||[]).concat({date:d,amt:a,est:+est().toFixed(2)});s.principal+=a;s.accrFrom=d;save();track('intereses_acreditados');openAcctDetail(id);render();toast('Intereses registrados')};
 }
+/* ---------- Menú de la inicial: perfiles financieros y cuentas de correo ----------
+   Perfil financiero: otro conjunto de finanzas dentro de la misma cuenta (personal, familiar, otra persona, proyecto).
+   Otra cuenta de correo: otra persona o acceso separado. En el teléfono hay una sola sesión a la vez: al cambiar,
+   los datos de la cuenta anterior se guardan en la nube y se borran de este teléfono, así nunca se mezclan. */
+Object.assign(PROF_KINDS,{persona:'Otra persona',negocio:'Proyecto o negocio'});
+PROF_IC.persona='<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c1-3.6 3.6-5.5 6.5-5.5s5.5 1.9 6.5 5.5"/><path d="M17 8h4M19 6v4"/>';
+const MAILS_KEY=KEY+'.correos';
+const knownMails=()=>{try{return JSON.parse(localStorage.getItem(MAILS_KEY)||'[]').filter(e=>okMail(e)).slice(0,5)}catch(e){return []}};
+function rememberMail(e){if(!e)return;try{const L=[e,...knownMails().filter(x=>x!==e)].slice(0,5);localStorage.setItem(MAILS_KEY,JSON.stringify(L))}catch(x){}}
+async function signOutHere(msg){
+  try{if(sbUser&&!S.example&&(S._upd||0)>(S._synced||0))await pushNow()}catch(e){}
+  try{const c=await sbClient();await c.auth.signOut()}catch(e){}
+  sbUser=null;loginFor='';isAdm=false;wipeLocal();widgetClear();close();render();if(msg)toast(msg);
+}
+function openMeMenu(){
+  ensureProfiles();const P=S.profiles,act=activeProfile(),who=sbUser&&sbUser.email,nm=(S.name||'').trim();
+  const row=(id,ic,t,s,cls)=>`<button type="button" class="menu-r ${cls||''}" id="${id}"><span class="menu-ic" style="--mc:var(--brand)"><svg viewBox="0 0 24 24">${ic}</svg></span><span><b>${t}</b>${s?`<small>${s}</small>`:''}</span>${chev}</button>`;
+  sheet(`<div class="me-h"><span class="me-av" aria-hidden="true">${esc((nm||who||'C').charAt(0).toUpperCase())}</span><span class="me-id"><b>${esc(nm||'Tu perfil')}</b><small>${who?esc(who):'Sin cuenta: tus datos viven solo en este teléfono'}</small></span></div>
+    <h3 class="sr">Tu perfil y tus cuentas</h3>
+    <h4 class="menu-g">Perfil financiero en uso</h4>
+    <div class="menu me-profs" role="radiogroup" aria-label="Cambiar de perfil">${P.list.map(p=>`<button type="button" class="menu-r${p.id===P.active?' on':''}" role="radio" aria-checked="${p.id===P.active}" data-me-prof="${p.id}"><span class="menu-ic" style="--mc:var(--brand)"><svg viewBox="0 0 24 24">${PROF_IC[p.kind]||PROF_IC.personal}</svg></span><span><b>${esc(p.name)}</b><small>${esc(PROF_KINDS[p.kind]||'Personal')}${p.id===P.active?' · en uso':''}</small></span>${p.id===P.active?'<span class="prof-ok" aria-hidden="true">✓</span>':''}</button>`).join('')}</div>
+    <div class="menu">${row('meMine',PROF_IC.personal,'Mi perfil','Nombre, edad, provincia y ocupación')}
+      ${S.example?'':row('meAdd','<path d="M12 5v14M5 12h14"/>','Agregar otro perfil','Familiar, de otra persona o de un proyecto')}
+      ${row('meAdm','<path d="M4 6h16M4 12h16M4 18h10"/>','Administrar perfiles','Cambiar nombre, tipo o eliminar')}</div>
+    <h4 class="menu-g">Cuenta de acceso</h4>
+    <div class="menu">${who?row('meAcc','<path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/>','Tu cuenta y sincronización',esc(syncLabel()))+row('meMail','<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>','Entrar con otro correo','Otra persona o un acceso separado')+row('meOut','<path d="M15 4h4v16h-4"/><path d="M10 8l-4 4 4 4M6 12h10"/>','Cerrar sesión','Tus datos quedan guardados en tu cuenta','danger')
+      :row('meLogin','<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>','Iniciar sesión o crear cuenta','Guarda tus datos y velos en cualquier teléfono')}</div>
+    <p class="hint me-note"><b>Perfil</b> separa tus finanzas dentro de tu misma cuenta. <b>Otro correo</b> es otra cuenta: sus datos nunca se mezclan con los tuyos.</p>`,'var(--brand)');
+  document.querySelectorAll('[data-me-prof]').forEach(b=>b.onclick=()=>{if(b.dataset.meProf===P.active)return close();switchProfile(b.dataset.meProf)});
+  $('#meMine').onclick=openMyProfile;$('#meAdm').onclick=openProfiles;const a=$('#meAdd');if(a)a.onclick=()=>openProfileForm();
+  const g=(id,f)=>{const e=$(id);if(e)e.onclick=f};
+  g('#meAcc',()=>openAccount());g('#meLogin',()=>{accMode='pw';accStep={email:'',sent:false};openAccount()});
+  g('#meOut',()=>signOutHere('Sesión cerrada. Tus datos siguen en tu cuenta.'));g('#meMail',openOtherMail);
+}
+function openOtherMail(){
+  const L=knownMails().filter(e=>!sbUser||e!==sbUser.email);
+  sheet(`<h3>Entrar con otro correo</h3><div class="form"><p class="lead-s">Cerraremos la sesión de <b>${esc(sbUser.email)}</b> en este teléfono. Sus datos quedan guardados en su cuenta y vuelven cuando entres de nuevo.</p>
+    ${L.length?`<h4 class="menu-g">Usados en este teléfono</h4><div class="menu">${L.map(e=>`<button type="button" class="menu-r" data-mail="${esc(e)}"><span class="menu-ic" style="--mc:var(--brand)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span><b>${esc(e)}</b><small>Te pediremos la contraseña o un código</small></span>${chev}</button>`).join('')}</div>`:''}
+    <button class="btn" type="button" id="omNew">${L.length?'Usar otro correo':'Continuar'}</button><button class="btn ghost" type="button" id="omNo">Cancelar</button>
+    <p class="hint">Caoba recuerda solo los correos, nunca las contraseñas.</p></div>`,'var(--brand)');
+  const go=async e=>{await signOutHere();accMode='pw';accStep={email:e||'',sent:false};openAccount()};
+  document.querySelectorAll('[data-mail]').forEach(b=>b.onclick=()=>go(b.dataset.mail));$('#omNew').onclick=()=>go('');$('#omNo').onclick=openMeMenu;
+}
+/* ---------- Privacidad, términos de uso y soporte ----------
+   Los textos describen lo que la app hace de verdad. No se inventan correos, teléfonos ni plazos de respuesta.
+   Los mensajes de soporte se guardan en la tabla support_tickets de Supabase: cualquiera puede escribir,
+   solo el administrador puede leerlos. */
+const LEGAL_FECHA='27 de noviembre de 2026';
+function legalSheet(title,sections,extra){
+  sheet(`<h3>${title}</h3><p class="hint">Vigente desde el ${LEGAL_FECHA}. Caoba está en fase de prueba (beta).</p>
+    <nav class="lg-toc" aria-label="Secciones">${sections.map((s,i)=>`<a href="#lg${i}" data-lg="${i}">${esc(s[0])}</a>`).join('')}</nav>
+    <div class="lg">${sections.map((s,i)=>`<section id="lg${i}"><h4>${esc(s[0])}</h4>${s[1]}</section>`).join('')}</div>${extra||''}`,'var(--brand)');
+  document.querySelectorAll('[data-lg]').forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById('lg'+a.dataset.lg);if(t)t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
+}
+function openPrivacy(){
+  legalSheet('Política de privacidad',[
+    ['Qué información recopila Caoba',`<ul><li><b>Lo que registras:</b> cuentas, tarjetas (solo los últimos 4 dígitos, si los escribes), préstamos, inversiones, ingresos, gastos, presupuestos, recordatorios y ajustes.</li>
+      <li><b>Tu perfil:</b> nombre, y si decides darlos, edad, provincia, ocupación y sexo.</li>
+      <li><b>Si creas una cuenta:</b> tu correo electrónico. La contraseña la guarda cifrada el servicio de cuentas; Caoba no puede verla.</li>
+      <li><b>Estadísticas de uso, solo si las aceptas:</b> qué pantallas y acciones se usan, con un identificador aleatorio del dispositivo. Nunca montos, nombres ni datos de tus cuentas.</li>
+      <li><b>Mensajes de soporte:</b> lo que escribas y, si lo permites, datos técnicos (versión de la app, plataforma y tamaño de pantalla).</li></ul>
+      <p><b>Caoba nunca pide ni guarda</b> números completos de tarjetas o cuentas, códigos de seguridad (CVV), claves bancarias ni tu cédula.</p>`],
+    ['Para qué se utiliza',`<p>Para mostrarte tus finanzas, calcular saldos, intereses y vencimientos, y sincronizar tus datos entre tus dispositivos. Las estadísticas anónimas sirven solo para mejorar la app. No se usa tu información para publicidad personalizada ni se vende.</p>`],
+    ['Cómo se almacena',`<ul><li><b>Sin cuenta:</b> todo queda en el almacenamiento de este teléfono o navegador.</li>
+      <li><b>Con cuenta:</b> además se guarda una copia en Supabase, el servicio de base de datos que usa Caoba, para que la veas en otros dispositivos.</li>
+      <li><b>App Android:</b> el resumen que muestran los widgets se guarda cifrado con una clave del propio teléfono, y la app no participa en las copias de seguridad automáticas de Google.</li></ul>`],
+    ['Cómo se protege',`<p>La conexión con los servidores es cifrada (HTTPS). Las reglas de la base de datos impiden que una cuenta lea o cambie los datos de otra. La app solo contiene la clave pública del servicio, que no permite saltarse esas reglas. Ningún sistema es infalible: protege tu teléfono con bloqueo de pantalla y usa una contraseña que no repitas en otros servicios.</p>`],
+    ['Qué se comparte con terceros',`<p>Caoba no vende ni cede tus datos. Para funcionar usa estos proveedores, que procesan información solo para prestar su servicio:</p>
+      <ul><li><b>Supabase:</b> cuentas de acceso, copia de tus datos, tasas del mercado, estadísticas y mensajes de soporte.</li>
+      <li><b>Google (Gmail):</b> envío de los correos con códigos de acceso y de recuperación.</li>
+      <li><b>GitHub Pages:</b> aloja la versión web; como todo servidor web, puede registrar la dirección IP de quien la visita.</li></ul>`],
+    ['Cómo pedir que se eliminen tus datos',`<ul><li><b>Desde la app:</b> Ajustes → Borrar todos mis datos (este teléfono), o Tu cuenta → Eliminar mi cuenta y todos mis datos (también la copia en la nube). Se borran de inmediato.</li>
+      <li><b>Por escrito:</b> desde Ayuda y soporte, tipo «Problema con mi cuenta».</li></ul>
+      <p>Puedes ver y corregir tus datos en la app en cualquier momento. Estos derechos se basan en la Ley 172-13 de protección de datos personales de la República Dominicana.</p>`],
+    ['Cookies y analítica',`<p>Caoba no usa cookies de publicidad ni herramientas de analítica de terceros. Guarda tus preferencias y tus datos en el almacenamiento local del navegador o del teléfono. Las estadísticas propias solo se envían si aceptas compartirlas, y puedes desactivarlas en Ajustes → Privacidad y seguridad.</p>`],
+    ['Cambios a esta política',`<p>Si esta política cambia, la app lo indicará en el aviso de novedades de la versión correspondiente.</p>`]]);
+}
+function openTerms(){
+  legalSheet('Términos y condiciones de uso',[
+    ['Qué es Caoba',`<p>Caoba es una herramienta para organizar tus finanzas personales y comparar información del mercado financiero dominicano. Está en fase de prueba (beta): puede tener errores y sus funciones pueden cambiar.</p>`],
+    ['Tu cuenta',`<p>Eres responsable de mantener segura tu contraseña y el acceso a tu correo. Cada cuenta es personal. No intentes acceder a datos de otras personas ni alterar el funcionamiento del servicio.</p>`],
+    ['La información financiera',`<ul><li><b>No es asesoría.</b> Caoba muestra cálculos y datos para ayudarte a decidir, pero no es una asesoría financiera, legal ni fiscal. Antes de invertir, confirma las condiciones con la entidad.</li>
+      <li><b>Tus registros:</b> los saldos, tasas e intereses se calculan con los datos que escribes. Los intereses y rendimientos que dicen «estimado» son aproximaciones; los valores oficiales son los de tu estado de cuenta.</li>
+      <li><b>Mercado:</b> cada tasa muestra su fuente, su fecha y si es un dato real, por verificar o simulado. Las secciones de prototipo usan datos simulados y lo indican.</li>
+      <li><b>Sin conexión bancaria:</b> Caoba no se conecta a tus bancos ni mueve dinero.</li></ul>`],
+    ['Limitaciones del servicio',`<p>El servicio se ofrece tal como está, sin garantía de disponibilidad continua. Caoba no se hace responsable de decisiones tomadas a partir de la información mostrada, ni de pérdidas de datos causadas por borrar la app o el navegador sin cuenta ni respaldo. Te recomendamos crear una cuenta o guardar respaldos.</p>`],
+    ['Propiedad',`<p>Tus datos son tuyos y puedes exportarlos a Excel o a un archivo de respaldo cuando quieras. La marca, el diseño y el código de Caoba pertenecen a sus autores.</p>`],
+    ['Cambios y contacto',`<p>Estos términos pueden actualizarse; los cambios se anunciarán en el aviso de novedades. Para consultas, usa Ayuda y soporte dentro de la app.</p>`]]);
+}
+/* ---------- Ayuda y soporte ---------- */
+const FAQ=[
+  ['¿Caoba se conecta a mi banco?','No. En República Dominicana los bancos aún no ofrecen una conexión autorizada para apps como Caoba. Tus cuentas se registran a mano, y Caoba nunca te pedirá claves bancarias.'],
+  ['¿Dónde están mis datos?','Sin cuenta, solo en este teléfono. Con cuenta, también en tu copia en la nube, que solo tú puedes leer.'],
+  ['¿Cuál es la diferencia entre un perfil y otra cuenta de correo?','Un perfil separa tus finanzas dentro de tu misma cuenta (por ejemplo, Personal y Negocio). Otro correo es otra cuenta, de otra persona o con acceso separado: sus datos no se mezclan.'],
+  ['¿Por qué los intereses dicen «estimado»?','Caoba calcula los intereses con la tasa y la capitalización que registraste. Lo que la entidad acredita puede variar un poco; regístralo desde la ficha de la cuenta para que el saldo sea exacto.'],
+  ['¿Qué diferencia hay entre la tasa cupón y el rendimiento al vencimiento?','La tasa cupón define los intereses periódicos sobre el valor nominal. El rendimiento al vencimiento considera además el precio que pagaste y el tiempo hasta el vencimiento.'],
+  ['¿Cómo paso mis datos de la web a la app Android?','Inicia sesión con la misma cuenta, o guarda un respaldo en Ajustes y restáuralo en la app.'],
+  ['No me llega el código por correo','Revisa la carpeta de spam y espera un minuto antes de pedir otro. El código vence a los 60 minutos.']];
+const SUP_KINDS=[['error','Reportar un error'],['sugerencia','Enviar una sugerencia'],['consulta','Hacer una consulta'],['cuenta','Problema con mi cuenta']];
+function openSupport(kind){
+  sheet(`<h3>Ayuda y soporte</h3>
+    <h4 class="menu-g">Preguntas frecuentes</h4><div class="faq">${FAQ.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>
+    <h4 class="menu-g">Escríbenos</h4><form class="form" id="f" novalidate>
+      <fieldset class="field"><legend>¿Qué necesitas?</legend><div class="choice two-c">${SUP_KINDS.map(([k,l])=>pill('supK',k,l,(kind||'error')===k)).join('')}</div></fieldset>
+      <div class="field"><label for="supS">Asunto <span class="opt">opcional</span></label><input id="supS" maxlength="120"></div>
+      <div class="field"><label for="supB">Descripción</label><textarea id="supB" rows="5" maxlength="2000" placeholder="Cuéntanos qué pasó, en qué pantalla y qué esperabas que ocurriera."></textarea><small class="hint" id="supN">Mínimo 15 caracteres. No escribas contraseñas ni números de tarjetas o cuentas.</small></div>
+      <div class="field"><label for="supC">Correo para responderte <span class="opt">opcional</span></label><input id="supC" type="email" inputmode="email" autocomplete="email" value="${esc(sbUser&&sbUser.email||'')}"></div>
+      <label class="check"><input type="checkbox" id="supT" checked><span>Incluir datos técnicos: versión de la app, plataforma y tamaño de pantalla</span></label>
+      <p class="err" id="err" role="alert"></p><button class="btn" type="submit">Enviar</button></form>
+    <p class="hint">Tu mensaje lo lee el equipo de Caoba. Caoba está en fase de prueba y no tiene todavía un plazo de respuesta garantizado.</p>`,'var(--brand)');
+  $('#f').onsubmit=async e=>{e.preventDefault();const err=m=>{$('#err').textContent=m},body=$('#supB').value.trim(),c=$('#supC').value.trim();
+    if(body.length<15)return err('Escribe al menos 15 caracteres para que podamos entenderte.');
+    if(/\b(?:\d[ -]?){13,19}\b/.test(body))return err('Parece que escribiste un número de tarjeta o de cuenta. Bórralo antes de enviar.');
+    if(c&&!okMail(c))return err('Revisa el correo o déjalo vacío.');
+    const row={kind:(document.querySelector('[name=supK]:checked')||{}).value||'consulta',subject:$('#supS').value.trim()||null,body,contact:c||null,
+      tech:$('#supT').checked?{v:String(APP_VER),p:anPlatform(),w:innerWidth,h:innerHeight,skin:S.skin||'azul',vista:view}:null};
+    const b=e.target.querySelector('[type=submit]');b.disabled=true;b.textContent='Enviando…';
+    try{const headers={apikey:SUPABASE_KEY,'Content-Type':'application/json',Prefer:'return=minimal',Authorization:'Bearer '+SUPABASE_KEY};
+      if(sbUser){try{const s=await (await sbClient()).auth.getSession();if(s&&s.data&&s.data.session)headers.Authorization='Bearer '+s.data.session.access_token}catch(x){}}
+      const r=await fetch(SUPABASE_URL+'/rest/v1/support_tickets',{method:'POST',headers,body:JSON.stringify(row)});if(!r.ok)throw new Error('HTTP '+r.status);
+      track('soporte_enviado',{kind:row.kind});
+      sheet(`<h3>Mensaje enviado</h3><div class="form"><p class="lead-s">Gracias. Recibimos tu mensaje${c?' y, si hace falta, te escribiremos a '+esc(c):''}.</p><button class="btn" type="button" id="supOk">Listo</button></div>`,'var(--brand)');$('#supOk').onclick=close}
+    catch(x){b.disabled=false;b.textContent='Enviar';err('No se pudo enviar. Revisa tu conexión; tu texto sigue aquí para intentarlo de nuevo.')}};
+}
+/* Panel del administrador: mensajes de soporte */
+async function admSupport(){
+  $('#admBody').innerHTML='<p class="hint center">Cargando…</p>';
+  try{const c=await sbClient();const {data,error}=await c.from('support_tickets').select('*').order('created_at',{ascending:false}).limit(100);if(error)throw error;
+    const K=Object.fromEntries(SUP_KINDS),ST={nuevo:'Nuevo',en_revision:'En revisión',resuelto:'Resuelto'};
+    $('#admBody').innerHTML=data.length?`<div class="tickets">${data.map(t=>`<article class="tk st-${t.status}"><div class="tk-h"><b>${esc(K[t.kind]||t.kind)}</b><span class="num">${esc(dtFmt.format(new Date(t.created_at)))}</span></div>
+      ${t.subject?`<p class="tk-s">${esc(t.subject)}</p>`:''}<p class="tk-b">${esc(t.body)}</p><p class="hint">${t.contact?'Responder a: '+esc(t.contact):'Sin correo de contacto'}${t.tech?' · '+esc(Object.entries(t.tech).map(([k,v])=>k+': '+v).join(', ')):''}</p>
+      <label class="tk-st"><span>Estado</span><select data-tk="${t.id}">${Object.entries(ST).map(([k,l])=>`<option value="${k}" ${t.status===k?'selected':''}>${l}</option>`).join('')}</select></label></article>`).join('')}</div>`:'<p class="hint center">No hay mensajes.</p>';
+    document.querySelectorAll('[data-tk]').forEach(s=>s.onchange=async()=>{const {error}=await c.from('support_tickets').update({status:s.value}).eq('id',+s.dataset.tk);toast(error?'No se pudo cambiar el estado':'Estado actualizado')});
+  }catch(x){$('#admBody').innerHTML='<p class="err">No se pudieron cargar los mensajes. Revisa tu conexión.</p>'}
+}
+/* ---------- Novedades por versión ----------
+   El aviso aparece una sola vez por versión (se recuerda en el teléfono y en la cuenta).
+   Quien abre Caoba por primera vez no lo ve: para esa persona todo es nuevo. */
+const CHANGELOG=[
+  {v:'3.0',fecha:'27 de noviembre de 2026',titulo:'Más claro, más preciso y a tu gusto',
+   nuevo:['Cinco identidades visuales para elegir en Ajustes. Azul financiero es la estándar.','Bonos con valor nominal, precio, cupones, calendario de pagos y rendimiento al vencimiento.','Cuentas de ahorro con intereses: estimados frente a acreditados por la entidad, historial de tasas y evolución del saldo.','Exportación a Excel por hojas, con filtros y totales.','Menú de perfil: cambia de perfil financiero o entra con otro correo desde tu inicial.','Ayuda y soporte, política de privacidad y términos de uso.'],
+   mejoras:['Formularios por bloques: primero lo esencial, lo avanzado plegado y ayudas breves.','Tarjetas con vista previa del color antes de guardar.','Inversiones con fecha de compra distinta de la fecha de registro.','Widgets nuevos en Android: cuentas (con ⇄, + y − por cuenta) y movimientos rápidos que abren directo el formulario.','Widgets en modo claro y oscuro, con comparación frente al mes anterior y próximo cupón de tus bonos.'],
+   arreglos:['El selector de color ya no se monta sobre los últimos 4 dígitos.','Los bonos ya no se calculan como certificados.']},
+  {v:'2.0',fecha:'24 de noviembre de 2026',titulo:'Nueva identidad y app Android',
+   nuevo:['Navegación de 5 pestañas: Resumen, Movimientos, Cuentas, Inversión y Mercado.','App Android con widgets en la pantalla de inicio.','Mercado con tasas verificadas, fuente y fecha.','Perfiles financieros y respaldo en archivo.'],
+   mejoras:['Código de acceso de 8 dígitos con casillas.','Campos de 16 px y formularios que no quedan tapados por el teclado.'],arreglos:[]}];
+const NOV_KEY=KEY+'.novedad';
+const novSeen=()=>{let v=null;try{v=localStorage.getItem(NOV_KEY)}catch(e){}return v||S.seenVer||null};
+function markNovSeen(){try{localStorage.setItem(NOV_KEY,CHANGELOG[0].v)}catch(e){}if(S.seenVer!==CHANGELOG[0].v&&!S.example){S.seenVer=CHANGELOG[0].v;save()}}
+const NOV_FIRST=(()=>{try{return !localStorage.getItem(KEY)}catch(e){return true}})();
+function changelogHTML(c){const L=(t,a)=>a&&a.length?`<h4 class="menu-g">${t}</h4><ul class="nov-l">${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'';
+  return `<p class="nov-v num">Versión ${esc(c.v)} · ${esc(c.fecha)}</p>${L('Nuevo',c.nuevo)}${L('Mejoras',c.mejoras)}${L('Correcciones',c.arreglos)}`}
+function openChangelog(all){
+  const c=CHANGELOG[0];
+  sheet(`<h3>${all?'Novedades de Caoba':esc(c.titulo)}</h3>${all?CHANGELOG.map(x=>`<section class="nov-s"><h4 class="nov-t">${esc(x.titulo)}</h4>${changelogHTML(x)}</section>`).join(''):changelogHTML(c)}
+    <div class="form">${all?'':'<button class="btn" type="button" id="novOk">Entendido</button><button class="btn ghost" type="button" id="novAll">Ver el historial de versiones</button>'}</div>`,'var(--brand)');
+  markNovSeen();const o=$('#novOk');if(o)o.onclick=close;const h=$('#novAll');if(h)h.onclick=()=>openChangelog(true);
+}
+function maybeShowNews(){
+  if(NOV_FIRST||S.example&&!novSeen()){markNovSeen();return}
+  if(novSeen()===CHANGELOG[0].v)return;
+  if(document.documentElement.classList.contains('onb-open')||$('#layer').firstChild||$('#tour'))return setTimeout(maybeShowNews,4000);
+  openChangelog(false);track('novedades_vistas',{v:CHANGELOG[0].v.replace('.','_')});
+}
+/* ---------- Exportar a Excel (.xlsx) ----------
+   Un archivo con una hoja por sección, encabezados fijos, filtros, fechas dd/mm/aaaa, monedas identificadas y totales.
+   Se arma en el propio dispositivo (sin enviar datos a ningún servidor) y respeta el perfil financiero en uso. */
+const XL_SHEETS=[['resumen','Resumen patrimonial'],['movimientos','Movimientos'],['ingresos','Ingresos'],['gastos','Gastos'],['presupuestos','Presupuestos'],['cuentas','Cuentas'],['tarjetas','Tarjetas de crédito'],['prestamos','Préstamos y deudas'],['inversiones','Ahorros e inversiones'],['bonos','Bonos'],['pagos','Historial de pagos y cupones']];
+const xEsc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+const xCol=i=>{let s='';i++;while(i){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+const xDate=t=>{const d=new Date(t);return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5+25569};
+/* Estilos: 0 normal, 1 encabezado, 2 fecha, 3 monto, 4 porcentaje, 5 total monto, 6 texto en negrita, 7 título */
+const XL_STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<numFmts count="2"><numFmt numFmtId="164" formatCode="dd/mm/yyyy"/><numFmt numFmtId="165" formatCode="0.00&quot; %&quot;"/></numFmts>
+<fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>
+<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0B2545"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EDF3"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top style="thin"><color rgb="FF0B2545"/></top><bottom/><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="8"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="4" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="4" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"/><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+/* Hoja: cols = [[encabezado, tipo('t'|'d'|'m'|'p'|'n'), ancho]], rows = arrays de valores; tot = índices de columnas a totalizar */
+function xSheet(cols,rows,tot,note){
+  const cell=(v,c,r,ty)=>{const ref=xCol(c)+r;if(v==null||v===''||(typeof v==='number'&&!isFinite(v)))return '';
+    if(ty==='d')return `<c r="${ref}" s="2"><v>${xDate(v)}</v></c>`;if(ty==='m')return `<c r="${ref}" s="3"><v>${+(+v).toFixed(2)}</v></c>`;if(ty==='p')return `<c r="${ref}" s="4"><v>${+(+v).toFixed(4)}</v></c>`;if(ty==='n')return `<c r="${ref}"><v>${+v}</v></c>`;
+    return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xEsc(v)}</t></is></c>`};
+  let r=1,x=`<row r="1">${cols.map((c,i)=>`<c r="${xCol(i)}1" s="1" t="inlineStr"><is><t>${xEsc(c[0])}</t></is></c>`).join('')}</row>`;
+  rows.forEach(row=>{r++;x+=`<row r="${r}">${row.map((v,i)=>cell(v,i,r,cols[i][1])).join('')}</row>`});
+  const last=r;
+  if(tot&&tot.length&&rows.length){r++;x+=`<row r="${r}"><c r="A${r}" s="6" t="inlineStr"><is><t>Total (filas visibles)</t></is></c>${cols.slice(1).map((c,j)=>{const i=j+1,ref=xCol(i)+r;if(!tot.includes(i))return `<c r="${ref}" s="6"/>`;const sum=rows.reduce((a,row)=>a+(+row[i]||0),0);return `<c r="${ref}" s="5"><f>SUBTOTAL(9,${xCol(i)}2:${xCol(i)}${last})</f><v>${+sum.toFixed(2)}</v></c>`}).join('')}</row>`}
+  if(note){r+=2;x+=`<row r="${r}"><c r="A${r}" t="inlineStr"><is><t>${xEsc(note)}</t></is></c></row>`}
+  const ref=`A1:${xCol(cols.length-1)}${Math.max(1,last)}`;
+  return {xml:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${cols.map((c,i)=>`<col min="${i+1}" max="${i+1}" width="${c[2]||14}" customWidth="1"/>`).join('')}</cols><sheetData>${x}</sheetData>${rows.length?`<autoFilter ref="${ref}"/>`:''}</worksheet>`,filter:rows.length?ref:null};
+}
+/* ZIP sin compresión con CRC-32: suficiente para un .xlsx y sin librerías externas */
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0};
+function zipStore(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;const d=new Date(),dt=((d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1)),dd=(((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate());
+  const u16=v=>[v&255,(v>>8)&255],u32=v=>[v&255,(v>>8)&255,(v>>16)&255,(v>>>24)&255];
+  files.forEach(([name,txt])=>{const n=enc.encode(name),data=enc.encode(txt),c=crc32(data);
+    const h=new Uint8Array([0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(dt),...u16(dd),...u32(c),...u32(data.length),...u32(data.length),...u16(n.length),...u16(0)]);
+    parts.push(h,n,data);cen.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(dt),...u16(dd),...u32(c),...u32(data.length),...u32(data.length),...u16(n.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),n);off+=h.length+n.length+data.length});
+  const cs=cen.reduce((a,x)=>a+x.length,0),end=new Uint8Array([0x50,0x4b,5,6,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cs),...u32(off),...u16(0)]);
+  const all=[...parts,...cen,end],out=new Uint8Array(all.reduce((a,x)=>a+x.length,0));let p=0;all.forEach(x=>{out.set(x,p);p+=x.length});return out}
+function xlsxBuild(sheets){
+  const wb=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xEsc(s.name.slice(0,31))}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets><definedNames>${sheets.map((s,i)=>s.filter?`<definedName name="_xlnm._FilterDatabase" localSheetId="${i}" hidden="1">'${xEsc(s.name.slice(0,31))}'!$${s.filter.replace(':',':$').replace(/([A-Z]+)(\d+)/g,'$1$$$2')}</definedName>`:'').join('')}</definedNames></workbook>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const ct=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`;
+  return zipStore([['[Content_Types].xml',ct],['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ['xl/workbook.xml',wb],['xl/_rels/workbook.xml.rels',rels],['xl/styles.xml',XL_STYLES],...sheets.map((s,i)=>[`xl/worksheets/sheet${i+1}.xml`,s.xml])]);
+}
+/* Contenido de cada hoja con los datos reales del perfil en uso */
+function xlData(keys,R){
+  const B=S.base,t=Date.now(),inR=x=>x.date>=R[0]&&x.date<=R[1],out=[],add=(k,name,cols,rows,tot,note)=>{if(keys.includes(k)){const s=xSheet(cols,rows,tot,note);out.push({name,xml:s.xml,filter:s.filter})}};
+  const F=snapshot(t),prof=S.profiles&&activeProfile()?activeProfile().name:'Personal';
+  add('resumen','Resumen patrimonial',[['Concepto','t',34],['Monto en '+B,'m',18],['Detalle','t',46]],[
+    ['Patrimonio neto',F.assets-F.debt,'Lo que tienes menos lo que debes'],['Lo que tienes',F.assets,'Cuentas e inversiones activas, con intereses estimados'],['Lo que debes',F.debt,'Tarjetas y préstamos'],
+    ['En cuentas',accts().reduce((a,s)=>a+conv(savValue(s,t),s.cur,B),0),accts().length+' cuentas'],['En inversiones',totalsOf(invList(),t).v,invList().length+' inversiones'],['Tarjetas de crédito',F.cards,S.cards.length+' tarjetas'],['Préstamos',F.loans,S.loans.length+' préstamos'],
+    ['Perfil financiero',null,prof],['Fecha de exportación',null,dtFmt.format(new Date())],['Tasa del dólar usada',S.rates.USD,'RD$ por US$1'],['Período de los movimientos',null,R[0]<=0?'Todo el historial':dateFmt.format(new Date(R[0]))+' a '+dateFmt.format(new Date(Math.min(R[1],t)))]],null,'Datos de Caoba exportados por la persona titular. Los montos con intereses son estimados; los oficiales son los de cada entidad.');
+  const inc=S.incomes.filter(inR).sort((a,b)=>a.date-b.date),exp=S.expenses.filter(inR).sort((a,b)=>a.date-b.date);
+  const mov=[...inc.map(x=>['Ingreso',x]),...exp.map(x=>['Gasto',x]),...(S.transfers||[]).filter(inR).map(x=>['Transferencia',x])].sort((a,b)=>a[1].date-b[1].date);
+  add('movimientos','Movimientos',[['Fecha','d',12],['Tipo','t',14],['Concepto','t',30],['Categoría o tipo','t',22],['Cuenta o medio','t',26],['Moneda','t',8],['Monto','m',14],['Monto en '+B,'m',16]],
+    mov.map(([k,x])=>[x.date,k,x.desc,k==='Gasto'?(CATS[x.cat]||CATS.otros).n:k==='Ingreso'?(INC[x.src]||'Ingreso'):'Entre cuentas',k==='Transferencia'?viaName(x.from)+' → '+viaName(x.to):viaName(x.via),x.cur,k==='Gasto'?-x.amt:x.amt,k==='Transferencia'?0:conv(k==='Gasto'?-x.amt:x.amt,x.cur,B)]),[7]);
+  add('ingresos','Ingresos',[['Fecha','d',12],['Concepto','t',30],['Tipo','t',22],['Naturaleza','t',16],['Cuenta','t',26],['Moneda','t',8],['Monto','m',14],['Monto en '+B,'m',16]],
+    inc.map(x=>[x.date,x.desc,INC[x.src]||'Ingreso',NAT[x.nat]||'',viaName(x.via),x.cur,x.amt,conv(x.amt,x.cur,B)]),[7]);
+  add('gastos','Gastos',[['Fecha','d',12],['Concepto','t',30],['Categoría','t',18],['Medio de pago','t',26],['Moneda','t',8],['Monto','m',14],['Monto en '+B,'m',16]],
+    exp.map(x=>[x.date,x.desc,(CATS[x.cat]||CATS.otros).n,viaName(x.via),x.cur,x.amt,conv(x.amt,x.cur,B)]),[6]);
+  const n=new Date(),mo=x=>{const d=new Date(x.date);return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()};
+  add('presupuestos','Presupuestos',[['Categoría','t',22],['Presupuesto mensual en '+B,'m',22],['Gastado este mes','m',18],['Disponible','m',16]],
+    Object.entries(S.catBudget||{}).filter(([,v])=>v>0).map(([k,v])=>{const g=S.expenses.filter(x=>x.cat===k&&mo(x)).reduce((a,x)=>a+conv(x.amt,x.cur,B),0);return [(CATS[k]||{n:k}).n,v,g,v-g]}),[1,2,3]);
+  add('cuentas','Cuentas',[['Entidad','t',22],['Nombre','t',26],['Tipo','t',16],['Últimos 4','t',10],['Moneda','t',8],['Saldo registrado','m',16],['Intereses estimados','m',16],['Saldo con intereses','m',18],['Tasa anual','p',11],['Tipo de tasa','t',12],['Capitalización','t',16],['Desde','d',12]],
+    accts().map(s=>[s.entity,s.name,s.type,s.last4||'',s.cur,s.principal,acctAccrued(s,t),savValue(s,t),s.rate||null,s.rate?(s.rateKind==='efectiva'?'Efectiva':'Nominal'):'',s.rate?(CAPS.find(c=>c[0]===(s.cap||12))||[0,''])[1]:'',s.start]));
+  add('tarjetas','Tarjetas de crédito',[['Entidad','t',22],['Nombre','t',24],['Últimos 4','t',10],['Moneda','t',8],['Límite','m',14],['Usado','m',14],['Disponible','m',14],['Tasa anual','p',11],['Día de corte','n',12],['Día de pago','n',12]],
+    S.cards.map(c=>[c.entity,c.name,c.last4||'',c.cur,c.limit,c.balance,Math.max(0,c.limit-c.balance),c.rate,c.cutDay||null,c.payDay]));
+  add('prestamos','Préstamos y deudas',[['Entidad','t',22],['Nombre','t',24],['Tipo','t',14],['Moneda','t',8],['Monto original','m',16],['Tasa anual','p',11],['Plazo (meses)','n',12],['Cuota','m',14],['Saldo pendiente','m',16],['Cuotas pagadas','n',14],['Próximo pago','d',13]],
+    S.loans.map(l=>{const st=loanState(l);return [l.entity,l.name,l.type||'',l.cur,l.principal,l.rate,l.months,st.left?st.cuota:0,st.left,st.n,st.left?st.next:null]}));
+  add('inversiones','Ahorros e inversiones',[['Entidad','t',22],['Nombre','t',28],['Instrumento','t',18],['Emisor','t',18],['Moneda','t',8],['Monto invertido','m',16],['Valor estimado hoy','m',18],['Ganancia estimada','m',16],['Tasa','p',10],['Tipo de tasa','t',12],['Fecha de inversión','d',14],['Registrada en Caoba','d',14],['Datos desde','d',12],['Vencimiento','d',13],['Estado','t',12]],
+    S.savings.filter(s=>!isAcct(s)&&!s.bond).map(s=>{const v=s.status==='liquidada'?0:savValue(s,t);return [s.entity,s.name,s.type,s.issuer||'',s.cur,s.principal,v,s.status==='liquidada'?null:v-s.principal,s.rate||null,s.rate?(s.vr?'Variable':s.rateKind==='efectiva'?'Efectiva':'Nominal'):'',s.start,s.createdAt||null,s.histFrom||null,s.open?null:nextMat(s,s.start),(ST_N[invStatus(s,t)]||'')]}),[]);
+  const BR=S.savings.filter(s=>s.bond);
+  add('bonos','Bonos',[['Nombre','t',26],['Emisor','t',22],['ISIN','t',14],['Tipo de emisor','t',13],['Moneda','t',8],['Nominal por bono','m',16],['Cantidad','n',10],['Nominal total','m',16],['Precio de compra','p',13],['Costo','m',15],['Tasa cupón','p',11],['Frecuencia','t',13],['Base de días','t',11],['Fecha de compra','d',13],['Emisión','d',12],['Vencimiento','d',12],['YTM','p',9],['YTM es','t',12],['Intereses devengados','m',16],['Valor en patrimonio','m',18],['Cupones cobrados','m',16]],
+    BR.map(s=>{const b=s.bond,y=b.ytm!==''&&b.ytm!=null?+b.ytm:bondYTM(s);return [s.name,s.issuer||'',b.isin||'',{gobierno:'Gobierno',empresa:'Empresa',otro:'Otro'}[b.itype]||'',s.cur,+b.face,+b.qty,bN(b),+b.price||null,s.principal,b.cpn===''?null:+b.cpn,(FREQS.find(f=>String(f[0])===String(b.freq))||[0,''])[1],(BASIS.find(x=>x[0]===b.basis)||[0,''])[1],s.start,b.issue||null,s.due||null,y!=null&&isFinite(y)?y:null,b.ytm!==''&&b.ytm!=null?'Registrado':y!=null?'Estimado':'',bondAccrued(s,t),bondValue(s,t),(b.pays||[]).reduce((a,p)=>a+p.amt,0)]}),[]);
+  const P=[];BR.forEach(s=>bondSchedule(s).forEach(c=>{if(c.d>=R[0]&&c.d<=R[1])P.push(['Cupón de bono',s.name,c.d,s.cur,c.exp,c.pay?c.pay.amt:null,c.st])}));
+  S.loans.forEach(l=>(l.pays||[]).filter(inR).forEach(p=>P.push([p.k==='abono'?'Abono a capital':'Cuota de préstamo',l.name,p.date,l.cur,null,p.amt,'Pagado'])));
+  (S.savings||[]).forEach(s=>(s.credits||[]).forEach(c=>{if(c.date>=R[0]&&c.date<=R[1])P.push(['Intereses acreditados',s.name,c.date,s.cur,c.est,c.amt,'Recibido'])}));
+  P.sort((a,b)=>a[2]-b[2]);
+  add('pagos','Historial de pagos y cupones',[['Tipo','t',22],['Producto','t',28],['Fecha','d',12],['Moneda','t',8],['Esperado o estimado','m',18],['Pagado o recibido','m',18],['Estado','t',16]],P,[4,5]);
+  return out;
+}
+function openExport(pre){
+  const sel=pre||XL_SHEETS.map(s=>s[0]);
+  sheet(`<h3>Exportar a Excel</h3><form class="form" id="f" novalidate><p class="lead-s">Un archivo con tus datos reales del perfil <b>${esc(activeProfile().name)}</b>, una hoja por sección, con filtros y totales.</p>
+    <fieldset class="field"><legend>Qué incluir</legend><div class="xl-pick">${XL_SHEETS.map(([k,l])=>`<label class="check"><input type="checkbox" name="xlS" value="${k}" ${sel.includes(k)?'checked':''}><span>${l}</span></label>`).join('')}</div>
+      <div class="xl-all"><button type="button" class="link-btn" id="xlAll">Todo</button><button type="button" class="link-btn" id="xlNone">Nada</button></div></fieldset>
+    <div class="field"><label for="xlP">Período de movimientos y pagos</label><select id="xlP"><option value="all">Todo el historial</option><option value="m">Este mes</option><option value="y">Este año</option><option value="12">Últimos 12 meses</option><option value="r">Elegir fechas</option></select></div>
+    <div class="two" id="xlR" hidden><div class="field"><label for="xlA">Desde</label><input type="date" id="xlA"></div><div class="field"><label for="xlB">Hasta</label><input type="date" id="xlB" value="${today()}"></div></div>
+    <p class="hint">El archivo contiene información financiera tuya: guárdalo en un lugar seguro.</p>
+    <p class="err" id="err" role="alert"></p><button class="btn" type="submit">Crear el Excel</button></form>`,'var(--brand)');
+  $('#xlP').onchange=()=>{$('#xlR').hidden=$('#xlP').value!=='r'};
+  $('#xlAll').onclick=()=>document.querySelectorAll('[name=xlS]').forEach(c=>c.checked=true);$('#xlNone').onclick=()=>document.querySelectorAll('[name=xlS]').forEach(c=>c.checked=false);
+  $('#f').onsubmit=async e=>{e.preventDefault();if(S.example)return $('#err').textContent='Estás viendo datos de ejemplo: el Excel se crea con tus propios datos.';
+    const keys=[...document.querySelectorAll('[name=xlS]:checked')].map(c=>c.value);if(!keys.length)return $('#err').textContent='Elige al menos una sección.';
+    const n=new Date(),p=$('#xlP').value;let R=[0,Infinity];
+    if(p==='m')R=[+new Date(n.getFullYear(),n.getMonth(),1),Infinity];else if(p==='y')R=[+new Date(n.getFullYear(),0,1),Infinity];else if(p==='12')R=[+new Date(n.getFullYear(),n.getMonth()-11,1),Infinity];
+    else if(p==='r'){if(!$('#xlA').value)return $('#err').textContent='Elige la fecha de inicio.';R=[parseDate($('#xlA').value)-DAY/2,parseDate($('#xlB').value||today())+DAY/2];if(R[1]<R[0])return $('#err').textContent='La fecha final debe ser posterior a la inicial.'}
+    const bytes=xlsxBuild(xlData(keys,R)),name='caoba-'+(activeProfile().name||'perfil').toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+isoLocal(n)+'.xlsx';
+    track('excel_exportado',{hojas:keys.length});
+    if(isNative()){let bin='';for(let i=0;i<bytes.length;i+=8192)bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+8192));
+      try{await cwPlugin().shareFile({base64:btoa(bin),name,mime:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});close()}catch(x){$('#err').textContent='No se pudo crear el archivo.'}return}
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800);close();toast('Excel descargado: '+name)};
+}
 /* ---------- Arranque: siempre al final; cierra el bloque abierto en 00-estado.js ---------- */
 normalizeS();
 try{if(getCed())S.mail.keepCed=true}catch(e){}
 render();
 showSplash();
 track('app_abierta');
+setTimeout(maybeShowNews,reduce?800:2800);
 if(!S.onboarded&&!S.onbDismissed)openWelcome();
 if(isPublished()&&canCloud()){let has=false;try{has=!!localStorage.getItem(KEY+'.auth')}catch(e){}if(/access_token=|error_description=/.test(location.hash||''))sessionFromUrl();else if(has)sbClient().catch(()=>{})}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullIfNewer()});

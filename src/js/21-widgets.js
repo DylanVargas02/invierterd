@@ -1,6 +1,6 @@
 /* ---------- Widgets nativos (etapa 5) ----------
    En la web no hace nada. En la app Android entrega a los widgets un resumen ya calculado (formato v1):
-   solo totales, nombres de inversiones y tasas del mercado. Nunca movimientos, notas, números de cuenta
+   solo totales, nombres y saldos de cuentas e inversiones y tasas del mercado (formato v2). Nunca movimientos, notas, números de cuenta
    ni datos de inicio de sesión. El lado nativo lo guarda cifrado con una clave del Android Keystore.
    iOS usará el mismo formato y la misma interfaz (CaobaWidgets.update / clear). */
 const isNative=()=>!!(window.CAOBA_NATIVE&&window.capacitorExports&&window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
@@ -8,15 +8,21 @@ let CW=null,wsT=null,wsLast='';
 function cwPlugin(){if(!CW&&isNative())CW=capacitorExports.registerPlugin('CaobaWidgets');return CW}
 const both=v=>({d:+conv(v,S.base,'DOP').toFixed(4),u:+conv(v,S.base,'USD').toFixed(6)});
 function widgetSnapshot(){
-  const t=Date.now(),out={v:1,ts:t,base:S.base==='USD'?'USD':'DOP',hideAll:!!S.wHide,prof:S.profiles&&S.profiles.list.length>1?activeProfile().name:'',fin:null,mkt:null};
+  const t=Date.now(),out={v:2,ts:t,base:S.base==='USD'?'USD':'DOP',hideAll:!!S.wHide,prof:S.profiles&&S.profiles.list.length>1?activeProfile().name:'',fin:null,mkt:null};
   if(!S.example){
     const F=snapshot(t),Ts=totals(t),L=invList(),Ti=totalsOf(L,t),now=new Date();
     const inMonth=x=>{const d=new Date(x.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()};
-    const inc=S.incomes.filter(inMonth).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0),exp=S.expenses.filter(inMonth).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0);
+    const pm=new Date(now.getFullYear(),now.getMonth()-1,1),inPrev=x=>{const d=new Date(x.date);return d.getMonth()===pm.getMonth()&&d.getFullYear()===pm.getFullYear()&&d.getDate()<=now.getDate()};
+    const sum=(A,f)=>A.filter(f).reduce((a,x)=>a+conv(x.amt,x.cur,S.base),0);
+    const inc=sum(S.incomes,inMonth),exp=sum(S.expenses,inMonth),pinc=sum(S.incomes,inPrev),pexp=sum(S.expenses,inPrev);
+    let cpn=null;L.filter(s=>s.bond).forEach(s=>{try{const n=bondSchedule(s).find(o=>o.st==='próximo');if(n&&(!cpn||n.d<cpn.date))cpn={name:s.name,date:n.d,amt:both(conv(n.exp,s.cur,S.base))}}catch(e){}});
+    const lastMove=id=>{let m=0;[S.incomes,S.expenses].forEach(A=>A.forEach(x=>{if(x.via==='a:'+id)m=Math.max(m,x.date)}));(S.transfers||[]).forEach(x=>{if(x.from==='a:'+id||x.to==='a:'+id)m=Math.max(m,x.date)});return m};
     let next=null;L.forEach(s=>{const d=nextMat(s,t);if(d&&d>t&&(!next||d<next.date))next={name:s.name,date:d}});
     out.fin={net:both(F.assets-F.debt),assets:both(F.assets),debt:both(F.debt),ps:both(Ts.ps),
-      flow:{label:MESES[now.getMonth()]+' '+now.getFullYear(),inc:both(inc),exp:both(exp)},
-      inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,
+      flow:{label:MESES[now.getMonth()]+' '+now.getFullYear(),inc:both(inc),exp:both(exp),prev:{label:'mismo día de '+MESES[pm.getMonth()],inc:both(pinc),exp:both(pexp)}},
+      acc:accts().map(s=>{const v=savValue(s,t);return {id:s.id,name:s.name,ent:s.type==='Efectivo'?'Efectivo':s.entity||'',cur:s.cur,
+        bal:+v.toFixed(2),cash:s.type==='Efectivo',manual:true,upd:Math.max(lastMove(s.id),s.createdAt||0,s.start||0)}}).slice(0,20),
+      inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,cpn,
         items:L.map(s=>({id:s.id,name:s.name,ent:s.entity,v:both(conv(savValue(s,t),s.cur,S.base)),rate:s.rate||0})).sort((a,b)=>b.v.d-a.v.d).slice(0,20)}};
   }
   if(mkr.rows&&mkr.rows.length){

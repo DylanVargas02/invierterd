@@ -30,25 +30,31 @@ const W_IC={all:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 
 function closeOnbLayer(){$('#onbLayer').innerHTML='';document.documentElement.classList.remove('onb-open')}
 function openWelcome(){
   document.documentElement.classList.add('onb-open');
-  $('#onbLayer').innerHTML=`<div class="onb wel" role="dialog" aria-modal="true" aria-labelledby="welT"><div class="wel-in">
-    <div class="wel-brand">${logoSym('wel-sym')}<span class="wel-name"><span class="wordmark">Caoba</span><small>App de organización financiera e inversión</small></span></div>
-    <h2 id="welT" tabindex="-1">Decide con información completa</h2>
-    <p class="wel-lead">Ordena tus cuentas, tarjetas, préstamos e inversiones, y compara lo que ofrece el mercado antes de decidir.</p>
-    <ul class="wel-f">
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.all}</svg></span><span><b>Todo tu dinero en un solo lugar</b>Lo registras tú: cuentas, tarjetas, préstamos e inversiones de cualquier entidad.</span></li>
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.rate}</svg></span><span><b>Tus inversiones al día</b>Cuánto ganas, cuándo vence cada una y cuándo cobras.</span></li>
-      <li><span class="wel-ic"><svg viewBox="0 0 24 24">${W_IC.fx}</svg></span><span><b>Mercado</b>Tasas de productos y de cambio, con su fuente y su fecha.</span></li>
-    </ul>
+  const pv=(t,body)=>`<figure class="wv"><figcaption>${t}</figcaption>${body}</figure>`;
+  $('#onbLayer').innerHTML=`<div class="onb wel" role="dialog" aria-modal="true" aria-labelledby="welT"><div class="wel-in wel3">
+    <div class="wel-main">
+      <div class="wel-brand">${logoSym('wel-sym')}<span class="wel-name"><span class="wordmark">Caoba</span><small>Organización financiera e inversión</small></span></div>
+      <h2 id="welT" tabindex="-1">Decide con información completa</h2>
+      <p class="wel-lead">Tus cuentas, tarjetas, préstamos e inversiones en un solo lugar, y las tasas del mercado con su fuente para comparar antes de decidir.</p>
+      <div class="wel-strip" id="welStrip" aria-label="Lo que puedes hacer en Caoba">
+        ${pv('Tu patrimonio, al día',`<div class="wv-hero"><small>Patrimonio neto</small><b class="num">RD$1,284,560</b><span class="num"><span>Tienes RD$1.90 M</span><span>Debes RD$0.62 M</span></span></div>`)}
+        ${pv('Inversiones con fechas reales',`<ul class="wv-l"><li><span><b>Bono Hacienda</b><small>Próximo cupón · 15 dic</small></span><b class="num">RD$16,013</b></li><li><span><b>Certificado</b><small>Vence 14 feb · 9.25 %</small></span><b class="num">RD$252,165</b></li></ul>`)}
+        ${pv('Mercado con fuente y fecha',`<ul class="wv-l"><li><span><b>Certificado 180 días</b><small>Dato real · fuente y fecha</small></span><b class="num">9.75 %</b></li><li><span><b>Dólar · venta</b><small>Por verificar</small></span><b class="num">RD$60.34</b></li></ul>`)}
+      </div>
+      <p class="wel-ex">Cifras de ejemplo.</p>
+      <ul class="wel-trust"><li>Nunca te pedimos claves bancarias</li><li>Sin cuenta, tus datos se quedan en tu teléfono</li><li>Con cuenta, los ves en cualquier dispositivo</li></ul>
+    </div>
     <div class="wel-act">
       <button type="button" class="btn wel-start" id="wNew">Crear mi cuenta</button>
-      <button type="button" class="sso" id="wLogin"><svg viewBox="0 0 24 24" aria-hidden="true">${W_IC.mail}</svg><span>Ya tengo cuenta · Iniciar sesión</span></button>
+      <button type="button" class="sso" id="wLogin"><svg viewBox="0 0 24 24" aria-hidden="true">${W_IC.mail}</svg><span>Iniciar sesión</span></button>
       <button type="button" class="o-link wel-forgot" id="wForgot">Olvidé mi contraseña</button>
       <p class="wel-or"><span>o</span></p>
-      <button type="button" class="wel-solo" id="wStart">Continuar sin cuenta</button>
-      <p class="wel-note">Tus datos se guardan solo en este teléfono: si lo pierdes, se pierden.</p>
-      <button type="button" class="wel-solo wel-mkt" id="wMkt">Solo quiero ver el mercado</button>
-      <button type="button" class="o-link wel-demo" id="wDemo">Prefiero ver un ejemplo</button>
+      <div class="wel-two"><button type="button" class="wel-solo" id="wStart">Continuar sin cuenta</button><button type="button" class="wel-solo wel-mkt" id="wMkt">Explorar el Mercado</button></div>
+      <p class="wel-note">Sin cuenta, tus datos se guardan solo en este teléfono.</p>
+      <button type="button" class="o-link wel-demo" id="wDemo">Conocer Caoba con un ejemplo</button>
+      <p class="wel-legal"><button type="button" class="link-btn" id="wPriv">Privacidad</button><button type="button" class="link-btn" id="wTerms">Términos de uso</button></p>
     </div></div></div>`;
+  $('#wPriv').onclick=openPrivacy;$('#wTerms').onclick=openTerms;
   $('#welT').focus({preventScroll:true});
   $('#wStart').onclick=()=>openOnboarding(true);
   $('#wDemo').onclick=()=>{S.onbDismissed=true;if(!S.example){const keep={base:S.base,rates:S.rates,theme:S.theme,mail:S.mail};S=Object.assign(sample(),keep);normalizeS()}save();closeOnbLayer();setView('resumen');render();window.scrollTo({top:0});startTour()};

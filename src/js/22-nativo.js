@@ -2,10 +2,23 @@
 /* Copia los datos también en el almacenamiento nativo (Preferences), para no depender solo del navegador interno. */
 let nmT=null;
 function nativeMirror(j){if(!isNative()||!window.capacitorPreferences||!j)return;clearTimeout(nmT);nmT=setTimeout(()=>{capacitorPreferences.Preferences.set({key:KEY,value:j}).catch(()=>{})},400)}
+/* Enlaces de los widgets: caoba://abrir?seccion=resumen  ·  caoba://abrir?accion=ingreso|gasto|transferencia[&cuenta=ID]
+   Una acción abre directo el formulario correspondiente, con la cuenta ya elegida si viene en el enlace. */
+function deepParams(u){const o={};String(u||'').replace(/[?&]([a-z]+)=([^&#]*)/gi,(_,k,v)=>{try{o[k.toLowerCase()]=decodeURIComponent(v)}catch(e){o[k.toLowerCase()]=v}});return o}
 function openDeep(u){
-  const m=/[?&]seccion=([a-z]+)/.exec(u||'');if(!m)return;
-  const sec={resumen:'resumen',movimientos:'movimientos',inversion:'inversion',mercado:'mercado',cuentas:'cuentas'}[m[1]];if(!sec)return;
-  close();if(!document.documentElement.classList.contains('onb-open'))goTo(sec);track('widget_abierto',{sec});
+  const q=deepParams(u);
+  if(document.documentElement.classList.contains('onb-open'))return;
+  const acc=q.cuenta&&accts().find(s=>String(s.id)===q.cuenta),via=acc?'a:'+acc.id:undefined;
+  if(q.accion){
+    const a={ingreso:'ingreso',gasto:'gasto',transferencia:'transferencia'}[q.accion];if(!a)return;
+    close();
+    if(a==='transferencia')openTransfer(null,acc&&acc.type!=='Efectivo'?{kind:'tr',from:via}:{kind:'tr'});
+    else openExpense(a,via?{via}:{});
+    track('widget_accion',{a,cuenta:!!acc});return;
+  }
+  if(!q.seccion)return;
+  const sec={resumen:'resumen',movimientos:'movimientos',inversion:'inversion',mercado:'mercado',cuentas:'cuentas'}[q.seccion];if(!sec)return;
+  close();goTo(sec);track('widget_abierto',{sec});
 }
 (function nativeBoot(){
   if(!isNative())return;

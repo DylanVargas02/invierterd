@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/a_root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@drawable/w_card" android:paddingStart="14dp" android:paddingEnd="12dp" android:paddingTop="10dp" android:paddingBottom="8dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:id="@+id/a_title" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:textColor="@color/w_ink" android:textSize="14sp" android:textStyle="bold" android:text="Cuentas" />
+        <TextView android:id="@+id/a_upd" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/w_mute" android:textSize="11sp" android:text="" />
+    </LinearLayout>
+    <TextView android:id="@+id/a_empty" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="@color/w_mute" android:textSize="13sp" android:text="Abre Caoba para ver tus cuentas" android:visibility="gone" />
+    <LinearLayout android:id="@+id/a_r1" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="7dp" android:paddingBottom="7dp" android:visibility="gone">
+        <LinearLayout android:id="@+id/a_r1o" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/a_r1n" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_mute" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+            <TextView android:id="@+id/a_r1v" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_ink" android:textSize="16sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+        <TextView android:id="@+id/a_r1t" android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/w_round" android:gravity="center" android:text="⇄" android:textColor="@color/w_ink" android:textSize="15sp" android:contentDescription="Transferir" />
+        <TextView android:id="@+id/a_r1p" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="+" android:textColor="@color/w_accent" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar ingreso a esta cuenta" />
+        <TextView android:id="@+id/a_r1m" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="−" android:textColor="@color/w_out_ink" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar gasto de esta cuenta" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/a_r2" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="7dp" android:paddingBottom="7dp" android:visibility="gone">
+        <LinearLayout android:id="@+id/a_r2o" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/a_r2n" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_mute" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+            <TextView android:id="@+id/a_r2v" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_ink" android:textSize="16sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+        <TextView android:id="@+id/a_r2t" android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/w_round" android:gravity="center" android:text="⇄" android:textColor="@color/w_ink" android:textSize="15sp" android:contentDescription="Transferir" />
+        <TextView android:id="@+id/a_r2p" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="+" android:textColor="@color/w_accent" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar ingreso a esta cuenta" />
+        <TextView android:id="@+id/a_r2m" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="−" android:textColor="@color/w_out_ink" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar gasto de esta cuenta" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/a_r3" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="7dp" android:paddingBottom="7dp" android:visibility="gone">
+        <LinearLayout android:id="@+id/a_r3o" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/a_r3n" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_mute" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+            <TextView android:id="@+id/a_r3v" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_ink" android:textSize="16sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+        <TextView android:id="@+id/a_r3t" android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/w_round" android:gravity="center" android:text="⇄" android:textColor="@color/w_ink" android:textSize="15sp" android:contentDescription="Transferir" />
+        <TextView android:id="@+id/a_r3p" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="+" android:textColor="@color/w_accent" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar ingreso a esta cuenta" />
+        <TextView android:id="@+id/a_r3m" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="−" android:textColor="@color/w_out_ink" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar gasto de esta cuenta" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/a_r4" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingTop="7dp" android:paddingBottom="7dp" android:visibility="gone">
+        <LinearLayout android:id="@+id/a_r4o" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/a_r4n" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_mute" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+            <TextView android:id="@+id/a_r4v" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/w_ink" android:textSize="16sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+        <TextView android:id="@+id/a_r4t" android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/w_round" android:gravity="center" android:text="⇄" android:textColor="@color/w_ink" android:textSize="15sp" android:contentDescription="Transferir" />
+        <TextView android:id="@+id/a_r4p" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="+" android:textColor="@color/w_accent" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar ingreso a esta cuenta" />
+        <TextView android:id="@+id/a_r4m" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginStart="6dp" android:background="@drawable/w_round" android:gravity="center" android:text="−" android:textColor="@color/w_out_ink" android:textSize="18sp" android:textStyle="bold" android:contentDescription="Agregar gasto de esta cuenta" />
+    </LinearLayout>
+</LinearLayout>

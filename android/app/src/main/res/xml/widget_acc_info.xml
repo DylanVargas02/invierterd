@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp" android:minHeight="110dp"
+    android:minResizeWidth="110dp" android:minResizeHeight="50dp"
+    android:targetCellWidth="4" android:targetCellHeight="2"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_accounts"
+    android:previewLayout="@layout/widget_accounts"
+    android:previewImage="@mipmap/ic_launcher"
+    android:description="@string/w_acc_desc"
+    android:configure="com.caobafinanzas.app.widgets.WidgetConfigActivity" android:widgetFeatures="reconfigurable|configuration_optional"
+    android:widgetCategory="home_screen" />

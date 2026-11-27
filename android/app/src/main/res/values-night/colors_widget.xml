@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="w_bg">#101D2E</color>
+    <color name="w_bg2">#172739</color>
+    <color name="w_line">#22344A</color>
+    <color name="w_ink">#E6ECF3</color>
+    <color name="w_mute">#9AABBF</color>
+    <color name="w_accent">#4CC38A</color>
+    <color name="w_in">#4CC38A</color>
+    <color name="w_in_ink">#07150F</color>
+    <color name="w_out">#22344A</color>
+    <color name="w_out_ink">#FF8A8A</color>
+    <color name="w_hero">#0E2A4A</color>
+    <color name="w_hero_ink">#FFFFFF</color>
+    <color name="w_hero_mute">#9FB3CC</color>
+    <color name="w_bar_bg">#22344A</color>
+</resources>

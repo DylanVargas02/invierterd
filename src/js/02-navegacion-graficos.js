@@ -5,7 +5,7 @@ function renderTabs(){
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;setView(b.dataset.tab);render();window.scrollTo({top:0})});
 $('#curSeg').addEventListener('click',e=>{const b=e.target.closest('[data-base]');if(!b)return;if(b.dataset.base===S.base){if(!matchMedia('(max-width:430px)').matches)return;S.base=S.base==='USD'?'DOP':'USD'}else S.base=b.dataset.base;save();render();toast(S.base==='USD'?'Mostrando todo en dólares':'Mostrando todo en pesos')});
 $('#setBtn').addEventListener('click',openSettings);$('#sideSet').addEventListener('click',openSettings);
-$('#accBtn').addEventListener('click',()=>openAccount());
+$('#accBtn').addEventListener('click',()=>openMeMenu());
 
 
 /* ---------- Cuentas, tarjetas y medio de pago de cada movimiento ---------- */

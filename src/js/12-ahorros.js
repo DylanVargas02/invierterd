@@ -76,6 +76,7 @@ function vInversion(){
   $('#heroAdd').onclick=()=>openInvChooser(true);const e=$('#emptyS');if(e)e.onclick=()=>openInvChooser(true);$('#goMkt').onclick=()=>goTo('mercado');
   const co=$('#calOpen');if(co)co.onclick=()=>openCalendar(null,null,null,'inv');
   document.querySelectorAll('details.eg2').forEach(d=>d.ontoggle=()=>{openEnt[d.dataset.ent]=d.open});
+  if(!S.example&&L.length){$('#view').insertAdjacentHTML('beforeend','<button type="button" class="xl-btn" id="xlInv">Exportar inversiones a Excel</button>');$('#xlInv').onclick=()=>openExport(['inversiones','bonos','pagos'])}
   bindInv();bindEdit();bindNextPays();
 }
 

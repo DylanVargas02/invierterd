@@ -6,9 +6,9 @@ async function checkAdmin(){isAdm=false;if(!sbUser)return false;try{const c=awai
 let admTab='cargar';
 function openAdmin(){
   if(!isAdm){toast('Esta sección es solo para administradores');return}
-  sheet(`<h3>Administración</h3><div class="seg seg-top" role="group" aria-label="Sección">${[['cargar','Cargar tasa'],['hist','Historial'],['uso','Uso de la app']].map(([k,l])=>`<button type="button" data-adm="${k}" aria-pressed="${admTab===k}">${l}</button>`).join('')}</div><div id="admBody"></div>`,'var(--brand)');
+  sheet(`<h3>Administración</h3><div class="seg seg-top" role="group" aria-label="Sección">${[['cargar','Cargar tasa'],['hist','Historial'],['uso','Uso'],['soporte','Soporte']].map(([k,l])=>`<button type="button" data-adm="${k}" aria-pressed="${admTab===k}">${l}</button>`).join('')}</div><div id="admBody"></div>`,'var(--brand)');
   document.querySelectorAll('[data-adm]').forEach(b=>b.onclick=()=>{admTab=b.dataset.adm;openAdmin()});
-  ({cargar:admLoad,hist:admHist,uso:admUsage})[admTab]();
+  ({cargar:admLoad,hist:admHist,uso:admUsage,soporte:admSupport})[admTab]();
 }
 function admLoad(pre){
   pre=pre||{};const opt=(o,v)=>Object.entries(o).map(([k,l])=>`<option value="${k}" ${k===v?'selected':''}>${l}</option>`).join('');

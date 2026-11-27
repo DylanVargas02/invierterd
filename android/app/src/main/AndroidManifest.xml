@@ -57,6 +57,14 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mkt_info" />
         </receiver>
+        <receiver android:name=".widgets.QuickWidget" android:label="Movimientos rápidos" android:exported="false">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_quick_info" />
+        </receiver>
+        <receiver android:name=".widgets.AccountsWidget" android:label="Cuentas" android:exported="false">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_acc_info" />
+        </receiver>
         <activity android:name=".widgets.WidgetConfigActivity" android:exported="true" android:label="Configurar widget"
             android:theme="@android:style/Theme.Material.Light.NoActionBar">
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>

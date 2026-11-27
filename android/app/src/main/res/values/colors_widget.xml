@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Colores de los widgets: claro (Azul financiero). La versión oscura está en values-night. -->
+<resources>
+    <color name="w_bg">#FFFFFF</color>
+    <color name="w_bg2">#F3F5F8</color>
+    <color name="w_line">#D8E0EA</color>
+    <color name="w_ink">#0B2545</color>
+    <color name="w_mute">#536378</color>
+    <color name="w_accent">#13805B</color>
+    <color name="w_in">#13505B</color>
+    <color name="w_in_ink">#FFFFFF</color>
+    <color name="w_out">#E8EDF3</color>
+    <color name="w_out_ink">#B4232F</color>
+    <color name="w_hero">#0B2545</color>
+    <color name="w_hero_ink">#FFFFFF</color>
+    <color name="w_hero_mute">#9FB3CC</color>
+    <color name="w_bar_bg">#E3EAF3</color>
+</resources>

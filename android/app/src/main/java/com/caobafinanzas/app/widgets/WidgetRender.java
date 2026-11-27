@@ -27,9 +27,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/** Dibuja los cuatro widgets a partir del resumen cifrado. No escribe nunca en los datos de la app. */
+/** Dibuja los seis widgets a partir del resumen cifrado. No escribe nunca en los datos de la app. */
 public final class WidgetRender {
-    public static final String NET = "net", FLOW = "flow", INV = "inv", MKT = "mkt";
+    public static final String NET = "net", FLOW = "flow", INV = "inv", MKT = "mkt", QUICK = "quick", ACC = "acc";
+    static final String[] KINDS = {NET, FLOW, INV, MKT, QUICK, ACC};
     static final String CFG = "caoba_widget_cfg";
     private static final Locale ES = new Locale("es", "DO");
     private static final int[] ROWS = {R.id.w_r1, R.id.w_r2, R.id.w_r3, R.id.w_r4};
@@ -43,13 +44,15 @@ public final class WidgetRender {
             case FLOW: return CashFlowWidget.class;
             case INV: return InvestmentsWidget.class;
             case MKT: return MarketWidget.class;
+            case QUICK: return QuickWidget.class;
+            case ACC: return AccountsWidget.class;
             default: return NetWorthWidget.class;
         }
     }
 
     public static void refreshAll(Context ctx) {
         AppWidgetManager m = AppWidgetManager.getInstance(ctx);
-        for (String k : new String[]{NET, FLOW, INV, MKT}) {
+        for (String k : KINDS) {
             int[] ids = m.getAppWidgetIds(new ComponentName(ctx, providerFor(k)));
             for (int id : ids) update(ctx, m, id, k);
         }
@@ -58,7 +61,7 @@ public final class WidgetRender {
     public static int countWidgets(Context ctx) {
         AppWidgetManager m = AppWidgetManager.getInstance(ctx);
         int n = 0;
-        for (String k : new String[]{NET, FLOW, INV, MKT}) n += m.getAppWidgetIds(new ComponentName(ctx, providerFor(k))).length;
+        for (String k : KINDS) n += m.getAppWidgetIds(new ComponentName(ctx, providerFor(k))).length;
         return n;
     }
 
@@ -71,7 +74,7 @@ public final class WidgetRender {
     /* ---------- formato ---------- */
     static String money(double v, String cur) {
         DecimalFormat f = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
-        String p = "USD".equals(cur) ? "US$" : "RD$";
+        String p = "USD".equals(cur) ? "US$" : "EUR".equals(cur) ? "€" : "RD$";
         return (v < 0 ? "−" : "") + p + f.format(Math.abs(Math.round(v)));
     }
     static String pct(double r) { return new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US)).format(r) + " %"; }
@@ -90,6 +93,8 @@ public final class WidgetRender {
         Bundle o = m.getAppWidgetOptions(id);
         int h = o != null ? o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 110) : 110;
         boolean compact = h < 100, big = h >= 170;
+        if (QUICK.equals(kind)) { m.updateAppWidget(id, quick(ctx, id, snap, cur, hide, h)); return; }
+        if (ACC.equals(kind)) { m.updateAppWidget(id, accounts(ctx, id, snap, sel, hide, h)); return; }
 
         RemoteViews v = new RemoteViews(ctx.getPackageName(), R.layout.widget_card);
         for (int i = 0; i < 4; i++) v.setViewVisibility(ROWS[i], View.GONE);
@@ -116,7 +121,15 @@ public final class WidgetRender {
                     v.setViewVisibility(R.id.w_bar, View.VISIBLE);
                     v.setProgressBar(R.id.w_bar, 100, (int) Math.min(100, Math.round(out / in * 100)), false);
                 }
-                v.setTextViewText(R.id.w_foot, in > 0 && !hide ? "Has usado el " + Math.round(out / Math.max(in, 1) * 100) + " % de tus ingresos" : "Toca para ver tus movimientos");
+                JSONObject pv = f.optJSONObject("prev");
+                double pin = pv != null ? pick(pv.optJSONObject("inc"), cur) : 0, pout = pv != null ? pick(pv.optJSONObject("exp"), cur) : 0;
+                String cmp = pv == null || hide ? "" : pout > 0 ? "Gastos " + delta(out, pout) + " · " + pv.optString("label") : pin > 0 ? "Ingresos " + delta(in, pin) + " · " + pv.optString("label") : "";
+                if (big && pv != null && !hide) {
+                    row(v, 0, "Ingresos", money(in, cur) + "  " + (pin > 0 ? delta(in, pin) : ""));
+                    row(v, 1, "Gastos", money(out, cur) + "  " + (pout > 0 ? delta(out, pout) : ""));
+                    row(v, 2, "Balance al " + pv.optString("label"), money(pin - pout, cur));
+                }
+                v.setTextViewText(R.id.w_foot, !cmp.isEmpty() ? cmp : in > 0 && !hide ? "Has usado el " + Math.round(out / Math.max(in, 1) * 100) + " % de tus ingresos" : "Toca para ver tus movimientos");
                 break;
             }
             case INV: {
@@ -128,7 +141,10 @@ public final class WidgetRender {
                 v.setTextViewText(R.id.w_value, hide ? mask : money(total, cur));
                 v.setTextViewText(R.id.w_sub, hide ? "Ganancia oculta" : "Ganancia " + money(pick(in.optJSONObject("gain"), cur) + pick(in.optJSONObject("ps"), cur) * secs, cur) + " · +" + money(pick(in.optJSONObject("ps"), cur) * 86400, cur) + " al día");
                 JSONObject next = in.optJSONObject("next");
-                v.setTextViewText(R.id.w_foot, next != null ? "Próximo vencimiento: " + next.optString("name") + " · " + day(next.optLong("date")) : "Sin vencimientos próximos");
+                JSONObject cpn = in.optJSONObject("cpn");
+                if (cpn != null && (next == null || cpn.optLong("date") <= next.optLong("date")))
+                    v.setTextViewText(R.id.w_foot, "Próximo cupón: " + cpn.optString("name") + " · " + day(cpn.optLong("date")) + (hide ? "" : " · " + money(pick(cpn.optJSONObject("amt"), cur), cur)));
+                else v.setTextViewText(R.id.w_foot, next != null ? "Próximo vencimiento: " + next.optString("name") + " · " + day(next.optLong("date")) : "Sin vencimientos próximos");
                 if (big) {
                     List<JSONObject> items = chosen(in.optJSONArray("items"), sel, 3);
                     for (int i = 0; i < items.size(); i++) {
@@ -180,6 +196,79 @@ public final class WidgetRender {
         PendingIntent pi = PendingIntent.getActivity(ctx, id, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         v.setOnClickPendingIntent(R.id.w_root, pi);
         m.updateAppWidget(id, v);
+    }
+
+    /* ---------- movimientos rápidos ---------- */
+    private static PendingIntent link(Context ctx, String q, int code) {
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("caoba://abrir?" + q), ctx, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivity(ctx, code, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+    static String delta(double now, double before) {
+        if (before <= 0) return "";
+        long p = Math.round((now - before) / before * 100);
+        return (p > 0 ? "+" : p < 0 ? "−" : "") + Math.abs(p) + " %";
+    }
+    private static RemoteViews quick(Context ctx, int id, JSONObject snap, String cur, boolean hide, int h) {
+        RemoteViews v = new RemoteViews(ctx.getPackageName(), R.layout.widget_quick);
+        JSONObject fin = snap != null ? snap.optJSONObject("fin") : null;
+        JSONObject f = fin != null ? fin.optJSONObject("flow") : null;
+        if (f != null) {
+            double in = pick(f.optJSONObject("inc"), cur), out = pick(f.optJSONObject("exp"), cur);
+            v.setTextViewText(R.id.q_label, "Balance de " + f.optString("label", "este mes").split(" ")[0] + " · " + sym(cur));
+            v.setTextViewText(R.id.q_value, hide ? "••••" : money(in - out, cur));
+        } else {
+            v.setTextViewText(R.id.q_label, "Movimientos rápidos");
+            v.setTextViewText(R.id.q_value, "Caoba");
+        }
+        v.setViewVisibility(R.id.q_head, h < 90 ? View.GONE : View.VISIBLE);
+        v.setOnClickPendingIntent(R.id.q_head, link(ctx, "seccion=movimientos", id * 32));
+        v.setOnClickPendingIntent(R.id.q_in, link(ctx, "accion=ingreso", id * 32 + 1));
+        v.setOnClickPendingIntent(R.id.q_out, link(ctx, "accion=gasto", id * 32 + 2));
+        return v;
+    }
+
+    /* ---------- cuentas ---------- */
+    private static final int[][] AR = {
+        {R.id.a_r1, R.id.a_r1o, R.id.a_r1n, R.id.a_r1v, R.id.a_r1t, R.id.a_r1p, R.id.a_r1m},
+        {R.id.a_r2, R.id.a_r2o, R.id.a_r2n, R.id.a_r2v, R.id.a_r2t, R.id.a_r2p, R.id.a_r2m},
+        {R.id.a_r3, R.id.a_r3o, R.id.a_r3n, R.id.a_r3v, R.id.a_r3t, R.id.a_r3p, R.id.a_r3m},
+        {R.id.a_r4, R.id.a_r4o, R.id.a_r4n, R.id.a_r4v, R.id.a_r4t, R.id.a_r4p, R.id.a_r4m}};
+    private static RemoteViews accounts(Context ctx, int id, JSONObject snap, String sel, boolean hide, int h) {
+        RemoteViews v = new RemoteViews(ctx.getPackageName(), R.layout.widget_accounts);
+        for (int[] r : AR) v.setViewVisibility(r[0], View.GONE);
+        JSONObject fin = snap != null ? snap.optJSONObject("fin") : null;
+        JSONArray acc = fin != null ? fin.optJSONArray("acc") : null;
+        v.setOnClickPendingIntent(R.id.a_title, link(ctx, "seccion=cuentas", id * 32));
+        if (acc == null || acc.length() == 0) {
+            v.setViewVisibility(R.id.a_empty, View.VISIBLE);
+            v.setTextViewText(R.id.a_empty, fin == null ? "Abre Caoba para ver tus cuentas aquí" : "Aún no tienes cuentas. Toca para agregar una.");
+            v.setOnClickPendingIntent(R.id.a_empty, link(ctx, "seccion=cuentas", id * 32 + 1));
+            v.setTextViewText(R.id.a_upd, "");
+            return v;
+        }
+        v.setViewVisibility(R.id.a_empty, View.GONE);
+        int max = h < 110 ? 1 : h < 170 ? 2 : h < 230 ? 3 : 4;
+        List<JSONObject> L = chosen(acc, sel, max);
+        long newest = 0;
+        for (int i = 0; i < L.size(); i++) {
+            JSONObject a = L.get(i); int[] r = AR[i];
+            String aid = Uri.encode(a.optString("id"));
+            long upd = a.optLong("upd");
+            newest = Math.max(newest, upd);
+            String ent = a.optString("ent");
+            v.setViewVisibility(r[0], View.VISIBLE);
+            v.setTextViewText(r[2], a.optString("name") + (ent.isEmpty() || a.optString("name").contains(ent) ? "" : " · " + ent));
+            v.setTextViewText(r[3], hide ? "••••" : money(a.optDouble("bal"), a.optString("cur")));
+            v.setOnClickPendingIntent(r[1], link(ctx, "seccion=cuentas", id * 32 + 2 + i * 4));
+            v.setViewVisibility(r[4], a.optBoolean("cash") ? View.GONE : View.VISIBLE);
+            v.setOnClickPendingIntent(r[4], link(ctx, "accion=transferencia&cuenta=" + aid, id * 32 + 3 + i * 4));
+            v.setOnClickPendingIntent(r[5], link(ctx, "accion=ingreso&cuenta=" + aid, id * 32 + 4 + i * 4));
+            v.setOnClickPendingIntent(r[6], link(ctx, "accion=gasto&cuenta=" + aid, id * 32 + 5 + i * 4));
+        }
+        v.setTextViewText(R.id.a_title, L.size() < acc.length() ? "Cuentas (" + L.size() + " de " + acc.length() + ")" : "Cuentas");
+        v.setTextViewText(R.id.a_upd, "Registro manual" + (newest > 0 ? " · " + day(newest) : ""));
+        return v;
     }
 
     private static void empty(RemoteViews v, String title) {

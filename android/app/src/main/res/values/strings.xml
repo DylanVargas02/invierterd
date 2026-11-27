@@ -12,4 +12,6 @@
     <string name="w_flow_desc">Ingresos, gastos y balance del mes</string>
     <string name="w_inv_desc">Valor de tu cartera, ganancia y próximo vencimiento</string>
     <string name="w_mkt_desc">Tasas del mercado con su fuente y su fecha</string>
+    <string name="w_quick_desc">Agrega un ingreso o un gasto con un toque</string>
+    <string name="w_acc_desc">Saldo de las cuentas que elijas, con acciones rápidas</string>
 </resources>

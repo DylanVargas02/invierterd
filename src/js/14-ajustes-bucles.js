@@ -21,16 +21,20 @@ function openSettings(){
     ${setRow('aProf','user','Perfiles financieros',(S.profiles&&S.profiles.list.length>1?'En uso: '+esc(activeProfile().name)+' · ':'')+'Personal, familiar, compartido o negocio')}
     ${setRow('aPerf','user','Tu perfil','Edad, provincia y ocupación')}
     ${setRow('aCats','tag','Mis categorías','Agrega o quita categorías y tipos de ingreso')}
+    ${setRow('aXl','tag','Exportar a Excel','Una hoja por sección, con filtros y totales')}
     ${setRow('aBkE','shield','Guardar un respaldo','Un archivo con tus datos, para pasarlos a otro teléfono o a la app')}
     ${setRow('aBkI','shield','Restaurar un respaldo','Carga el archivo de respaldo de Caoba')}
     ${setRow('aOnb','guide','Organizar mis finanzas paso a paso','Vuelve a la guía inicial')}
   </div></section>
-  <section class="set-g"><h4>Aprende a usar Caoba</h4><div class="set-card">
+  <section class="set-g"><h4>Ayuda</h4><div class="set-card">
+    ${setRow('aSup','shield','Ayuda y soporte','Preguntas frecuentes, reportar un error o escribirnos')}
+    ${setRow('aNov','play','Novedades de Caoba','Qué trae cada versión')}
     ${setRow('aTut','play','Ver el recorrido','Un paseo corto por cada sección, con datos de ejemplo')}
     ${S.example?'':setRow('aEx','eye','Ver datos de ejemplo','Reemplaza tus datos por los de una familia de muestra')}
   </div></section>
   <section class="set-g"><h4>Privacidad y seguridad</h4><div class="set-card">
-    ${setRow('aPrv','shield','Privacidad','Qué guardamos y cómo')}
+    ${setRow('aPrv','shield','Política de privacidad','Qué guardamos, cómo se protege y cómo borrarlo')}
+    ${setRow('aTer','shield','Términos de uso','Condiciones y alcance de la información')}
     ${isNative()?`<label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Ocultar montos en los widgets</b><small>Los widgets de la pantalla de inicio muestran •••• en vez de cifras</small></span><input type="checkbox" id="aWh" role="switch" ${S.wHide?'checked':''}></label>`:''}
     <label class="set-row set-sw"><span class="set-ic">${sic('eye')}</span><span class="set-t"><b>Compartir estadísticas de uso</b><small>Anónimas: qué pantallas se usan. Nunca montos ni datos de tus cuentas.</small></span><input type="checkbox" id="aAn" role="switch" ${anConsent()==='si'?'checked':''}></label>
     ${setRow('aBlank','trash','Borrar todos mis datos','Te pediremos confirmarlo dos veces','danger')}
@@ -39,7 +43,7 @@ function openSettings(){
   <p class="set-ver">Caoba ${APP_VER} · los cambios se guardan solos</p>`,'var(--brand)');
   const live=()=>{save();render()};
   document.querySelectorAll('[name=aSkin]').forEach(r=>r.onchange=()=>{S.skin=r.value==='azul'?undefined:r.value;applySkin();save();render();widgetSync();track('identidad_cambiada',{skin:r.value});toast('Identidad: '+SKINS.find(s=>s[0]===r.value)[1])});
-  $('#aProf').onclick=openProfiles;$('#aBkE').onclick=exportBackup;$('#aBkI').onclick=importBackup;const wh=$('#aWh');if(wh)wh.onchange=()=>{S.wHide=wh.checked;save();widgetSync();toast(wh.checked?'Los widgets ocultan los montos':'Los widgets muestran los montos')};$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
+  $('#aProf').onclick=openProfiles;$('#aBkE').onclick=exportBackup;$('#aXl').onclick=()=>openExport();$('#aBkI').onclick=importBackup;const wh=$('#aWh');if(wh)wh.onchange=()=>{S.wHide=wh.checked;save();widgetSync();toast(wh.checked?'Los widgets ocultan los montos':'Los widgets muestran los montos')};$('#aAn').onchange=()=>{setConsent($('#aAn').checked);toast($('#aAn').checked?'Gracias: compartes estadísticas anónimas':'Ya no compartes estadísticas')};const ad=$('#aAdm');if(ad)ad.onclick=openAdmin;$('#aPerf').onclick=openMyProfile;
   $('#aName').onchange=()=>{S.name=$('#aName').value.trim();live();const av=$('.set-av');if(av&&S.name)av.textContent=S.name[0].toUpperCase();toast('Nombre guardado')};
   document.querySelectorAll('[name=aBase]').forEach(r=>r.onchange=()=>{S.base=r.value;live();toast(r.value==='USD'?'Ahora ves todo en dólares':'Ahora ves todo en pesos')});
   document.querySelectorAll('[name=aTheme]').forEach(r=>r.onchange=()=>{S.theme=r.value||null;
@@ -48,7 +52,7 @@ function openSettings(){
   usd.onchange=()=>{const u=rate(usd.value);if(!(u>1&&u<1000)){msg.textContent='Escribe un número válido, por ejemplo 60.90.';msg.classList.add('bad');usd.value=S.rates.USD;return}
     S.rates=Object.assign({},S.rates,{USD:u});msg.classList.remove('bad');msg.textContent='Guardado. US$1 = '+fmt(u,'DOP');live()};
   $('#aAcc').onclick=()=>{close();openAccount()};
-  $('#aPrv').onclick=()=>{close();openPrivacy()};
+  $('#aPrv').onclick=()=>{close();openPrivacy()};$('#aTer').onclick=openTerms;$('#aSup').onclick=()=>openSupport();$('#aNov').onclick=()=>openChangelog(true);
   $('#aCats').onclick=openMyCats;
   $('#aTut').onclick=()=>{close();startTour()};
   $('#aOnb').onclick=()=>{if(!hasRealData()){close();return openOnboarding(true,1)}

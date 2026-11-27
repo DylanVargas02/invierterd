@@ -6,6 +6,7 @@ function vMovimientos(){
   $('#view').insertAdjacentHTML('afterbegin',`<div class="seg seg-top" role="group" aria-label="Tipo de movimiento">
     <button type="button" data-ms="gastos" aria-pressed="${movSeg==='gastos'}">Gastos</button><button type="button" data-ms="ingresos" aria-pressed="${movSeg==='ingresos'}">Ingresos</button></div>`);
   document.querySelectorAll('[data-ms]').forEach(b=>b.onclick=()=>{if(movSeg===b.dataset.ms)return;movSeg=b.dataset.ms;render()});
+  if(!S.example){$('#view').insertAdjacentHTML('beforeend','<button type="button" class="xl-btn" id="xlMov">Exportar movimientos a Excel</button>');$('#xlMov').onclick=()=>openExport(['movimientos','ingresos','gastos','presupuestos'])}
 }
 
 /* Colores para las tarjetas de cuenta: los elige la persona; no imitamos la marca de ninguna entidad */

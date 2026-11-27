@@ -34,7 +34,7 @@ function applyRemote(row){
 }
 async function fetchRemote(){const c=await sbClient();const {data,error}=await c.from('app_state').select('data,updated_at').eq('user_id',sbUser.id).maybeSingle();if(error)throw error;return data}
 async function afterLogin(){
-  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;checkAdmin();
+  if(!sbUser||loginFor===sbUser.id)return;loginFor=sbUser.id;checkAdmin();rememberMail(sbUser.email);
   try{
     const row=await fetchRemote();
     if(!row){if(!S.example){S._owner=sbUser.id;await pushNow();toast('Tus datos quedaron guardados en tu cuenta')}else{toast('Sesión iniciada. Organicemos tus finanzas.');S.onbDismissed=true;save();openOnboarding(true)}return}
@@ -200,14 +200,7 @@ function friendlyAuth(e){
   if(/network|fetch|Failed/i.test(m))return 'No hay conexión con el servicio de cuentas. Revisa tu internet.';
   return 'No se pudo completar. '+m;
 }
-function openPrivacy(){
-  sheet(`<h3>Privacidad</h3><div class="form priv">
-  <p><b>Qué guardamos.</b> Lo que registras en la app: ingresos, gastos, ahorros, tarjetas, préstamos y ajustes. Sin cuenta, se guarda solo en este teléfono. Con cuenta, además se guarda una copia en la nube (Supabase, servidores en EE. UU.), cifrada en tránsito y en reposo.</p>
-  <p><b>Qué no guardamos.</b> Tu cédula ni datos de tus tarjetas o cuentas bancarias. Tu contraseña la guarda cifrada el servicio de cuentas; nosotros no la vemos.</p>
-  <p><b>Quién puede ver tus datos.</b> Solo tú. Las reglas de la base de datos impiden que otra cuenta lea o cambie tus datos. No los vendemos ni los compartimos.</p>
-  <p><b>Tus derechos.</b> Puedes ver y corregir tus datos en la app, y borrar tu cuenta con todos tus datos desde <i>Ajustes → Tu cuenta</i>. Se borran de inmediato. Esto sigue la Ley 172-13 de protección de datos personales de la República Dominicana.</p>
-  </div>`,'var(--brand)');
-}
+/* openPrivacy vive en 28-ayuda-legal.js */
 
 function normalizeS(){
   ensureProfiles();
