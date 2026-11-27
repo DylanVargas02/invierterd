@@ -85,7 +85,7 @@ function tourStep(){
   el.scrollIntoView({block:'center',behavior:'auto'});
   requestAnimationFrame(()=>{const r=el.getBoundingClientRect(),pad=6,vh=innerHeight,below=r.top+r.height/2<vh/2;
     t.innerHTML=`<div class="tour-hole" style="top:${r.top-pad}px;left:${r.left-pad}px;width:${r.width+pad*2}px;height:${Math.min(r.height+pad*2,vh*.6)}px"></div>
-      <div class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourT" style="${below?`top:${Math.min(vh-220,r.top+Math.min(r.height,vh*.6)+pad+12)}px`:`bottom:${Math.max(12,vh-r.top+pad+12)}px`}">
+      <div class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourT" style="${innerWidth>=1000?`left:${Math.round(Math.max(264,Math.min(r.left,innerWidth-436)))}px;`:''}${below?`top:${Math.min(vh-220,r.top+Math.min(r.height,vh*.6)+pad+12)}px`:`bottom:${Math.max(12,vh-r.top+pad+12)}px`}">
         <p class="tour-n num">${tourI+1} de ${TOUR.length}</p><h3 id="tourT" tabindex="-1">${title}</h3><p>${text}</p>
         <div class="tour-b"><button type="button" class="o-link" id="tSkip">Saltar</button>${tourI?'<button type="button" class="btn ghost" id="tPrev">Atrás</button>':''}<button type="button" class="btn" id="tNext">${tourI===TOUR.length-1?'Terminar':'Siguiente'}</button></div></div>`;
     $('#tourT').focus({preventScroll:true});$('#tNext').onclick=()=>{tourI++;tourStep()};$('#tSkip').onclick=()=>{tourI=TOUR.length;tourStep()};const pv=$('#tPrev');if(pv)pv.onclick=()=>{tourI--;tourStep()}});

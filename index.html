@@ -3031,6 +3031,44 @@ textarea{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);b
 @media (max-width:420px){.xl-pick{grid-template-columns:1fr}}
 .xl-all{display:flex;gap:16px;margin-top:6px}
 .xl-btn{display:block;margin:18px auto 0;border:1px solid var(--line);background:var(--surface);color:var(--brand);font:inherit;font-weight:700;font-size:14px;border-radius:var(--r-btn,8px);padding:10px 16px;min-height:44px;cursor:pointer}
+
+/* Fechas en dos columnas: que no se salgan de la pantalla en teléfonos de 320 px */
+.two>.field{min-width:0}
+.field input[type=date]{min-width:0;max-width:100%;width:100%}
+/* ===== Escritorio (1000 px o más) =====
+   Solo cambia la disposición, así que vale para las cinco identidades; Azul financiero es la base.
+   - Los formularios se abren en un panel lateral a toda la altura, sin tapar la lista que se está editando.
+   - Los movimientos se leen como un libro de cuentas: una fila por movimiento, montos alineados a la derecha.
+   - Avisos y confirmaciones cortas siguen como ventana centrada. */
+@media (min-width:1000px){
+  /* Panel lateral para formularios */
+  .scrim:has(> .sheet form){justify-content:flex-end;align-items:stretch;padding:0;background:rgb(5 15 12 / .32)}
+  .scrim:has(> .sheet form) > .sheet{max-width:560px;width:560px;height:100dvh;max-height:100dvh;border-radius:var(--r-sheet,22px) 0 0 var(--r-sheet,22px);
+    padding:28px 32px 32px;box-shadow:-1px 0 0 var(--line),-24px 0 60px -30px rgb(14 44 68 / .45);animation:caoba-drawer .2s ease-out}
+  .scrim:has(> .sheet form) > .sheet h3{font-size:22px}
+  @keyframes caoba-drawer{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+
+  /* Movimientos como libro de cuentas */
+  .mv-list{gap:0;border-top:1px solid var(--line)}
+  .mv-day{justify-content:flex-start;margin:0;padding:12px 4px 6px;border-bottom:1px solid var(--line)}
+  .mv-day span{background:none;padding:0;font-size:12px;color:var(--ink-2)}
+  .mvr,.mvr.out,.mvr.in,.mvr.mid{width:100%;align-self:stretch;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"b s" "m s";align-items:center;column-gap:16px;
+    text-align:left;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:10px 6px;cursor:pointer}
+  .mvr b{grid-area:b}
+  .mvr small{grid-area:m}
+  .mvr strong{grid-area:s;margin:0;text-align:right;font-size:15px}
+  .mvr.mid strong{color:var(--ink-2)}
+  .mvr:hover{background:var(--surface-2)}
+  .mvr:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+
+  /* Tarjetas de cuentas: llenan la fila cuando hay pocas */
+  .acards{grid-template-columns:repeat(auto-fit,minmax(260px,320px))}
+
+  /* Guía: la tarjeta se alinea con lo que señala y no tapa el menú lateral */
+  .tour-card{right:auto;margin:0}
+  .tour-card.end{left:calc(50% + 124px);transform:translate(-50%,-50%)}
+}
+@media (min-width:1000px) and (prefers-reduced-motion:reduce){.scrim:has(> .sheet form) > .sheet{animation:none}}
 /* ===== Estabilidad (etapa 1): reglas que corrigen desajustes en cualquier tamaño ===== */
 
 /* Campos: 16 px o más para que iPhone no haga zoom al tocarlos */
@@ -4258,7 +4296,7 @@ function tourStep(){
   el.scrollIntoView({block:'center',behavior:'auto'});
   requestAnimationFrame(()=>{const r=el.getBoundingClientRect(),pad=6,vh=innerHeight,below=r.top+r.height/2<vh/2;
     t.innerHTML=`<div class="tour-hole" style="top:${r.top-pad}px;left:${r.left-pad}px;width:${r.width+pad*2}px;height:${Math.min(r.height+pad*2,vh*.6)}px"></div>
-      <div class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourT" style="${below?`top:${Math.min(vh-220,r.top+Math.min(r.height,vh*.6)+pad+12)}px`:`bottom:${Math.max(12,vh-r.top+pad+12)}px`}">
+      <div class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourT" style="${innerWidth>=1000?`left:${Math.round(Math.max(264,Math.min(r.left,innerWidth-436)))}px;`:''}${below?`top:${Math.min(vh-220,r.top+Math.min(r.height,vh*.6)+pad+12)}px`:`bottom:${Math.max(12,vh-r.top+pad+12)}px`}">
         <p class="tour-n num">${tourI+1} de ${TOUR.length}</p><h3 id="tourT" tabindex="-1">${title}</h3><p>${text}</p>
         <div class="tour-b"><button type="button" class="o-link" id="tSkip">Saltar</button>${tourI?'<button type="button" class="btn ghost" id="tPrev">Atrás</button>':''}<button type="button" class="btn" id="tNext">${tourI===TOUR.length-1?'Terminar':'Siguiente'}</button></div></div>`;
     $('#tourT').focus({preventScroll:true});$('#tNext').onclick=()=>{tourI++;tourStep()};$('#tSkip').onclick=()=>{tourI=TOUR.length;tourStep()};const pv=$('#tPrev');if(pv)pv.onclick=()=>{tourI--;tourStep()}});

@@ -65,3 +65,7 @@ textarea{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);b
 @media (max-width:420px){.xl-pick{grid-template-columns:1fr}}
 .xl-all{display:flex;gap:16px;margin-top:6px}
 .xl-btn{display:block;margin:18px auto 0;border:1px solid var(--line);background:var(--surface);color:var(--brand);font:inherit;font-weight:700;font-size:14px;border-radius:var(--r-btn,8px);padding:10px 16px;min-height:44px;cursor:pointer}
+
+/* Fechas en dos columnas: que no se salgan de la pantalla en teléfonos de 320 px */
+.two>.field{min-width:0}
+.field input[type=date]{min-width:0;max-width:100%;width:100%}
