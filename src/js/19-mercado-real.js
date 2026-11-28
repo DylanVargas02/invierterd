@@ -18,7 +18,7 @@ async function loadMarket(force){
     try{localStorage.setItem(KEY+'.mkr',JSON.stringify({rows:mkr.rows,at:mkr.at}))}catch(e){}
     widgetSync();
   }catch(e){mkr.err=mkr.rows?'Sin conexión: mostrando los datos guardados el '+dtFmt.format(new Date(mkr.at))+'.':'No se pudieron cargar las tasas. Revisa tu conexión.'}
-  mkr.loading=false;if(view==='mercado'&&mk.seg==='real')render();
+  mkr.loading=false;if(view==='mercado'&&mk.seg==='inversion'&&mk.inv==='entidades')render();
 }
 const mkrTerm=d=>d==null?'Sin plazo':d===0?'A la vista':d%365===0?d/365+(d/365===1?' año':' años'):d%30===0?d/30+(d/30===1?' mes':' meses'):d+' días';
 const mkrDate=v=>v?dateFmt.format(new Date(String(v).length<=10?v+'T12:00:00':v)):'';
@@ -49,5 +49,5 @@ function realHTML(){
   return `${mkr.err?`<p class="mk-note warn">${esc(mkr.err)}</p>`:''}
     ${rows.length?`${mkrCompareHTML(rows)}<div class="mk-types" role="group" aria-label="Producto"><button type="button" data-mkr="" aria-pressed="${!mkr.prod}">Todos</button>${prods.map(k=>`<button type="button" data-mkr="${k}" aria-pressed="${mkr.prod===k}">${esc(MKR_PROD[k]||k)}</button>`).join('')}</div>
       <div class="mkr-list">${L.map(mkrRow).join('')}</div>`
-    :`<section class="conn-empty"><h2>Todavía no hay tasas verificadas</h2><p>Aquí aparecerán las tasas de cada entidad con su fuente, su fecha y su estado (dato real o por verificar). Ninguna tasa se inventa ni se sobrescribe.</p><p>Mientras tanto puedes explorar el prototipo, que usa datos simulados y así lo indica.</p><button type="button" class="btn ghost" data-mks="prod">Ver el prototipo simulado</button></section>`}`;
+    :`<section class="conn-empty"><h2>Todavía no hay tasas por entidad</h2><p>Aquí aparecerán las tasas de certificados, cuentas y otros productos de cada banco o puesto de bolsa, con su fuente, su fecha y su estado. Ninguna tasa se inventa: se cargan cuando se pueden verificar.</p></section>`}`;
 }

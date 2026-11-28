@@ -55,7 +55,7 @@ function vInversion(){
   const ents=Object.entries(byE).map(([e,L])=>({e,L,v:L.reduce((a,s)=>a+val(s),0)})).sort((a,b)=>b.v-a.v);
   const tot=T.v||1;
   $('#view').innerHTML=`
-    <button type="button" class="mkt-link" id="goMkt"><span class="mkt-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span><b>Descubre y compara oportunidades de inversión</b><small>Tasas de bancos, puestos de bolsa y tasas de cambio</small></span>${chev}</button>
+    <button type="button" class="mkt-link" id="goMkt"><span class="mkt-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span><b>Mira el mercado</b><small>Dólar del BCRD, Notas del Banco Central y fondos cerrados</small></span>${chev}</button>
     <section class="deep inv-card">
       <div class="hero-top"><span class="lbl">Tus inversiones · ${S.base}</span><span class="hero-r"><span class="hero-pulse"><i></i>En vivo</span>${heroAdd('Agregar una inversión')}</span></div>
       <div class="big num" id="liveTotal">${split(T.v,S.base,4)}</div>

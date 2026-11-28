@@ -48,7 +48,7 @@ function simHTML(){return `<div class="sim">
   <div class="field"><label for="simAmt">Monto <output class="num">${esc(fmt(sim.amt,'DOP',0))}</output></label><input type="range" id="simAmt" min="50000" max="20000000" step="50000" value="${sim.amt}"></div>
   <div class="field"><label for="simYrs">Plazo <output>${sim.years} ${sim.years===1?'año':'años'}</output></label><input type="range" id="simYrs" min="1" max="30" step="1" value="${sim.years}"></div>
   <div class="field"><label for="simRate">Tasa anual <output>${sim.rate.toFixed(2)} %</output></label><input type="range" id="simRate" min="4" max="30" step="0.05" value="${sim.rate}"></div>
-  <div id="simOut" class="sim-out">${simOut()}</div><p class="hint">Compara tasas de préstamos en Mercado.</p></div>`}
+  <div id="simOut" class="sim-out">${simOut()}</div></div>`}
 function simOut(){const n=sim.years*12,c=cuota(sim.amt,sim.rate,n),tot=c*n,intr=tot-sim.amt;
   return `<div class="kv2 num"><div><small>Cuota al mes</small><strong>${esc(fmt(c,'DOP',0))}</strong></div><div><small>Intereses totales</small><strong>${esc(fmt(intr,'DOP',0))}</strong></div><div><small>Pagas en total</small><strong>${esc(fmt(tot,'DOP',0))}</strong></div></div>`}
 function bindSim(){const upd=(id,k)=>{const el=$(id);if(!el)return;el.oninput=ev=>{sim[k]=Number(ev.target.value);const o=ev.target.previousElementSibling.querySelector('output');

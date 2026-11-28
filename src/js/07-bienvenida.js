@@ -71,7 +71,7 @@ const TOUR=[
   ['ingresos','[data-ms]','Movimientos','Gastos e ingresos en una sola pestaña. En gastos también están tu presupuesto y tus gastos fijos.'],
   ['cuentas','.acc-card','Cuentas','Tus cuentas de ahorro, corrientes y efectivo. En «Crédito» están tus tarjetas y préstamos.'],
   ['inversion','.inv-card','Inversiones que crecen en vivo','Mira cuánto ganas por día y cuándo vence o paga intereses cada inversión.'],
-  ['mercado','.mk-types','Mercado','Compara tasas de productos y de cambio. Cada dato dice su fuente y su fecha.']
+  ['mercado','.mk-types','Mercado','Tipo de cambio del BCRD, Notas del Banco Central y fondos cerrados, con su fuente y su fecha.']
 ];
 let tourI=-1;
 function startTour(){tourI=0;tourStep()}

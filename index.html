@@ -3069,6 +3069,60 @@ textarea{width:100%;font:inherit;font-size:16px;border:1.5px solid var(--line);b
   .tour-card.end{left:calc(50% + 124px);transform:translate(-50%,-50%)}
 }
 @media (min-width:1000px) and (prefers-reduced-motion:reduce){.scrim:has(> .sheet form) > .sheet{animation:none}}
+/* ===== Mercado con datos reales (Fase 2 del portal) ===== */
+.mk2-inds{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 8px}
+.mk2-ind{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font:inherit;color:inherit;cursor:pointer;min-width:0}
+.mk2-ind:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.mk2-il{font-size:12px;font-weight:600;color:var(--ink-2)}
+.mk2-ind b{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.mk2-ch{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.mk2-ch small{font-weight:500}
+.mk2-src{font-size:11.5px;color:var(--ink-2)}
+.mk2-status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);margin:0 0 12px}
+.mk2-dot{width:8px;height:8px;border-radius:50%;background:var(--grow);flex:none}
+.mk2-dot.warn{background:#C58A12}
+.mk2 .panel{margin-top:12px}
+.mk2-fx .per{margin:4px 0 0}
+.mk2-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mk2-kpi small{display:block;font-size:11.5px;color:var(--ink-2);margin-top:2px}
+.mk2-why{font-size:13.5px;line-height:1.5;color:var(--ink);margin:4px 0 12px}
+.mk2-tbl{display:flex;flex-direction:column;border-top:1px solid var(--line);font-size:13px}
+.mk2-tbl>div{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:8px;padding:7px 2px;border-bottom:1px solid var(--line);align-items:center}
+.mk2-tbl.five>div{grid-template-columns:1.3fr 1fr 1fr 1fr 1fr}
+.mk2-tbl>div span:not(:first-child){text-align:right}
+.mk2-tbl.five>div span:last-child{text-align:left}
+.mk2-th{font-size:11.5px;font-weight:700;color:var(--ink-2)}
+.mk2-tbl .rev{color:var(--ink-2);background:var(--surface-2)}
+.mk2-src-l{font-size:12px;color:var(--ink-2);margin:10px 0 0}
+.mk2-src-l a{color:inherit;text-decoration:underline}
+.mk2-empty p{font-size:13px;color:var(--ink-2);margin:4px 0 0}
+.mk2-lead{font-size:13px;line-height:1.5;color:var(--ink-2);margin:12px 0}
+.mk2-sub{margin-top:12px}
+.mk2-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.mk2-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 4px;font:inherit;color:inherit;cursor:pointer}
+.mk2-row:hover{background:var(--surface-2)}
+.mk2-row:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.mk2-rt b{display:block;font-size:14px;font-weight:700;overflow-wrap:anywhere}
+.mk2-rt small,.mk2-rv small{display:block;font-size:12px;color:var(--ink-2);margin-top:2px}
+.mk2-rv{text-align:right}
+.mk2-rv b{font-size:15px;font-weight:800}
+.mk2 .up,.sheet .la-kpi .up{color:var(--grow)}
+.mk2 .dn,.sheet .la-kpi .dn{color:var(--spend)}
+.mk2-flt{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.mk2 h4.menu-g{margin-top:14px}
+@media (max-width:380px){.mk2-inds{grid-template-columns:1fr}.mk2-tbl{font-size:12px}}
+@media (min-width:1000px){
+  #view.v-mercado{max-width:1240px}
+  .mk2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 24px;align-items:start}
+  .mk2>*{grid-column:1 / -1}
+  .mk2-inds{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mk2-ind{flex-direction:row;flex-wrap:wrap;align-items:baseline;column-gap:14px}
+  .mk2-il{width:100%}
+  .mk2-fx .lc svg,.sheet .lc svg{height:220px}
+  .mk2-fx .lc-y,.sheet .lc-y{height:220px}
+  .mk2-kpi{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mk2-list{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+}
 /* ===== Estabilidad (etapa 1): reglas que corrigen desajustes en cualquier tamaño ===== */
 
 /* Campos: 16 px o más para que iPhone no haga zoom al tocarlos */
@@ -3630,162 +3684,216 @@ function simHTML(){return `<div class="sim">
   <div class="field"><label for="simAmt">Monto <output class="num">${esc(fmt(sim.amt,'DOP',0))}</output></label><input type="range" id="simAmt" min="50000" max="20000000" step="50000" value="${sim.amt}"></div>
   <div class="field"><label for="simYrs">Plazo <output>${sim.years} ${sim.years===1?'año':'años'}</output></label><input type="range" id="simYrs" min="1" max="30" step="1" value="${sim.years}"></div>
   <div class="field"><label for="simRate">Tasa anual <output>${sim.rate.toFixed(2)} %</output></label><input type="range" id="simRate" min="4" max="30" step="0.05" value="${sim.rate}"></div>
-  <div id="simOut" class="sim-out">${simOut()}</div><p class="hint">Compara tasas de préstamos en Mercado.</p></div>`}
+  <div id="simOut" class="sim-out">${simOut()}</div></div>`}
 function simOut(){const n=sim.years*12,c=cuota(sim.amt,sim.rate,n),tot=c*n,intr=tot-sim.amt;
   return `<div class="kv2 num"><div><small>Cuota al mes</small><strong>${esc(fmt(c,'DOP',0))}</strong></div><div><small>Intereses totales</small><strong>${esc(fmt(intr,'DOP',0))}</strong></div><div><small>Pagas en total</small><strong>${esc(fmt(tot,'DOP',0))}</strong></div></div>`}
 function bindSim(){const upd=(id,k)=>{const el=$(id);if(!el)return;el.oninput=ev=>{sim[k]=Number(ev.target.value);const o=ev.target.previousElementSibling.querySelector('output');
   o.textContent=k==='amt'?fmt(sim.amt,'DOP',0):k==='years'?`${sim.years} ${sim.years===1?'año':'años'}`:sim.rate.toFixed(2)+' %';$('#simOut').innerHTML=simOut()}};
   upd('#simAmt','amt');upd('#simYrs','years');upd('#simRate','rate')}
 
-/* ---------- Mercado (prototipo con datos simulados) ---------- */
-const MK_T=[['cert','Certificados'],['aho','Cuentas de ahorro'],['fon','Fondos'],['bon','Bonos'],['pre','Préstamos']];
-const MK=[ /* tipo, entidad, producto, moneda, tasa, plazo en meses (0 = libre), monto mínimo, extra */
-  ['cert','Banco Ademi','Certificado financiero','DOP',10.5,12,10000],['cert','Banco Caribe','Certificado financiero','DOP',10.25,6,25000],['cert','APAP','Certificado de inversión','DOP',10.0,12,5000],
-  ['cert','Asociación Cibao','Certificado financiero','DOP',9.9,6,10000],['cert','Banco Santa Cruz','Certificado financiero','DOP',9.5,6,50000],['cert','Banco BHD','Certificado financiero','DOP',9.25,12,25000],
-  ['cert','Banco Popular','Certificado financiero','DOP',9.0,6,10000],['cert','Banreservas','Certificado financiero','DOP',8.75,3,10000],['cert','Banco Promerica','Certificado financiero','DOP',9.6,3,20000],
-  ['cert','Banco Popular','Certificado en dólares','USD',3.25,12,1000],['cert','Banco BHD','Certificado en dólares','USD',3.5,12,1000],['cert','Scotiabank','Depósito a plazo en dólares','USD',3.0,6,2000],
-  ['aho','Asociación Cibao','Ahorro programado','DOP',4.0,0,1000],['aho','APAP','Cuenta de ahorro','DOP',2.0,0,500],['aho','Banco BHD','Cuenta de ahorro','DOP',1.5,0,500],['aho','Banco Popular','Cuenta de ahorro','DOP',0.5,0,500],
-  ['aho','Banreservas','Ahorro en dólares','USD',1.5,0,100],['aho','Banco Popular','Ahorro en dólares','USD',0.75,0,100],
-  ['fon','AFI Universal','Fondo de liquidez','DOP',10.8,0,1000,'Rescate en 24 h'],['fon','AFI Popular','Fondo plazo 30 días','DOP',10.2,1,5000,'Rescate cada 30 días'],['fon','AFI Reservas','Fondo de liquidez','DOP',9.9,0,1000,'Rescate en 24 h'],
-  ['fon','JMMB Funds','Fondo en dólares','USD',4.6,0,500,'Rescate en 48 h'],['fon','AFI Universal','Fondo en dólares','USD',4.9,0,500,'Rescate en 48 h'],
-  ['bon','Ministerio de Hacienda','Bono 2031','DOP',10.15,52,10000,'Cupón semestral'],['bon','Ministerio de Hacienda','Bono 2034','DOP',10.6,93,10000,'Cupón semestral'],['bon','Banco Central','Notas de renta fija 2028','DOP',10.9,24,10000,'Cupón semestral'],
-  ['bon','Ministerio de Hacienda','Bono global 2035','USD',6.4,105,1000,'Cupón semestral'],
-  ['pre','Banreservas','Préstamo de vehículo','DOP',11.25,60,0,'Vehículo'],['pre','Banco Popular','Préstamo de vehículo','DOP',11.5,60,0,'Vehículo'],['pre','Banco BHD','Préstamo de vehículo','DOP',11.95,60,0,'Vehículo'],['pre','Banco Santa Cruz','Préstamo de vehículo usado','DOP',13.5,48,0,'Vehículo'],
-  ['pre','Asociación Cibao','Préstamo hipotecario','DOP',8.9,240,0,'Hipotecario'],['pre','Banreservas','Préstamo hipotecario','DOP',9.75,240,0,'Hipotecario'],['pre','Banco Popular','Hipotecario tasa fija 3 años','DOP',10.25,240,0,'Hipotecario'],['pre','APAP','Préstamo hipotecario','DOP',10.5,240,0,'Hipotecario'],
-  ['pre','Banreservas','Préstamo personal','DOP',16.5,36,0,'Personal'],['pre','Banco Popular','Préstamo personal','DOP',18.0,36,0,'Personal'],['pre','Banco Ademi','Préstamo para negocio','DOP',22.0,24,0,'Comercial']
-].map(([t,e,n,cur,r,m,min,x],i)=>({id:'p'+i,t,e,n,cur,r,m,min,x:x||''}));
-const FXE=[['Banco Popular','b',.55],['Banco BHD','b',.6],['Banreservas','b',.5],['Scotiabank','b',.7],['Banco Santa Cruz','b',.65],['Banco Caribe','b',.75],['Banco Promerica','b',.7],['APAP','b',.6],
-  ['Casa de cambio · Zona Colonial','c',.35],['Casa de cambio · Piantini','c',.4],['Casa de cambio · Santiago','c',.3],['Agente de cambio · Bávaro','c',.45]];
-/* Series simuladas y estables: la misma entidad siempre muestra la misma historia */
-function seeded(key){let h=2166136261;for(const c of key){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return ()=>{h^=h<<13;h^=h>>>17;h^=h<<5;return ((h>>>0)%10000)/10000}}
-function mkSeries(key,now,days,vol,step){const R=seeded(key),v=[now];let x=now;for(let i=1;i<days;i++){if(R()<step)x-= (R()-.5)*vol;v.push(+x.toFixed(4))}return v.reverse()}
-const MK_D=365;
-const rateHist=p=>mkSeries(p.id+p.e,p.r,MK_D,p.t==='pre'?.5:.35,.05).map(v=>Math.max(.05,v));
-function fxNow(e,cur){const base=cur==='USD'?(S.rates.USD||60.9):(S.rates.EUR||70.6),R=seeded(e[0]+cur),off=(R()-.5)*.3,sp=e[2]*(cur==='EUR'?1.4:1);return {buy:+(base+off-sp).toFixed(2),sell:+(base+off+sp).toFixed(2)}}
-function fxHist(e,cur){const n=fxNow(e,cur),b=mkSeries(e[0]+cur+'fx',n.buy,MK_D,cur==='USD'?.18:.24,.7);const sp=n.sell-n.buy;return {buy:b,sell:b.map(v=>+(v+sp).toFixed(2))}}
-let mk={seg:'real',t:'cert',ent:'',cur:'',plazo:'',sort:'',fx:'USD',fxk:'',amt:'',dir:'vendo',cmp:[]};
-try{Object.assign(mk,JSON.parse(localStorage.getItem(KEY+'.mk')||'{}'));mk.cmp=[];if(!mk.v2){mk.seg='real';mk.v2=1}}catch(e){}
-const mkKeep=()=>{try{const {cmp,...o}=mk;localStorage.setItem(KEY+'.mk',JSON.stringify(o))}catch(e){}};
-const plazoTxt=p=>p.m===0?(p.x||'Libre'):p.m<12?p.m+(p.m===1?' mes':' meses'):p.m%12===0?(p.m/12)+(p.m===12?' año':' años'):p.m+' meses';
-function sparkL(h,col){const v=h.slice(-60),mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;const d='M'+v.map((y,i)=>(i/(v.length-1)*64).toFixed(1)+' '+(22-(y-mn)/r*20).toFixed(1)).join(' L');return `<svg class="spk" viewBox="0 0 64 24" aria-hidden="true"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
-function vMercado(){
-  if(!['real','prod','fx'].includes(mk.seg))mk.seg='real';
-  const seg=`<div class="seg seg-top" role="group" aria-label="Sección"><button data-mks="real" aria-pressed="${mk.seg==='real'}">Tasas verificadas</button><button data-mks="prod" aria-pressed="${mk.seg==='prod'}">Productos</button><button data-mks="fx" aria-pressed="${mk.seg==='fx'}">Cambio</button></div>`;
-  const note=`<p class="mk-note sim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg><span><b>Datos simulados.</b> Esta sección es un prototipo para mostrar cómo funcionará la comparación; sus tasas no son reales. Las tasas verificadas están en la primera pestaña.</span></p>`;
-  $('#view').innerHTML=`<p class="mk-lead">Compara y descubre dónde te conviene ahorrar, invertir o cambiar tus dólares.</p>${seg}${mk.seg==='real'?realHTML():note+(mk.seg==='fx'?fxHTML():prodHTML())}${promoHTML('mercado')}`;
-  document.querySelectorAll('[data-mks]').forEach(b=>b.onclick=()=>{mk.seg=b.dataset.mks;mkKeep();render();track('mercado_'+mk.seg)});
-  document.querySelectorAll('[data-mkr]').forEach(b=>b.onclick=()=>{mkr.prod=b.dataset.mkr;render()});
-  if(mk.seg==='fx')bindFx();else if(mk.seg==='prod')bindProd();
+/* ---------- Mercado: solo datos reales (Fase 2 del portal) ----------
+   Lee las vistas públicas de Supabase (mkt_obs, mkt_notas, mkt_subastas, mkt_fondos, mkt_estado).
+   Nada se simula ni se estima: si un dato no está, no se muestra. Cada bloque dice su fuente y su fecha.
+   Convenciones: las variaciones del dólar se muestran en gris (no son buenas ni malas); la del valor cuota
+   de un fondo en verde o rojo para quien tiene cuotas. */
+const MKF={c:'bcrd.usd_dop.compra.diaria',v:'bcrd.usd_dop.venta.diaria',cm:'bcrd.usd_dop.compra.prom_mensual',vm:'bcrd.usd_dop.venta.prom_mensual'};
+const MK_SRC={bcrd:'https://www.bancentral.gov.do/SectorExterno/HistoricoTasas',notas:'https://www.bancentral.gov.do/a/d/2711-notas-del-banco-central',simv:'https://datos.gob.do/dataset/variacion-del-valor-cuota-de-los-instrumentos-de-renta-variable'};
+let mk={seg:'moneda',inv:'notas',per:'1a',fcur:'',ftipo:'',fsort:'v12',fact:1};
+try{Object.assign(mk,JSON.parse(localStorage.getItem(KEY+'.mk2')||'{}'))}catch(e){}
+const mkKeep=()=>{try{localStorage.setItem(KEY+'.mk2',JSON.stringify(mk))}catch(e){}};
+let mkt={fx:null,fxm:null,notas:null,fondos:null,fobs:null,estado:null,at:0,err:'',loading:false};
+try{const c=JSON.parse(localStorage.getItem(KEY+'.mkt')||'null');if(c&&c.v===2)Object.assign(mkt,c.d,{at:c.at})}catch(e){}
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const dIso=s=>new Date(s+'T12:00:00');
+const dLong=new Intl.DateTimeFormat('es-DO',{day:'numeric',month:'short',year:'numeric'});
+const dMon=new Intl.DateTimeFormat('es-DO',{month:'short',year:'numeric'});
+const fD=s=>s?dLong.format(dIso(s)):'';
+const fM=s=>s?dMon.format(dIso(s)):'';
+const fx4=v=>'RD$'+(+v).toFixed(4);
+const pct=(v,d=2)=>(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(d)+' %';
+async function restAll(path){
+  let out=[],off=0;
+  for(let i=0;i<20;i++){
+    const r=await fetch(SUPABASE_URL+'/rest/v1/'+path+(path.includes('?')?'&':'?')+'limit=1000&offset='+off,{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY}});
+    if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();out=out.concat(j);if(j.length<1000)break;off+=1000;
+  }
+  return out;
 }
-function prodHTML(){
-  const L0=MK.filter(p=>p.t===mk.t),ents=[...new Set(L0.map(p=>p.e))].sort(),loan=mk.t==='pre';
-  let L=L0.filter(p=>(!mk.ent||p.e===mk.ent)&&(!mk.cur||p.cur===mk.cur)&&(!mk.plazo||(mk.plazo==='c'?p.m>0&&p.m<=3:mk.plazo==='m'?p.m>3&&p.m<=12:mk.plazo==='l'?p.m>12:p.m===0)));
-  const asc=mk.sort?mk.sort==='asc':loan;L.sort((a,b)=>asc?a.r-b.r:b.r-a.r);
-  const best=L[0];
-  return `<div class="mk-types" role="group" aria-label="Tipo de producto">${MK_T.map(([k,l])=>`<button type="button" data-mkt="${k}" aria-pressed="${mk.t===k}">${l}</button>`).join('')}</div>
-    <div class="ch-flt mk-flt"><label><span>Entidad</span><select id="mkEnt"><option value="">Todas</option>${ents.map(e=>`<option ${e===mk.ent?'selected':''}>${esc(e)}</option>`).join('')}</select></label>
-      <label><span>Moneda</span><select id="mkCur"><option value="">Todas</option><option value="DOP" ${mk.cur==='DOP'?'selected':''}>Pesos</option><option value="USD" ${mk.cur==='USD'?'selected':''}>Dólares</option></select></label>
-      <label><span>${loan?'Plazo':'Vencimiento'}</span><select id="mkPl"><option value="">Cualquiera</option>${loan?'':`<option value="0" ${mk.plazo==='0'?'selected':''}>Sin vencimiento</option>`}<option value="c" ${mk.plazo==='c'?'selected':''}>Hasta 3 meses</option><option value="m" ${mk.plazo==='m'?'selected':''}>De 3 a 12 meses</option><option value="l" ${mk.plazo==='l'?'selected':''}>Más de 1 año</option></select></label>
-      <label><span>Ordenar</span><select id="mkSo"><option value="">${loan?'Menor tasa':'Mayor tasa'}</option><option value="${loan?'desc':'asc'}" ${mk.sort===(loan?'desc':'asc')?'selected':''}>${loan?'Mayor tasa':'Menor tasa'}</option></select></label></div>
-    ${best?`<p class="mk-best">${loan?'La tasa más baja':'La tasa más alta'} con estos filtros: <b>${esc(best.e)}</b> al <b class="num">${best.r.toFixed(2)} %</b></p>`:''}
-    <div class="mk-list">${L.map(p=>{const h=rateHist(p),ch=p.r-h[h.length-31];return `<div class="mk-r${mk.cmp.includes(p.id)?' cmp':''}"><button type="button" class="mk-main" data-mkp="${p.id}">${inst(p.e,1)}
-      <span class="mk-t"><b>${esc(p.e)}</b><small>${esc(p.n)} · ${esc(plazoTxt(p))}${p.min?' · desde '+esc(fmt(p.min,p.cur,0)):''}</small></span>
-      ${sparkL(h,loan?(ch>0?'var(--spend)':'var(--grow)'):(ch>=0?'var(--grow)':'var(--spend)'))}
-      <span class="mk-v num"><b>${p.r.toFixed(2)} %</b><small class="${(loan?-ch:ch)>=0?'up':'dn'}">${ch>=0?'▲':'▼'} ${Math.abs(ch).toFixed(2)} en 30 d</small></span></button>
-      <label class="mk-c"><input type="checkbox" data-mkc="${p.id}" ${mk.cmp.includes(p.id)?'checked':''}><span>Comparar</span></label></div>`}).join('')||'<p class="hint center" style="margin:18px 0">No hay productos con esos filtros.</p>'}</div>
-    <div class="mk-cmpbar" id="mkCmp" ${mk.cmp.length?'':'hidden'}><span>${mk.cmp.length} de 3 elegidos</span><button type="button" class="btn" id="mkCmpGo" ${mk.cmp.length<2?'disabled':''}>Comparar</button></div>`;
+const byDate=(rows,serie)=>rows.filter(o=>o.serie===serie).map(o=>({d:o.fecha_ref,v:+o.valor})).sort((a,b)=>a.d<b.d?-1:1);
+async function loadMkt(force){
+  if(mkt.loading||(!force&&mkt.fx&&Date.now()-mkt.at<30*60e3))return;
+  if(!canCloud())return;mkt.loading=true;
+  try{
+    const t=new Date(),d5=new Date(t.getFullYear()-5,t.getMonth(),t.getDate()-10),d14=new Date(t.getFullYear(),t.getMonth()-14,1);
+    const [fx,fxm,notas,fondos,fobs,estado]=await Promise.all([
+      restAll(`mkt_obs?select=serie,fecha_ref,valor&serie=in.(${MKF.c},${MKF.v})&fecha_ref=gte.${iso(d5)}&order=fecha_ref`),
+      restAll(`mkt_obs?select=serie,fecha_ref,valor&serie=in.(${MKF.cm},${MKF.vm})&order=fecha_ref`),
+      restAll('mkt_notas?select=*&order=vencimiento'),
+      restAll('mkt_fondos?select=*&order=nombre'),
+      restAll(`mkt_obs?select=serie,fecha_ref,valor&serie=like.simv.vc.*&fecha_ref=gte.${iso(d14)}&order=fecha_ref`),
+      restAll('mkt_estado?select=*')]);
+    Object.assign(mkt,{fx:{c:byDate(fx,MKF.c),v:byDate(fx,MKF.v)},fxm:{c:byDate(fxm,MKF.cm),v:byDate(fxm,MKF.vm)},notas,fondos,fobs,estado,at:Date.now(),err:''});
+    try{localStorage.setItem(KEY+'.mkt',JSON.stringify({v:2,at:mkt.at,d:{fx:mkt.fx,fxm:mkt.fxm,notas,fondos,fobs,estado}}))}catch(e){}
+    widgetSync();
+  }catch(e){mkt.err=mkt.fx?'Sin conexión: se muestran los datos guardados el '+dtFmt.format(new Date(mkt.at))+'.':'No se pudieron cargar los datos del mercado. Revisa tu conexión.'}
+  mkt.loading=false;if(view==='mercado')render();
 }
-function bindProd(){
-  document.querySelectorAll('[data-mkt]').forEach(b=>b.onclick=()=>{mk.t=b.dataset.mkt;mk.ent='';mk.plazo='';mk.sort='';mk.cmp=[];mkKeep();render()});
-  [['#mkEnt','ent'],['#mkCur','cur'],['#mkPl','plazo'],['#mkSo','sort']].forEach(([s,k])=>$(s).onchange=()=>{mk[k]=$(s).value;mkKeep();render()});
-  document.querySelectorAll('[data-mkp]').forEach(b=>b.onclick=()=>openProduct(b.dataset.mkp));
-  document.querySelectorAll('[data-mkc]').forEach(c=>c.onchange=()=>{const id=c.dataset.mkc;if(c.checked){if(mk.cmp.length>=3){c.checked=false;return toast('Compara hasta 3 a la vez')}mk.cmp.push(id)}else mk.cmp=mk.cmp.filter(x=>x!==id);
-    c.closest('.mk-r').classList.toggle('cmp',c.checked);const bar=$('#mkCmp');bar.hidden=!mk.cmp.length;bar.querySelector('span').textContent=mk.cmp.length+' de 3 elegidos';$('#mkCmpGo').disabled=mk.cmp.length<2});
-  const g=$('#mkCmpGo');if(g)g.onclick=()=>openCompare(mk.cmp.map(id=>MK.find(p=>p.id===id)));
+/* Valor en o antes de una fecha (búsqueda binaria sobre una serie ordenada) */
+function onOrBefore(arr,d){let lo=0,hi=arr.length-1,r=null;while(lo<=hi){const m=(lo+hi)>>1;if(arr[m].d<=d){r=arr[m];lo=m+1}else hi=m-1}return r}
+const shiftIso=(s,{y=0,m=0,d=0})=>{const x=dIso(s);x.setFullYear(x.getFullYear()+y,x.getMonth()+m,x.getDate()+d);return iso(x)};
+function fxStats(arr){
+  if(!arr||arr.length<2)return null;
+  const L=arr.at(-1),P=arr.at(-2),m1=onOrBefore(arr,shiftIso(L.d,{m:-1})),y1=onOrBefore(arr,shiftIso(L.d,{y:-1})),ye=onOrBefore(arr,(+L.d.slice(0,4)-1)+'-12-31');
+  const ch=x=>x?{from:x,abs:L.v-x.v,rel:(L.v/x.v-1)*100}:null;
+  return {last:L,prev:P,day:ch(P),mon:ch(m1),year:ch(y1),ytd:ch(ye),pesoYtd:ye?(ye.v/L.v-1)*100:null};
 }
-/* Gráfico de línea con guía al tocar */
-const LC=['var(--brand)','var(--grow)','#3F7CB8'];
-function lineChart(series,days,fmtV,id){
-  const S2=series.map(s=>({...s,v:s.v.slice(-days)})),all=S2.flatMap(s=>s.v),mn=Math.min(...all),mx=Math.max(...all),pad=(mx-mn)*.12||Math.max(.05,mx*.01),lo=mn-pad,hi=mx+pad,W=320,H=150,n=S2[0].v.length;
-  const X=i=>(i/(n-1)*W).toFixed(1),Y=v=>(H-(v-lo)/(hi-lo)*H).toFixed(1);
-  const d0=new Date(Date.now()-(n-1)*DAY),mo=new Intl.DateTimeFormat('es-DO',{day:'numeric',month:'short'});
-  return `<div class="lc" id="${id}" data-n="${n}"><div class="lc-y num"><span>${fmtV(hi)}</span><span>${fmtV((hi+lo)/2)}</span><span>${fmtV(lo)}</span></div>
-    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Evolución en ${days} días">${[0,.5,1].map(f=>`<line x1="0" x2="${W}" y1="${f*H}" y2="${f*H}" class="lc-g"/>`).join('')}
-      ${S2.map((s,k)=>`<path d="M${s.v.map((v,i)=>X(i)+' '+Y(v)).join(' L')}" fill="none" stroke="${s.c||LC[k]}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
+/* ---------- Gráfico de líneas con fechas reales ---------- */
+const mkCharts={};
+function tChart(ser,id,fv){
+  const all=ser.flatMap(s=>s.p);if(all.length<2)return '<p class="hint">No hay suficientes datos para graficar.</p>';
+  const T=x=>dIso(x).getTime(),t0=T(all.reduce((a,b)=>a.d<b.d?a:b).d),t1=T(all.reduce((a,b)=>a.d>b.d?a:b).d),vs=all.map(p=>p.v),mn=Math.min(...vs),mx=Math.max(...vs),pad=(mx-mn)*.1||Math.abs(mx)*.01||1,lo=mn-pad,hi=mx+pad,W=320,H=160;
+  const X=t=>((t-t0)/((t1-t0)||1)*W).toFixed(1),Y=v=>(H-(v-lo)/(hi-lo)*H).toFixed(1),span=(t1-t0)/864e5,lab=t=>(span>400?dMon:dLong).format(new Date(t));
+  mkCharts[id]={ser,t0,t1,fv};
+  return `<div class="lc mk2-lc" id="${id}"><div class="lc-y num"><span>${fv(hi)}</span><span>${fv((hi+lo)/2)}</span><span>${fv(lo)}</span></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Evolución de ${esc(ser.map(s=>s.n).join(' y '))} del ${esc(lab(t0))} al ${esc(lab(t1))}">${[0,.5,1].map(f=>`<line x1="0" x2="${W}" y1="${f*H}" y2="${f*H}" class="lc-g"/>`).join('')}
+      ${ser.map(s=>`<path d="M${s.p.map(p=>X(T(p.d))+' '+Y(p.v)).join(' L')}" fill="none" stroke="${s.c}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
       <line class="lc-cross" x1="0" x2="0" y1="0" y2="${H}" vector-effect="non-scaling-stroke" visibility="hidden"/></svg>
-    <div class="lc-x"><span>${mo.format(d0)}</span><span>${mo.format(new Date(Date.now()-Math.round((n-1)/2)*DAY))}</span><span>Hoy</span></div>
+    <div class="lc-x"><span>${esc(lab(t0))}</span><span>${esc(lab((t0+t1)/2))}</span><span>${esc(lab(t1))}</span></div>
     <div class="dtip num lc-tip" hidden></div></div>`;
 }
-function bindLine(id,series,days,fmtV){
-  const w=document.getElementById(id);if(!w)return;const svg=w.querySelector('svg'),cr=w.querySelector('.lc-cross'),tip=w.querySelector('.lc-tip'),n=+w.dataset.n,S2=series.map(s=>({...s,v:s.v.slice(-days)})),df=new Intl.DateTimeFormat('es-DO',{day:'numeric',month:'short',year:'numeric'});
-  const at=x=>{const r=svg.getBoundingClientRect(),f=Math.max(0,Math.min(1,(x-r.left)/r.width)),i=Math.round(f*(n-1));cr.setAttribute('x1',f*320);cr.setAttribute('x2',f*320);cr.setAttribute('visibility','visible');
-    tip.innerHTML=`<span class="dt-c">${df.format(new Date(Date.now()-(n-1-i)*DAY))}</span>`+S2.map((s,k)=>`<span><i style="background:${s.c||LC[k]}"></i>${esc(s.n)} ${fmtV(s.v[i])}</span>`).join('');tip.hidden=false;
-    const wr=w.getBoundingClientRect(),tw=tip.offsetWidth,px=r.left-wr.left+f*r.width,lf=Math.max(0,Math.min(wr.width-tw,px-tw/2));tip.style.left=lf+'px';tip.style.setProperty('--ax',(px-lf)+'px')};
+function bindT(id){
+  const w=document.getElementById(id),C=mkCharts[id];if(!w||!C)return;const svg=w.querySelector('svg'),cr=w.querySelector('.lc-cross'),tip=w.querySelector('.lc-tip');
+  const near=(p,t)=>{let lo=0,hi=p.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(dIso(p[m].d).getTime()<=t)lo=m;else hi=m}return Math.abs(dIso(p[lo].d).getTime()-t)<=Math.abs(dIso(p[hi].d).getTime()-t)?p[lo]:p[hi]};
+  const at=x=>{const r=svg.getBoundingClientRect(),f0=Math.max(0,Math.min(1,(x-r.left)/r.width)),f=f0>.985?1:f0<.015?0:f0,t=C.t0+f*(C.t1-C.t0),pts=C.ser.map(s=>near(s.p,t)),fx=(dIso(pts[0].d).getTime()-C.t0)/((C.t1-C.t0)||1);
+    cr.setAttribute('x1',fx*320);cr.setAttribute('x2',fx*320);cr.setAttribute('visibility','visible');
+    tip.innerHTML=`<span class="dt-c">${esc(fD(pts[0].d))}</span>`+C.ser.map((s,k)=>`<span><i style="background:${s.c}"></i>${esc(s.n)} ${esc(C.fv(pts[k].v))}</span>`).join('');tip.hidden=false;
+    const wr=w.getBoundingClientRect(),tw=tip.offsetWidth,px=r.left-wr.left+fx*r.width,lf=Math.max(0,Math.min(wr.width-tw,px-tw/2));tip.style.left=lf+'px';tip.style.setProperty('--ax',(px-lf)+'px')};
   svg.addEventListener('pointerdown',e=>{at(e.clientX);svg.setPointerCapture&&svg.setPointerCapture(e.pointerId)});svg.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='mouse')at(e.clientX)});
   svg.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){tip.hidden=true;cr.setAttribute('visibility','hidden')}});
 }
-const RANGES=[[30,'30 días'],[90,'3 meses'],[180,'6 meses'],[365,'1 año']];
-function openProduct(id,days=90){
-  const p=MK.find(x=>x.id===id);if(!p)return;const h=rateHist(p),v=h.slice(-days),loan=p.t==='pre',fv=x=>x.toFixed(2)+' %',a0=v[0],ch=p.r-a0;
-  const amt=money(mk.amt)||(loan?1000000:(p.cur==='USD'?5000:100000));
-  sheet(`<div class="la-h">${inst(p.e)}<div><h3>${esc(p.n)}</h3><p class="lead-s">${esc(p.e)} · ${esc(plazoTxt(p))} · ${p.cur==='USD'?'Dólares':'Pesos'}</p></div></div>
-    <div class="mk-big num"><b>${p.r.toFixed(2)} %</b><span class="${(loan?-ch:ch)>=0?'up':'dn'}">${ch>=0?'▲':'▼'} ${Math.abs(ch).toFixed(2)} puntos en ${RANGES.find(r=>r[0]===days)[1]}</span></div>
-    <div class="per light" role="group" aria-label="Período">${RANGES.map(([d,l])=>`<button type="button" data-pr="${d}" aria-pressed="${d===days}">${l}</button>`).join('')}</div>
-    ${lineChart([{n:'Tasa',v:h,c:'var(--brand)'}],days,fv,'lcP')}
-    <div class="la-kpi num"><div><span>Mínima</span><b>${Math.min(...v).toFixed(2)} %</b></div><div><span>Máxima</span><b>${Math.max(...v).toFixed(2)} %</b></div>${p.min?`<div><span>Monto mínimo</span><b>${esc(fmt(p.min,p.cur,0))}</b></div>`:''}<div><span>${loan?'Plazo típico':'Plazo'}</span><b>${esc(plazoTxt(p))}</b></div></div>
-    <div class="mk-calc"><label for="mkAmt">${loan?'Si te prestan':'Si inviertes'}</label><div class="o-amt"><input id="mkAmt" inputmode="decimal" value="${amt}"><span>${p.cur}</span></div><p class="num" id="mkCalc"></p></div>
-    ${loan?`<button class="btn" type="button" id="mkUse" style="--accent:var(--debt)">Ya tengo este préstamo · registrarlo</button>`:`<button class="btn" type="button" id="mkUse" style="--accent:var(--grow)">Ya invertí aquí · agregarlo a mis ahorros</button>`}
-    <p class="hint">Datos simulados para el prototipo. Confirma siempre la tasa con la entidad.</p>`,'var(--brand)');
-  const calc=()=>{const a=money($('#mkAmt').value)||0;mk.amt=String(a);
-    if(loan){const n=p.m||60,c=cuota(a,p.r,n);$('#mkCalc').innerHTML=`Cuota de <b>${esc(fmt(c,p.cur,0))}</b> al mes por ${n} meses. Pagarías <b>${esc(fmt(c*n-a,p.cur,0))}</b> de intereses.`}
-    else{const y=a*p.r/100*.9;$('#mkCalc').innerHTML=`Ganarías unos <b>${esc(fmt(y/12,p.cur,0))}</b> al mes, <b>${esc(fmt(y,p.cur,0))}</b> al año, ya con ISR del 10 %.`}};
-  $('#mkAmt').oninput=calc;calc();
-  document.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>openProduct(id,+b.dataset.pr));
-  bindLine('lcP',[{n:'Tasa',v:h,c:'var(--brand)'}],days,fv);
-  $('#mkUse').onclick=()=>{const a=money($('#mkAmt').value)||0;if(loan)openLoan();else openSaving({type:{cert:'Certificado',aho:'Cuenta de ahorro',fon:'Fondo de inversión',bon:'Bono'}[p.t],entity:p.e,cur:p.cur,rate:p.r,principal:a||'',months:p.m||undefined,mode:p.m?'meses':'sin',vr:p.t==='fon'})};
+/* ---------- Encabezado: indicadores y estado de actualización ---------- */
+function mkIndHTML(){
+  const S1=fxStats(mkt.fx&&mkt.fx.c),S2=fxStats(mkt.fx&&mkt.fx.v);
+  const card=(lbl,s,k)=>s?`<button type="button" class="mk2-ind" data-mkgo="moneda" aria-label="${esc(lbl)}: ${esc(fx4(s.last.v))}"><span class="mk2-il">${esc(lbl)}</span><b class="num">${esc(fx4(s.last.v))}</b>
+    <span class="mk2-ch num">${s.day.abs>=0?'▲':'▼'} ${esc(Math.abs(s.day.abs).toFixed(4))} · ${esc(pct(s.day.rel))} <small>frente al ${esc(fD(s.prev.d))}</small></span><small class="mk2-src">${esc(fD(s.last.d))} · BCRD</small></button>`:'';
+  return S1?`<div class="mk2-inds">${card('Dólar, tasa de compra',S1)}${card('Dólar, tasa de venta',S2)}</div>`:'';
 }
-function openCompare(P,days=90){
-  const ser=P.map((p,k)=>({n:p.e,v:rateHist(p),c:LC[k]})),fv=x=>x.toFixed(2)+' %';
-  sheet(`<h3>Comparar tasas</h3>
-    <div class="per light" role="group" aria-label="Período">${RANGES.map(([d,l])=>`<button type="button" data-pr="${d}" aria-pressed="${d===days}">${l}</button>`).join('')}</div>
-    ${lineChart(ser,days,fv,'lcC')}
-    <div class="cmp-t">${P.map((p,k)=>`<div class="cmp-c"><span class="cmp-sw" style="background:${LC[k]}"></span><b>${esc(p.e)}</b><small>${esc(p.n)}</small><dl class="num"><dt>Tasa hoy</dt><dd>${p.r.toFixed(2)} %</dd><dt>Plazo</dt><dd>${esc(plazoTxt(p))}</dd><dt>Mínimo</dt><dd>${p.min?esc(fmt(p.min,p.cur,0)):'—'}</dd><dt>Moneda</dt><dd>${p.cur}</dd></dl></div>`).join('')}</div>`,'var(--brand)');
-  document.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>openCompare(P,+b.dataset.pr));bindLine('lcC',ser,days,fv);
+function mkStatusHTML(){
+  const E=(mkt.estado||[]).filter(e=>e.ultima_observacion);if(!E.length)return '';
+  const last=E.map(e=>e.ultima_consulta).filter(Boolean).sort().at(-1),bad=E.filter(e=>e.estado&&e.estado!=='al_dia').length;
+  return `<p class="mk2-status"><span class="mk2-dot${bad?' warn':''}" aria-hidden="true"></span>${bad?`${bad} ${bad===1?'fuente pendiente':'fuentes pendientes'} de actualizar · `:''}${E.length} fuentes con datos · última carga ${esc(last?dtFmt.format(new Date(last)):'')}</p>`;
 }
-function fxHTML(){
-  const cur=mk.fx,R=FXE.filter(e=>!mk.fxk||e[1]===mk.fxk).map(e=>({e,...fxNow(e,cur)}));
-  const bestB=Math.max(...R.map(r=>r.buy)),bestS=Math.min(...R.map(r=>r.sell)),a=money(mk.amt)||0,sell=mk.dir==='vendo';
-  const res=r=>sell?a*r.buy:a/r.sell;
-  const L=[...R].sort((x,y)=>a?(sell?res(y)-res(x):res(y)-res(x)):(sell?y.buy-x.buy:x.sell-y.sell));
-  return `<div class="fx-top"><div class="seg tiny" role="group" aria-label="Moneda">${[['USD','Dólar · US$'],['EUR','Euro · €']].map(([k,l])=>`<button type="button" data-fxc="${k}" aria-pressed="${cur===k}">${l}</button>`).join('')}</div>
-      <div class="seg tiny" role="group" aria-label="Dónde">${[['','Todos'],['b','Bancos'],['c','Casas de cambio']].map(([k,l])=>`<button type="button" data-fxk="${k}" aria-pressed="${mk.fxk===k}">${l}</button>`).join('')}</div></div>
-    <section class="panel fx-calc"><div class="fx-q"><div class="seg tiny" role="group" aria-label="Operación"><button type="button" data-fxd="vendo" aria-pressed="${sell}">Tengo ${cur==='USD'?'dólares':'euros'}</button><button type="button" data-fxd="compro" aria-pressed="${!sell}">Tengo pesos</button></div>
-      <div class="o-amt"><input id="fxAmt" inputmode="decimal" value="${esc(mk.amt||'')}" placeholder="${sell?'Ej. 500':'Ej. 30,000'}" aria-label="Monto"><span>${sell?(cur==='USD'?'US$':'€'):'RD$'}</span></div></div>
-      <p class="hint">${a?(sell?'Recibirías en pesos:':'Recibirías en '+(cur==='USD'?'dólares':'euros')+':')+' ordenado de mejor a peor.':'Escribe un monto y te decimos dónde te conviene cambiar.'}</p></section>
-    <div class="fx-h"><span>Entidad</span><span>Compra</span><span>Venta</span></div>
-    <div class="mk-list fx-list">${L.map((r,i)=>`<button type="button" class="fx-r" data-fxe="${esc(r.e[0])}">${r.e[1]==='b'?inst(r.e[0],1):`<span class="tx-ic ic2" style="--ic:var(--ink-2)">${svgIc('<path d="M7 7h13l-3-3M17 17H4l3 3"/>')}</span>`}
-      <span class="mk-t"><b>${esc(r.e[0])}</b><small>${a?`Recibes <b class="num">${esc(sell?fmt(res(r),'DOP',2):fmt(res(r),cur,2))}</b>${i===0?' · la mejor':''}`:(r.e[1]==='b'?'Banco':'Casa de cambio')}</small></span>
-      <span class="fx-v num${r.buy===bestB?' best':''}">${r.buy.toFixed(2)}</span><span class="fx-v num${r.sell===bestS?' best':''}">${r.sell.toFixed(2)}</span></button>`).join('')}</div>
-    <p class="hint fx-leg"><b>Compra</b>: lo que te pagan por cada ${cur==='USD'?'dólar':'euro'}. <b>Venta</b>: lo que te cobran por cada uno. En verde, la mejor de cada columna. Toca una entidad para ver su historial.</p>`;
+/* ---------- Moneda ---------- */
+const MK_PER=[['1m','1 mes',{m:-1}],['3m','3 meses',{m:-3}],['6m','6 meses',{m:-6}],['1a','1 año',{y:-1}],['3a','3 años',{y:-3}],['5a','5 años',{y:-5}],['todo','Todo',null]];
+function monedaHTML(){
+  if(!mkt.fx||!mkt.fx.c.length)return '';
+  const C=mkt.fx.c,V=mkt.fx.v,S=fxStats(C),Sv=fxStats(V),per=MK_PER.find(p=>p[0]===mk.per)||MK_PER[3],all=per[0]==='todo';
+  const from=all?null:shiftIso(C.at(-1).d,per[2]),cut=a=>all?a:a.filter(p=>p.d>=from);
+  const pc=all?mkt.fxm.c:cut(C),pv=all?mkt.fxm.v:cut(V),vs=pc.map(p=>p.v),mxp=pc.reduce((a,b)=>b.v>a.v?b:a,pc[0]),mnp=pc.reduce((a,b)=>b.v<a.v?b:a,pc[0]);
+  const ser=[{n:'Compra',c:'var(--grow)',p:pc},{n:'Venta',c:'var(--brand)',p:pv}];
+  const kpi=(l,c)=>c?`<div><span>${esc(l)}</span><b class="num">${esc(pct(c.rel))}</b><small>${c.abs>=0?'+':'−'}${esc(Math.abs(c.abs).toFixed(4))} desde el ${esc(fD(c.from.d))}</small></div>`:'';
+  const peso=S.pesoYtd,dir=peso>=0?'se apreció':'se depreció';
+  const why=`El dólar ${S.day.abs>=0?'subió':'bajó'} ${esc(Math.abs(S.day.abs).toFixed(4))} pesos (${esc(pct(S.day.rel))}) en la tasa de compra frente al ${esc(fD(S.prev.d))}. En lo que va de ${S.last.d.slice(0,4)}, el peso ${dir} ${esc(Math.abs(peso).toFixed(1))} % frente al dólar, medido como lo publica el BCRD (tasa de cierre del año anterior entre la de hoy). Son cálculos de Caoba sobre los datos del BCRD; no explican la causa del movimiento.`;
+  return `<section class="panel mk2-fx"><div class="panel-h"><b>Dólar estadounidense</b><span class="panel-s">Tasa de referencia del mercado spot · pesos por US$1</span></div>
+    <div class="per light" role="group" aria-label="Período">${MK_PER.map(([k,l])=>`<button type="button" data-mkper="${k}" aria-pressed="${k===per[0]}">${l}</button>`).join('')}</div>
+    ${tChart(ser,'mkFx',v=>v.toFixed(2))}
+    <div class="ch-leg"><span><i style="background:var(--grow)"></i>Compra</span><span><i style="background:var(--brand)"></i>Venta</span>${all?'<span>Promedios mensuales desde 1985</span>':''}</div>
+    <div class="la-kpi mk2-kpi">${kpi('En el día',S.day)}${kpi('En un mes',S.mon)}${kpi('En un año',S.year)}<div><span>El peso en ${S.last.d.slice(0,4)}</span><b class="num">${peso>=0?'▲':'▼'} ${esc(Math.abs(peso).toFixed(1))} %</b><small>${peso>=0?'apreciación':'depreciación'} acumulada</small></div>
+      <div><span>Máximo del período</span><b class="num">${esc(mxp.v.toFixed(4))}</b><small>${esc((all?fM:fD)(mxp.d))}</small></div><div><span>Mínimo del período</span><b class="num">${esc(mnp.v.toFixed(4))}</b><small>${esc((all?fM:fD)(mnp.d))}</small></div></div>
+    <h4 class="menu-g">¿Qué significa este movimiento?</h4><p class="mk2-why">${why}</p>
+    <div class="mk2-tbl" role="table" aria-label="Últimos días"><div role="row" class="mk2-th"><span role="columnheader">Fecha</span><span role="columnheader">Compra</span><span role="columnheader">Venta</span><span role="columnheader">Diferencia</span></div>
+      ${C.slice(-6).reverse().map((p,i)=>{const q=onOrBefore(V,p.d);return `<div role="row"><span role="cell">${esc(fD(p.d))}</span><span role="cell" class="num">${p.v.toFixed(4)}</span><span role="cell" class="num">${q?q.v.toFixed(4):''}</span><span role="cell" class="num">${q?(q.v-p.v).toFixed(4):''}</span></div>`}).join('')}</div>
+    <p class="mk2-src-l">Fuente: <a href="${MK_SRC.bcrd}" target="_blank" rel="noopener">Banco Central de la República Dominicana</a> · datos al ${esc(fD(S.last.d))}. Diferencia = venta − compra.</p></section>
+    <section class="panel mk2-empty"><b>Tasas de bancos y casas de cambio</b><p>Todavía no hay una fuente verificable que publique estas tasas de forma que se puedan comprobar. Se mostrarán cuando cada tasa tenga su fuente y su fecha.</p></section>`;
 }
-function bindFx(){
-  document.querySelectorAll('[data-fxc]').forEach(b=>b.onclick=()=>{mk.fx=b.dataset.fxc;mkKeep();render()});
-  document.querySelectorAll('[data-fxk]').forEach(b=>b.onclick=()=>{mk.fxk=b.dataset.fxk;mkKeep();render()});
-  document.querySelectorAll('[data-fxd]').forEach(b=>b.onclick=()=>{mk.dir=b.dataset.fxd;mk.amt='';mkKeep();render()});
-  const a=$('#fxAmt');a.onchange=()=>{mk.amt=a.value;mkKeep();const y=scrollY;render();scrollTo(0,y)};
-  document.querySelectorAll('[data-fxe]').forEach(b=>b.onclick=()=>openFx(b.dataset.fxe));
+/* ---------- Notas del Banco Central ---------- */
+const yrs=(a,b)=>(dIso(b)-dIso(a))/(365.25*864e5);
+const plazoRest=(a,b)=>{const d=Math.round((dIso(b)-dIso(a))/864e5);return d<=0?'vence hoy':d<60?d+(d===1?' día':' días'):d<365?Math.round(d/30.44)+' meses':yrs(a,b).toFixed(1)+' años'};
+function notasHTML(){
+  const hoy=iso(new Date()),L=(mkt.notas||[]).filter(n=>n.estado==='vigente'&&n.vencimiento>=hoy);if(!L.length)return '<p class="hint center">No hay Notas vigentes cargadas.</p>';
+  const T=[['Hasta 1 año',0,1],['De 1 a 3 años',1,3],['De 3 a 5 años',3,5],['Más de 5 años',5,99]];
+  const row=n=>{const r=n.ultimo_rendimiento!=null?+n.ultimo_rendimiento*100:null;return `<button type="button" class="mk2-row" data-nota="${esc(n.isin)}"><span class="mk2-rt"><b>${esc(n.isin)}</b><small>Cupón ${(+n.cupon*100).toFixed(2)} % · vence el ${esc(fD(n.vencimiento))} · ${esc(plazoRest(hoy,n.vencimiento))}</small></span>
+    <span class="mk2-rv num">${r!=null?`<b>${r.toFixed(2)} %</b><small>${n.ultimo_en_revision?'dato en revisión · ':''}subasta del ${esc(fD(n.ultima_adjudicacion))}</small>`:'<small>Sin adjudicación</small>'}</span></button>`};
+  return `<p class="mk2-lead">Notas vigentes del BCRD y el rendimiento promedio ponderado de su última subasta adjudicada. Ese rendimiento es lo que obtuvo quien compró en esa subasta; no es la tasa cupón ni una oferta disponible hoy. Se agrupan por plazo restante porque plazos distintos no se comparan.</p>
+    ${T.map(([lbl,a,b])=>{const G=L.filter(n=>{const y=yrs(hoy,n.vencimiento);return y>=a&&y<b});return G.length?`<h4 class="menu-g">${esc(lbl)}</h4><div class="mk2-list">${G.map(row).join('')}</div>`:''}).join('')}
+    <p class="mk2-src-l">Fuente: <a href="${MK_SRC.notas}" target="_blank" rel="noopener">Banco Central, histórico de subastas de Notas</a> · ${L.length} Notas vigentes · última subasta ${esc(fD((mkt.notas||[]).map(n=>n.ultima_subasta).filter(Boolean).sort().at(-1)))}.</p>`;
 }
-function openFx(name,days=90){
-  const e=FXE.find(x=>x[0]===name),cur=mk.fx,n=fxNow(e,cur),H=fxHist(e,cur),ser=[{n:'Compra',v:H.buy,c:'var(--grow)'},{n:'Venta',v:H.sell,c:'var(--brand)'}],fv=x=>x.toFixed(2);
-  const ch=n.buy-H.buy[H.buy.length-days];
-  sheet(`<div class="la-h">${e[1]==='b'?inst(name):''}<div><h3>${esc(name)}</h3><p class="lead-s">${cur==='USD'?'Dólar estadounidense':'Euro'} · pesos por cada ${cur==='USD'?'US$1':'€1'}</p></div></div>
-    <div class="la-kpi num"><div><span>Compra</span><b>${n.buy.toFixed(2)}</b><small>te pagan</small></div><div><span>Venta</span><b>${n.sell.toFixed(2)}</b><small>te cobran</small></div><div><span>Diferencia</span><b>${(n.sell-n.buy).toFixed(2)}</b><small>margen</small></div><div><span>Cambio</span><b class="${ch>=0?'up':'dn'}">${ch>=0?'+':''}${ch.toFixed(2)}</b><small>en el período</small></div></div>
-    <div class="per light" role="group" aria-label="Período">${RANGES.map(([d,l])=>`<button type="button" data-pr="${d}" aria-pressed="${d===days}">${l}</button>`).join('')}</div>
-    ${lineChart(ser,days,fv,'lcF')}<div class="ch-leg"><span><i style="background:var(--grow)"></i>Compra</span><span><i style="background:var(--brand)"></i>Venta</span></div>
-    <p class="hint">Datos simulados para el prototipo.</p>`,'var(--brand)');
-  document.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>openFx(name,+b.dataset.pr));bindLine('lcF',ser,days,fv);
+async function openNota(isin){
+  const n=(mkt.notas||[]).find(x=>x.isin===isin);if(!n)return;
+  sheet(`<h3>${esc(isin)}</h3><p class="lead-s">Nota del Banco Central · cupón ${(+n.cupon*100).toFixed(2)} % · vence el ${esc(fD(n.vencimiento))}</p><p class="hint center" id="ntLoad">Cargando subastas…</p>`,'var(--market)');
+  let S=[];try{S=await restAll(`mkt_subastas?select=*&isin=eq.${encodeURIComponent(isin)}&order=fecha_subasta`)}catch(e){$('#ntLoad').textContent='No se pudieron cargar las subastas.';return}
+  const A=S.filter(s=>s.estado==='adjudicada'&&s.rendimiento_prom!=null&&!s.en_revision),p=A.map(s=>({d:s.fecha_subasta,v:+s.rendimiento_prom*100}));
+  const a=A.at(-1),b=A.at(-2),bp=a&&b?Math.round((a.rendimiento_prom-b.rendimiento_prom)*1e4):null;
+  const why=a&&b&&bp===0?`El rendimiento promedio ponderado se mantuvo en ${(+a.rendimiento_prom*100).toFixed(2)} % entre las subastas del ${esc(fD(b.fecha_subasta))} y del ${esc(fD(a.fecha_subasta))} (menos de medio punto básico de diferencia). Cálculo de Caoba sobre los resultados publicados.`:a&&b?`El rendimiento promedio ponderado pasó de ${(+b.rendimiento_prom*100).toFixed(2)} % en la subasta del ${esc(fD(b.fecha_subasta))} a ${(+a.rendimiento_prom*100).toFixed(2)} % en la del ${esc(fD(a.fecha_subasta))}: ${bp>0?'+':bp<0?'−':''}${Math.abs(bp)} ${Math.abs(bp)===1?'punto básico':'puntos básicos'} (${((a.rendimiento_prom-b.rendimiento_prom)*100).toFixed(2)} puntos porcentuales). Cálculo de Caoba sobre los resultados publicados; no indica la causa.`:'Solo hay una subasta adjudicada válida para esta Nota.';
+  const money=v=>v==null?'':'RD$'+(v/1e6).toLocaleString('en-US',{maximumFractionDigits:1})+' M';
+  $('.sheet').innerHTML=`<div class="grab"></div><h3>${esc(isin)}</h3><p class="lead-s">Nota del Banco Central · cupón ${(+n.cupon*100).toFixed(2)} % · vence el ${esc(fD(n.vencimiento))}</p>
+    <div class="la-kpi num"><div><span>Último rendimiento</span><b>${a?(+a.rendimiento_prom*100).toFixed(2)+' %':'—'}</b><small>${a?esc(fD(a.fecha_subasta)):''}</small></div><div><span>Precio promedio</span><b>${a&&a.adjudicado_precio_prom!=null?(+a.adjudicado_precio_prom*100).toFixed(2)+' %':'—'}</b><small>del valor nominal</small></div><div><span>Subastas</span><b>${S.length}</b><small>desde ${esc(fD(S[0]&&S[0].fecha_subasta))}</small></div><div><span>Plazo restante</span><b>${esc(plazoRest(iso(new Date()),n.vencimiento))}</b></div></div>
+    ${p.length>1?tChart([{n:'Rendimiento',c:'var(--market)',p}],'mkNt',v=>v.toFixed(2)+' %'):''}
+    <h4 class="menu-g">¿Qué significa este movimiento?</h4><p class="mk2-why">${why}</p>
+    <div class="mk2-tbl five" role="table" aria-label="Subastas"><div role="row" class="mk2-th"><span role="columnheader">Subasta</span><span role="columnheader">Recibido</span><span role="columnheader">Adjudicado</span><span role="columnheader">Rendimiento</span><span role="columnheader">Estado</span></div>
+      ${[...S].reverse().map(s=>`<div role="row"${s.en_revision?' class="rev"':''}><span role="cell">${esc(fD(s.fecha_subasta))}</span><span role="cell" class="num">${esc(money(s.recibido_vn))}</span><span role="cell" class="num">${esc(money(s.adjudicado_vn))}</span><span role="cell" class="num">${s.rendimiento_prom!=null?(+s.rendimiento_prom*100).toFixed(2)+' %':''}</span><span role="cell">${s.estado==='adjudicada'?'Adjudicada':s.estado==='desierta'?'Desierta':'Sin adjudicación'}${s.en_revision?' · en revisión':''}</span></div>`).join('')}</div>
+    <p class="mk2-src-l">Las filas «en revisión» tienen datos dudosos en el archivo oficial y no se usan en el gráfico. Fuente: <a href="${MK_SRC.notas}" target="_blank" rel="noopener">Banco Central</a>.</p>`;
+  bindT('mkNt');
 }
-
+/* ---------- Fondos cerrados y fideicomisos ---------- */
+function fondosData(){
+  const by={};(mkt.fobs||[]).forEach(o=>{(by[o.serie]=by[o.serie]||[]).push({d:o.fecha_ref,v:+o.valor})});
+  const ult=Object.values(by).map(a=>a.at(-1).d).sort().at(-1);
+  return (mkt.fondos||[]).map(f=>{const a=(by[f.serie]||[]).sort((x,y)=>x.d<y.d?-1:1),L=a.at(-1);if(!L)return f.ultima_fecha?{...f,last:{d:f.ultima_fecha,v:null},v1:null,v12:null,al:false}:null;
+    const m1=a.find(p=>p.d===shiftIso(L.d.slice(0,8)+'01',{d:-1})),y12=a.find(p=>p.d.slice(0,7)===shiftIso(L.d.slice(0,8)+'01',{y:-1}).slice(0,7));
+    return {...f,last:L,v1:m1?(L.v/m1.v-1)*100:null,v12:y12?(L.v/y12.v-1)*100:null,al:L.d===ult}}).filter(Boolean);
+}
+function fondosHTML(){
+  let F=fondosData();if(!F.length)return '<p class="hint center">No hay fondos cargados.</p>';
+  const ult=F.filter(f=>f.last.v!=null).map(f=>f.last.d).sort().at(-1);
+  F=F.filter(f=>(!mk.fact||f.al)&&(!mk.fcur||f.moneda===mk.fcur)&&(!mk.ftipo||f.tipo===mk.ftipo));
+  F.sort((a,b)=>mk.fsort==='nom'?a.nombre.localeCompare(b.nombre):((b.v12??-1e9)-(a.v12??-1e9)));
+  const seg=(k,opts)=>`<div class="seg tiny" role="group">${opts.map(([v,l])=>`<button type="button" data-mkf="${k}:${v}" aria-pressed="${String(mk[k])===String(v)}">${l}</button>`).join('')}</div>`;
+  const cv=v=>v==null?'—':`<span class="${v>0?'up':v<0?'dn':''}">${esc(pct(v,1))}</span>`;
+  return `<p class="mk2-lead">Valor cuota mensual de fondos de inversión cerrados y fideicomisos de oferta pública. La variación del valor cuota no incluye los beneficios que el fondo reparte, así que no es la rentabilidad total. Los fondos en pesos y en dólares no se comparan entre sí.</p>
+    <div class="mk2-flt">${seg('fcur',[['','Todas'],['DOP','RD$'],['USD','US$']])}${seg('ftipo',[['','Todos'],['cerrado','Fondos cerrados'],['fideicomiso','Fideicomisos']])}${seg('fsort',[['v12','Por 12 meses'],['nom','Por nombre']])}${seg('fact',[[1,'Con dato de '+esc(fM(ult))],[0,'Todos']])}</div>
+    <div class="mk2-list">${F.map(f=>`<button type="button" class="mk2-row" data-fondo="${esc(f.codigo)}"><span class="mk2-rt"><b>${esc(f.nombre)}</b><small>${f.tipo==='fideicomiso'?'Fideicomiso':'Fondo cerrado'} · ${f.moneda==='USD'?'US$':'RD$'}${f.last.v==null?' · sin datos recientes':' · '+esc(fM(f.last.d))}</small></span>
+      <span class="mk2-rv num">${f.last.v==null?`<small>Último dato: ${esc(fM(f.last.d))}</small>`:`<b>${esc(fmt(f.last.v,f.moneda,2))}</b><small>mes ${cv(f.v1)} · 12 meses ${cv(f.v12)}</small>`}</span></button>`).join('')||'<p class="hint center">Ningún fondo con esos filtros.</p>'}</div>
+    <p class="mk2-src-l">Fuente: <a href="${MK_SRC.simv}" target="_blank" rel="noopener">SIMV en datos.gob.do</a>, con datos de la BVRD que la SIMV indica que no están auditados por ella · datos a ${esc(fM(ult))}.</p>`;
+}
+async function openFondo(code){
+  const f=(mkt.fondos||[]).find(x=>x.codigo===code);if(!f)return;
+  sheet(`<h3>${esc(f.nombre)}</h3><p class="hint center" id="fdLoad">Cargando historial…</p>`,'var(--market)');
+  let O=[];try{O=(await restAll(`mkt_obs?select=fecha_ref,valor&serie=eq.${encodeURIComponent(f.serie)}&order=fecha_ref`)).map(o=>({d:o.fecha_ref,v:+o.valor}))}catch(e){$('#fdLoad').textContent='No se pudo cargar el historial.';return}
+  if(!O.length){$('#fdLoad').textContent='Sin datos.';return}
+  const L=O.at(-1),F0=O[0],P=O.at(-2),y12=O.find(p=>p.d.slice(0,7)===shiftIso(L.d.slice(0,8)+'01',{y:-1}).slice(0,7)),yrsN=yrs(F0.d,L.d);
+  const cagr=yrsN>=1?(Math.pow(L.v/F0.v,1/yrsN)-1)*100:null,mx=O.reduce((a,b)=>b.v>a.v?b:a),mn=O.reduce((a,b)=>b.v<a.v?b:a);
+  const why=P?`El valor cuota ${L.v>=P.v?'subió':'bajó'} ${esc(pct((L.v/P.v-1)*100))} entre ${esc(fM(P.d))} y ${esc(fM(L.d))}. Es la variación del valor de cada cuota; si el fondo repartió beneficios en ese período, no están incluidos. Cálculo de Caoba sobre los datos publicados; no indica la causa.`:'';
+  $('.sheet').innerHTML=`<div class="grab"></div><h3>${esc(f.nombre)}</h3><p class="lead-s">${f.tipo==='fideicomiso'?'Fideicomiso de oferta pública':'Fondo de inversión cerrado'} · ${f.moneda==='USD'?'dólares':'pesos'} · ${O.length} meses de datos</p>
+    <div class="la-kpi num"><div><span>Valor cuota</span><b>${esc(fmt(L.v,f.moneda,2))}</b><small>${esc(fM(L.d))}</small></div><div><span>En 12 meses</span><b class="${y12?(L.v>=y12.v?'up':'dn'):''}">${y12?esc(pct((L.v/y12.v-1)*100,1)):'—'}</b><small>variación del valor cuota</small></div>
+      <div><span>Anualizada desde el inicio</span><b>${cagr!=null?esc(pct(cagr,1)):'—'}</b><small>desde ${esc(fM(F0.d))}</small></div><div><span>Máximo y mínimo</span><b>${esc(fmt(mx.v,f.moneda,0))} · ${esc(fmt(mn.v,f.moneda,0))}</b><small>${esc(fM(mx.d))} · ${esc(fM(mn.d))}</small></div></div>
+    ${tChart([{n:'Valor cuota',c:'var(--market)',p:O}],'mkFd',v=>fmt(v,f.moneda,0))}
+    <h4 class="menu-g">¿Qué significa este movimiento?</h4><p class="mk2-why">${why}</p>
+    <p class="mk2-src-l">Fuente: <a href="${MK_SRC.simv}" target="_blank" rel="noopener">SIMV en datos.gob.do</a>, datos de la BVRD no auditados por la SIMV.</p>`;
+  bindT('mkFd');
+}
+/* ---------- Vista ---------- */
+function vMercado(){
+  if(!['moneda','inversion'].includes(mk.seg))mk.seg='moneda';
+  if(!['notas','fondos','entidades'].includes(mk.inv))mk.inv='notas';
+  loadMkt();
+  const seg=`<div class="seg seg-top mk-types" role="group" aria-label="Sección"><button type="button" data-mks="moneda" aria-pressed="${mk.seg==='moneda'}">Moneda</button><button type="button" data-mks="inversion" aria-pressed="${mk.seg==='inversion'}">Tasas e inversiones</button></div>`;
+  let body;
+  if(!mkt.fx&&!mkt.err)body='<p class="hint center" style="margin:28px 0">Cargando datos del mercado…</p>';
+  else if(!mkt.fx)body=`<p class="mk-note warn">${esc(mkt.err)}</p>`;
+  else if(mk.seg==='moneda')body=monedaHTML();
+  else body=`<div class="mk-types mk2-sub" role="group" aria-label="Instrumento">${[['notas','Notas del BCRD'],['fondos','Fondos cerrados'],['entidades','Tasas por entidad']].map(([k,l])=>`<button type="button" data-mkinv="${k}" aria-pressed="${mk.inv===k}">${l}</button>`).join('')}</div>`+(mk.inv==='notas'?notasHTML():mk.inv==='fondos'?fondosHTML():realHTML());
+  $('#view').innerHTML=`<div class="mk2">${mkIndHTML()}${mkStatusHTML()}${mkt.err&&mkt.fx?`<p class="mk-note warn">${esc(mkt.err)}</p>`:''}${seg}${body}</div>${promoHTML('mercado')}`;
+  document.querySelectorAll('[data-mks]').forEach(b=>b.onclick=()=>{mk.seg=b.dataset.mks;mkKeep();render();track('mercado_'+mk.seg)});
+  document.querySelectorAll('[data-mkgo]').forEach(b=>b.onclick=()=>{mk.seg='moneda';mkKeep();render()});
+  document.querySelectorAll('[data-mkinv]').forEach(b=>b.onclick=()=>{mk.inv=b.dataset.mkinv;mkKeep();render();track('mercado_'+mk.inv)});
+  document.querySelectorAll('[data-mkper]').forEach(b=>b.onclick=()=>{mk.per=b.dataset.mkper;mkKeep();const y=scrollY;render();scrollTo(0,y)});
+  document.querySelectorAll('[data-mkf]').forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.mkf.split(':');mk[k]=k==='fact'?+v:v;mkKeep();const y=scrollY;render();scrollTo(0,y)});
+  document.querySelectorAll('[data-nota]').forEach(b=>b.onclick=()=>openNota(b.dataset.nota));
+  document.querySelectorAll('[data-fondo]').forEach(b=>b.onclick=()=>openFondo(b.dataset.fondo));
+  document.querySelectorAll('[data-mkr]').forEach(b=>b.onclick=()=>{mkr.prod=b.dataset.mkr;render()});
+  bindT('mkFx');
+}
 /* ---------- Ingresos, presupuesto, fijos, metas, plan de deudas y hogar compartido ---------- */
 const INC={salario:'Salario',independiente:'Trabajo independiente',remesa:'Remesas',negocio:'Negocio propio',renta:'Alquileres cobrados',otros:'Otro ingreso'};
 const ESSENTIAL=['vivienda','servicios','comida','salud','transporte','educacion'];
@@ -4282,7 +4390,7 @@ const TOUR=[
   ['ingresos','[data-ms]','Movimientos','Gastos e ingresos en una sola pestaña. En gastos también están tu presupuesto y tus gastos fijos.'],
   ['cuentas','.acc-card','Cuentas','Tus cuentas de ahorro, corrientes y efectivo. En «Crédito» están tus tarjetas y préstamos.'],
   ['inversion','.inv-card','Inversiones que crecen en vivo','Mira cuánto ganas por día y cuándo vence o paga intereses cada inversión.'],
-  ['mercado','.mk-types','Mercado','Compara tasas de productos y de cambio. Cada dato dice su fuente y su fecha.']
+  ['mercado','.mk-types','Mercado','Tipo de cambio del BCRD, Notas del Banco Central y fondos cerrados, con su fuente y su fecha.']
 ];
 let tourI=-1;
 function startTour(){tourI=0;tourStep()}
@@ -5398,7 +5506,7 @@ function vInversion(){
   const ents=Object.entries(byE).map(([e,L])=>({e,L,v:L.reduce((a,s)=>a+val(s),0)})).sort((a,b)=>b.v-a.v);
   const tot=T.v||1;
   $('#view').innerHTML=`
-    <button type="button" class="mkt-link" id="goMkt"><span class="mkt-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span><b>Descubre y compara oportunidades de inversión</b><small>Tasas de bancos, puestos de bolsa y tasas de cambio</small></span>${chev}</button>
+    <button type="button" class="mkt-link" id="goMkt"><span class="mkt-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span><b>Mira el mercado</b><small>Dólar del BCRD, Notas del Banco Central y fondos cerrados</small></span>${chev}</button>
     <section class="deep inv-card">
       <div class="hero-top"><span class="lbl">Tus inversiones · ${S.base}</span><span class="hero-r"><span class="hero-pulse"><i></i>En vivo</span>${heroAdd('Agregar una inversión')}</span></div>
       <div class="big num" id="liveTotal">${split(T.v,S.base,4)}</div>
@@ -6000,7 +6108,7 @@ async function loadMarket(force){
     try{localStorage.setItem(KEY+'.mkr',JSON.stringify({rows:mkr.rows,at:mkr.at}))}catch(e){}
     widgetSync();
   }catch(e){mkr.err=mkr.rows?'Sin conexión: mostrando los datos guardados el '+dtFmt.format(new Date(mkr.at))+'.':'No se pudieron cargar las tasas. Revisa tu conexión.'}
-  mkr.loading=false;if(view==='mercado'&&mk.seg==='real')render();
+  mkr.loading=false;if(view==='mercado'&&mk.seg==='inversion'&&mk.inv==='entidades')render();
 }
 const mkrTerm=d=>d==null?'Sin plazo':d===0?'A la vista':d%365===0?d/365+(d/365===1?' año':' años'):d%30===0?d/30+(d/30===1?' mes':' meses'):d+' días';
 const mkrDate=v=>v?dateFmt.format(new Date(String(v).length<=10?v+'T12:00:00':v)):'';
@@ -6031,7 +6139,7 @@ function realHTML(){
   return `${mkr.err?`<p class="mk-note warn">${esc(mkr.err)}</p>`:''}
     ${rows.length?`${mkrCompareHTML(rows)}<div class="mk-types" role="group" aria-label="Producto"><button type="button" data-mkr="" aria-pressed="${!mkr.prod}">Todos</button>${prods.map(k=>`<button type="button" data-mkr="${k}" aria-pressed="${mkr.prod===k}">${esc(MKR_PROD[k]||k)}</button>`).join('')}</div>
       <div class="mkr-list">${L.map(mkrRow).join('')}</div>`
-    :`<section class="conn-empty"><h2>Todavía no hay tasas verificadas</h2><p>Aquí aparecerán las tasas de cada entidad con su fuente, su fecha y su estado (dato real o por verificar). Ninguna tasa se inventa ni se sobrescribe.</p><p>Mientras tanto puedes explorar el prototipo, que usa datos simulados y así lo indica.</p><button type="button" class="btn ghost" data-mks="prod">Ver el prototipo simulado</button></section>`}`;
+    :`<section class="conn-empty"><h2>Todavía no hay tasas por entidad</h2><p>Aquí aparecerán las tasas de certificados, cuentas y otros productos de cada banco o puesto de bolsa, con su fuente, su fecha y su estado. Ninguna tasa se inventa: se cargan cuando se pueden verificar.</p></section>`}`;
 }
 /* ---------- Administración (etapas 4 y 6): solo para cuentas registradas en la tabla admins ----------
    La base de datos decide quién es administrador (función is_admin con seguridad por fila);
@@ -6109,12 +6217,12 @@ function widgetSnapshot(){
       inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,cpn,
         items:L.map(s=>({id:s.id,name:s.name,ent:s.entity,v:both(conv(savValue(s,t),s.cur,S.base)),rate:s.rate||0})).sort((a,b)=>b.v.d-a.v.d).slice(0,20)}};
   }
-  if(mkr.rows&&mkr.rows.length){
-    const R=[...mkr.rows].sort((a,b)=>(b.status==='real')-(a.status==='real')||(b.product==='tasa_cambio')-(a.product==='tasa_cambio')||Date.parse(b.observed_at)-Date.parse(a.observed_at));
-    out.mkt={at:mkr.at,rows:R.slice(0,20).map(o=>{const fx=o.product==='tasa_cambio';return {id:String(o.id),inst:o.institution,
+  const fxr=[];
+  if(mkt.fx&&mkt.fx.c&&mkt.fx.c.length){[['c','compra'],['v','venta']].forEach(([k,rt])=>{const L=mkt.fx[k].at(-1);fxr.push({id:'bcrd_usd_'+rt,inst:'Banco Central',label:'Dólar',cur:'USD',rate:L.v,rt,st:'real',date:Date.parse(L.d+'T12:00:00')||0,fx:true})})}
+  const rr=(mkr.rows||[]).filter(o=>o.status==='real').sort((a,b)=>(b.product==='tasa_cambio')-(a.product==='tasa_cambio')||Date.parse(b.observed_at)-Date.parse(a.observed_at)).map(o=>{const fx=o.product==='tasa_cambio';return {id:String(o.id),inst:o.institution,
       label:fx?(o.currency==='USD'?'Dólar':o.currency==='EUR'?'Euro':o.currency):(o.product_name||MKR_PROD[o.product]||o.product)+' '+o.currency+(o.term_days?' '+mkrTerm(o.term_days):''),
-      cur:o.currency,rate:+o.rate,rt:MKR_RT[o.rate_type]||o.rate_type,st:o.status,date:Date.parse(o.observed_at)||0,fx}})};
-  }
+      cur:o.currency,rate:+o.rate,rt:MKR_RT[o.rate_type]||o.rate_type,st:o.status,date:Date.parse(o.observed_at)||0,fx}});
+  if(fxr.length||rr.length)out.mkt={at:Math.max(mkt.at||0,mkr.at||0),rows:fxr.concat(rr).slice(0,20)};
   return out;
 }
 /* Se llama después de cada cambio (render). Espera un momento para agrupar cambios seguidos. */
@@ -6605,7 +6713,7 @@ function openTerms(){
     ['Tu cuenta',`<p>Eres responsable de mantener segura tu contraseña y el acceso a tu correo. Cada cuenta es personal. No intentes acceder a datos de otras personas ni alterar el funcionamiento del servicio.</p>`],
     ['La información financiera',`<ul><li><b>No es asesoría.</b> Caoba muestra cálculos y datos para ayudarte a decidir, pero no es una asesoría financiera, legal ni fiscal. Antes de invertir, confirma las condiciones con la entidad.</li>
       <li><b>Tus registros:</b> los saldos, tasas e intereses se calculan con los datos que escribes. Los intereses y rendimientos que dicen «estimado» son aproximaciones; los valores oficiales son los de tu estado de cuenta.</li>
-      <li><b>Mercado:</b> cada tasa muestra su fuente, su fecha y si es un dato real, por verificar o simulado. Las secciones de prototipo usan datos simulados y lo indican.</li>
+      <li><b>Mercado:</b> muestra solo datos publicados por fuentes oficiales (Banco Central y Superintendencia del Mercado de Valores), cada uno con su fuente y su fecha. Los cálculos de Caoba, como las variaciones, se indican como tales. No es asesoría de inversión.</li>
       <li><b>Sin conexión bancaria:</b> Caoba no se conecta a tus bancos ni mueve dinero.</li></ul>`],
     ['Limitaciones del servicio',`<p>El servicio se ofrece tal como está, sin garantía de disponibilidad continua. Caoba no se hace responsable de decisiones tomadas a partir de la información mostrada, ni de pérdidas de datos causadas por borrar la app o el navegador sin cuenta ni respaldo. Te recomendamos crear una cuenta o guardar respaldos.</p>`],
     ['Propiedad',`<p>Tus datos son tuyos y puedes exportarlos a Excel o a un archivo de respaldo cuando quieras. La marca, el diseño y el código de Caoba pertenecen a sus autores.</p>`],

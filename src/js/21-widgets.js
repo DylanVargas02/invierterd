@@ -25,12 +25,12 @@ function widgetSnapshot(){
       inv:{total:both(Ti.v),gain:both(Ti.v-Ti.p),ps:both(Ti.ps),next,cpn,
         items:L.map(s=>({id:s.id,name:s.name,ent:s.entity,v:both(conv(savValue(s,t),s.cur,S.base)),rate:s.rate||0})).sort((a,b)=>b.v.d-a.v.d).slice(0,20)}};
   }
-  if(mkr.rows&&mkr.rows.length){
-    const R=[...mkr.rows].sort((a,b)=>(b.status==='real')-(a.status==='real')||(b.product==='tasa_cambio')-(a.product==='tasa_cambio')||Date.parse(b.observed_at)-Date.parse(a.observed_at));
-    out.mkt={at:mkr.at,rows:R.slice(0,20).map(o=>{const fx=o.product==='tasa_cambio';return {id:String(o.id),inst:o.institution,
+  const fxr=[];
+  if(mkt.fx&&mkt.fx.c&&mkt.fx.c.length){[['c','compra'],['v','venta']].forEach(([k,rt])=>{const L=mkt.fx[k].at(-1);fxr.push({id:'bcrd_usd_'+rt,inst:'Banco Central',label:'Dólar',cur:'USD',rate:L.v,rt,st:'real',date:Date.parse(L.d+'T12:00:00')||0,fx:true})})}
+  const rr=(mkr.rows||[]).filter(o=>o.status==='real').sort((a,b)=>(b.product==='tasa_cambio')-(a.product==='tasa_cambio')||Date.parse(b.observed_at)-Date.parse(a.observed_at)).map(o=>{const fx=o.product==='tasa_cambio';return {id:String(o.id),inst:o.institution,
       label:fx?(o.currency==='USD'?'Dólar':o.currency==='EUR'?'Euro':o.currency):(o.product_name||MKR_PROD[o.product]||o.product)+' '+o.currency+(o.term_days?' '+mkrTerm(o.term_days):''),
-      cur:o.currency,rate:+o.rate,rt:MKR_RT[o.rate_type]||o.rate_type,st:o.status,date:Date.parse(o.observed_at)||0,fx}})};
-  }
+      cur:o.currency,rate:+o.rate,rt:MKR_RT[o.rate_type]||o.rate_type,st:o.status,date:Date.parse(o.observed_at)||0,fx}});
+  if(fxr.length||rr.length)out.mkt={at:Math.max(mkt.at||0,mkr.at||0),rows:fxr.concat(rr).slice(0,20)};
   return out;
 }
 /* Se llama después de cada cambio (render). Espera un momento para agrupar cambios seguidos. */
