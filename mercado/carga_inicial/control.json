@@ -1,0 +1,610 @@
+{
+ "bcrd_tipo_cambio": {
+  "resumen": {
+   "fuente": "bcrd_tipo_cambio",
+   "series": 14,
+   "observaciones": 20664,
+   "marcadas_para_revisar": 190,
+   "pendientes": 3
+  },
+  "documento": {
+   "nombre": "f1dca473-TASA_DOLAR_REFERENCIA_MC_16.xlsx",
+   "sha256": "870f5b7dbbdf06b80bb984d832e9f059cc235f0a7c8a11173df65eb7bb9fbca8",
+   "bytes": 358938
+  },
+  "series": {
+   "bcrd.usd_dop.compra.diaria": {
+    "n": 9014,
+    "suma": "312240.1444112",
+    "min": "1991-01-02",
+    "max": "2026-11-27"
+   },
+   "bcrd.usd_dop.venta.diaria": {
+    "n": 9014,
+    "suma": "313590.01132",
+    "min": "1991-01-02",
+    "max": "2026-11-27"
+   },
+   "bcrd.usd_dop.compra.prom_mensual": {
+    "n": 502,
+    "suma": "15240.991402852136156",
+    "min": "1985-01-31",
+    "max": "2026-10-31"
+   },
+   "bcrd.usd_dop.venta.prom_mensual": {
+    "n": 502,
+    "suma": "15309.229882209116064",
+    "min": "1985-01-31",
+    "max": "2026-10-31"
+   },
+   "bcrd.usd_dop.compra.prom_trimestral": {
+    "n": 167,
+    "suma": "5059.2939146690396435",
+    "min": "1985-03-31",
+    "max": "2026-09-30"
+   },
+   "bcrd.usd_dop.venta.prom_trimestral": {
+    "n": 167,
+    "suma": "5081.8674250203453562",
+    "min": "1985-03-31",
+    "max": "2026-09-30"
+   },
+   "bcrd.usd_dop.compra.prom_anual": {
+    "n": 41,
+    "suma": "1220.3175519610646293",
+    "min": "1985-12-31",
+    "max": "2025-12-31"
+   },
+   "bcrd.usd_dop.venta.prom_anual": {
+    "n": 41,
+    "suma": "1225.5272220797366223",
+    "min": "1985-12-31",
+    "max": "2025-12-31"
+   },
+   "bcrd.usd_dop.compra.fin_mensual": {
+    "n": 430,
+    "suma": "14906.4640",
+    "min": "1991-01-31",
+    "max": "2026-10-31"
+   },
+   "bcrd.usd_dop.venta.fin_mensual": {
+    "n": 430,
+    "suma": "14972.8912",
+    "min": "1991-01-31",
+    "max": "2026-10-31"
+   },
+   "bcrd.usd_dop.compra.fin_trimestral": {
+    "n": 143,
+    "suma": "4956.1608",
+    "min": "1991-03-31",
+    "max": "2026-09-30"
+   },
+   "bcrd.usd_dop.venta.fin_trimestral": {
+    "n": 143,
+    "suma": "4978.3393",
+    "min": "1991-03-31",
+    "max": "2026-09-30"
+   },
+   "bcrd.usd_dop.compra.fin_anual": {
+    "n": 35,
+    "suma": "1211.2874",
+    "min": "1991-12-31",
+    "max": "2025-12-31"
+   },
+   "bcrd.usd_dop.venta.fin_anual": {
+    "n": 35,
+    "suma": "1216.6778",
+    "min": "1991-12-31",
+    "max": "2025-12-31"
+   }
+  }
+ },
+ "bcrd_notas": {
+  "resumen": {
+   "fuente": "bcrd_notas",
+   "series": 0,
+   "observaciones": 0,
+   "marcadas_para_revisar": 0,
+   "pendientes": 18,
+   "notas": 65,
+   "subastas": 224
+  },
+  "documento": {
+   "nombre": "ad787208-Historico_Subastas_Notas_2.xlsx",
+   "sha256": "48b33711fe39ec9e8e55c5735f9695b83338717e2a17cd8524653cccafce9822",
+   "bytes": 53598
+  },
+  "series": {},
+  "subastas": {
+   "n": 224,
+   "adjudicado_vn": "1464826614020.99999896",
+   "recibido_vn": "3314205609999.999999",
+   "isin": 65
+  }
+ },
+ "simv_fondos_cerrados": {
+  "resumen": {
+   "fuente": "simv_fondos_cerrados",
+   "series": 78,
+   "observaciones": 3901,
+   "marcadas_para_revisar": 25,
+   "pendientes": 13,
+   "fondos": 78
+  },
+  "documento": {
+   "nombre": "804e45f8-Variacion-de-Valor-Cuota-de-Fondos-de-Inversion-Cerrados-y-Fideicomisos-de-Oferta-Publica_2.xlsx",
+   "sha256": "853d57973b54342e687e3efb1b3b955c8b641073d80306f5d1d3ffdd2df09e03",
+   "bytes": 157801
+  },
+  "series": {
+   "simv.vc.fondo_nacional_pioneer_united_renta_fija": {
+    "n": 104,
+    "suma": "120221.12",
+    "min": "2013-04-30",
+    "max": "2021-11-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_fija_capitalizable_popular": {
+    "n": 121,
+    "suma": "167464.7792",
+    "min": "2015-02-28",
+    "max": "2025-02-28"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_fija_pago_recurrente_popular": {
+    "n": 121,
+    "suma": "128872.4036",
+    "min": "2015-02-28",
+    "max": "2025-02-28"
+   },
+   "simv.vc.fondo_cerrado_de_inversion_de_renta_fija_gam": {
+    "n": 102,
+    "suma": "179232.2384",
+    "min": "2015-04-30",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_cerrado_de_inversion_inmobiliaria_pioneer": {
+    "n": 90,
+    "suma": "112825.4497",
+    "min": "2015-06-30",
+    "max": "2022-11-30"
+   },
+   "simv.vc.fideicomiso_de_op_de_valores_inmobiliario_malaga": {
+    "n": 121,
+    "suma": "124675.0412",
+    "min": "2015-09-30",
+    "max": "2025-09-30"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_gam_energia": {
+    "n": 95,
+    "suma": "119234.2027",
+    "min": "2015-11-30",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_excel_i": {
+    "n": 127,
+    "suma": "14428.3180",
+    "min": "2016-02-29",
+    "max": "2026-08-31"
+   },
+   "simv.vc.jmmb_fondo_de_inversion_cerrado_inmobiliario": {
+    "n": 119,
+    "suma": "129929.2020",
+    "min": "2016-07-31",
+    "max": "2026-05-31"
+   },
+   "simv.vc.fideicomiso_de_oferta_publica_inmobiliario_fpm_02_fp": {
+    "n": 109,
+    "suma": "116508.0441",
+    "min": "2016-11-30",
+    "max": "2025-11-30"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_advanced_oportunidades_de_inversion": {
+    "n": 114,
+    "suma": "172383481.9908",
+    "min": "2017-05-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_inmobiliaria_dolares_popular": {
+    "n": 110,
+    "suma": "118334.0759",
+    "min": "2017-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_pioneer": {
+    "n": 106,
+    "suma": "1374840.1906",
+    "min": "2018-01-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_fija_gam_united_capital": {
+    "n": 61,
+    "suma": "68850.8201",
+    "min": "2018-06-30",
+    "max": "2023-06-30"
+   },
+   "simv.vc.fondo_cerrado_de_inversion_inmobiliaria_universal_i": {
+    "n": 62,
+    "suma": "66355.5648",
+    "min": "2018-08-31",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_libre_para_el_desarrollo_de_infraestructura_433fd43c": {
+    "n": 62,
+    "suma": "63454156.874",
+    "min": "2018-08-31",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_excel_ii": {
+    "n": 94,
+    "suma": "10290.2278",
+    "min": "2019-01-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fideicomiso_de_oferta_publica_de_valores_fiduciarios_g_patio_01_fu": {
+    "n": 93,
+    "suma": "106380.8614",
+    "min": "2019-02-28",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_fija_multiactivos_popular": {
+    "n": 27,
+    "suma": "30920.3230",
+    "min": "2019-03-31",
+    "max": "2021-05-31"
+   },
+   "simv.vc.fideicomiso_de_oferta_publica_de_valores_accionarios_rica_03_fu": {
+    "n": 87,
+    "suma": "14357.7027",
+    "min": "2019-08-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_gam_ii": {
+    "n": 50,
+    "suma": "46948.0849",
+    "min": "2019-08-31",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_pioneer_inmobiliario_ii": {
+    "n": 86,
+    "suma": "109707.9657",
+    "min": "2019-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_popular": {
+    "n": 84,
+    "suma": "106416.8982",
+    "min": "2019-11-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.jmmb_fondo_de_inversion_cerrado_inmobiliario_ii": {
+    "n": 81,
+    "suma": "89005.1145",
+    "min": "2020-02-29",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_pioneer_ii": {
+    "n": 41,
+    "suma": "451084.5224",
+    "min": "2020-05-31",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_bhd_fondos_i": {
+    "n": 73,
+    "suma": "7617.8069",
+    "min": "2020-10-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_gam_i": {
+    "n": 33,
+    "suma": "34162.7106",
+    "min": "2021-01-31",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_de_sociedades_con_impacto_social_pioneer": {
+    "n": 30,
+    "suma": "305910.6870",
+    "min": "2021-04-30",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_viviendas_en_la_republica_d_8631f90e": {
+    "n": 64,
+    "suma": "8348654.1004",
+    "min": "2021-07-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.jmmb_fondo_de_inversion_cerrado_de_desarrollo_de_sociedades_de_energia_4fa8c953": {
+    "n": 64,
+    "suma": "698638.5893",
+    "min": "2021-07-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_advanced_oportunidades_ii": {
+    "n": 63,
+    "suma": "716153.7934",
+    "min": "2021-08-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_pioneer_united_renta_fija": {
+    "n": 29,
+    "suma": "38762.3471",
+    "min": "2021-12-31",
+    "max": "2024-04-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_desarrollo_excel_i": {
+    "n": 57,
+    "suma": "69434.4536",
+    "min": "2022-02-28",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_reservas_i": {
+    "n": 56,
+    "suma": "650858.5365",
+    "min": "2022-03-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_inmobiliario_pesos_popular": {
+    "n": 38,
+    "suma": "43672.8379",
+    "min": "2022-03-31",
+    "max": "2025-04-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_bhd_fondos_i": {
+    "n": 54,
+    "suma": "60497.7463",
+    "min": "2022-05-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_advanced_i": {
+    "n": 48,
+    "suma": "60837.9236",
+    "min": "2022-11-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_reservas_i": {
+    "n": 47,
+    "suma": "537326.1358",
+    "min": "2022-12-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_infraestructura_energeticas_i": {
+    "n": 5,
+    "suma": "4941.4403",
+    "min": "2023-05-31",
+    "max": "2023-09-30"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_renta_fija_altio_united_capital": {
+    "n": 41,
+    "suma": "52096.4421",
+    "min": "2023-06-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.jmmb_fondo_de_inversion_cerrado_de_desarrollo": {
+    "n": 40,
+    "suma": "41679330.3770",
+    "min": "2023-07-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_altio_energia": {
+    "n": 38,
+    "suma": "62624.0975",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_altio_ii": {
+    "n": 38,
+    "suma": "35916.3494",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_inversion_de_renta_fija_altio": {
+    "n": 38,
+    "suma": "117382.7979",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_altio_i": {
+    "n": 38,
+    "suma": "42055.2798",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_viviendas_en_la_republica_d_e730068e": {
+    "n": 38,
+    "suma": "5172382.1010",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_universal_i": {
+    "n": 38,
+    "suma": "49580.3143",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_libre_para_el_desarrollo_de_infraestructuras_4911bb24": {
+    "n": 38,
+    "suma": "42702925.8060",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_con_impacto_social_pioneer": {
+    "n": 38,
+    "suma": "450148.8671",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_infraestructuras_energeticas_i": {
+    "n": 38,
+    "suma": "58128.9409",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_sociedades_pioneer_ii": {
+    "n": 38,
+    "suma": "602884.4013",
+    "min": "2023-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_fondos_cerrado_altio_i": {
+    "n": 37,
+    "suma": "39638.6911",
+    "min": "2023-10-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fideicomiso_de_oferta_publica_de_valores_inmobiliarios_de_renta_variabl_fa2f1c13": {
+    "n": 36,
+    "suma": "38346.4291",
+    "min": "2023-11-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_en_dolares_reservas_ii": {
+    "n": 36,
+    "suma": "382466.6913",
+    "min": "2023-11-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_reservas_ii": {
+    "n": 36,
+    "suma": "916971.0797",
+    "min": "2023-11-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_universal_i": {
+    "n": 31,
+    "suma": "332399.4814",
+    "min": "2024-04-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_cerrado_de_desarrollo_altio_iii": {
+    "n": 30,
+    "suma": "46539.4341",
+    "min": "2024-05-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_con_impacto_social_pioneer_ii": {
+    "n": 30,
+    "suma": "323048.7453",
+    "min": "2024-05-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_excel_iii": {
+    "n": 13,
+    "suma": "13582.9049",
+    "min": "2024-07-31",
+    "max": "2025-07-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_advanced_oportunidades_iii": {
+    "n": 27,
+    "suma": "292523.8538",
+    "min": "2024-08-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fideicomiso_de_oferta_publica_de_valores_inmobiliario_g_patio02_patio_c_e0e70048": {
+    "n": 26,
+    "suma": "28675.9531",
+    "min": "2024-09-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_interval_i": {
+    "n": 25,
+    "suma": "27365.1279",
+    "min": "2024-10-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_interval_i": {
+    "n": 25,
+    "suma": "259630.2598",
+    "min": "2024-10-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_universal_ii": {
+    "n": 24,
+    "suma": "24966.0934",
+    "min": "2024-11-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_desarrollo_turistico_excel_i": {
+    "n": 19,
+    "suma": "19379.9858",
+    "min": "2025-04-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_tc_rd_i": {
+    "n": 12,
+    "suma": "1246405.8787",
+    "min": "2025-05-31",
+    "max": "2026-05-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_excel_iv": {
+    "n": 17,
+    "suma": "17552.1470",
+    "min": "2025-06-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_velora": {
+    "n": 16,
+    "suma": "18235.6776",
+    "min": "2025-07-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_infraestructuras_dominicanas_ii": {
+    "n": 15,
+    "suma": "1332814.3394",
+    "min": "2025-08-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_excel_v": {
+    "n": 11,
+    "suma": "929.0581",
+    "min": "2025-12-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_sociedades_sur": {
+    "n": 9,
+    "suma": "8963.6740",
+    "min": "2026-02-28",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_financiero_advanced_i": {
+    "n": 8,
+    "suma": "66491.4191",
+    "min": "2026-03-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_financiero_advanced_ii": {
+    "n": 8,
+    "suma": "66493.8074",
+    "min": "2026-03-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fideicomiso_de_oferta_publica_de_valores_multiplaza_fr_no_02": {
+    "n": 6,
+    "suma": "6788.4795",
+    "min": "2026-04-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_educativo_en_la_republica_dominicana_i": {
+    "n": 5,
+    "suma": "46258.1539",
+    "min": "2026-06-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_activos_reales_latitude_i": {
+    "n": 5,
+    "suma": "537870.0785",
+    "min": "2026-06-30",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_inmobiliario_amergent_i": {
+    "n": 4,
+    "suma": "4038.0888",
+    "min": "2026-07-31",
+    "max": "2026-10-31"
+   },
+   "simv.vc.fondo_de_inversion_cerrado_de_desarrollo_de_deuda_privada_latitude_i": {
+    "n": 1,
+    "suma": "96203.35",
+    "min": "2026-10-31",
+    "max": "2026-10-31"
+   }
+  }
+ }
+}
