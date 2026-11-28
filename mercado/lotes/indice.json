@@ -1,0 +1,257 @@
+{
+ "formato": 1,
+ "lotes": [
+  {
+   "id": "20261127T224416_bcrd_tipo_cambio_175dbc74",
+   "archivo": "20261127T224416_bcrd_tipo_cambio_175dbc74.json",
+   "sha256": "033dc52fbc86d6b1a31cba7adb157e0336b29ec37a8c6f5853b0a017db9602a9",
+   "fuente": "bcrd_tipo_cambio",
+   "documento": "bcrd_tipo_cambio",
+   "nuevas": 20662,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_notas_48b33711",
+   "archivo": "20261127T224416_bcrd_notas_48b33711.json",
+   "sha256": "433525de65e74f7ed58e07cf623a9d3c10f595e4b13057aad127f6af437e0a24",
+   "fuente": "bcrd_notas",
+   "documento": "bcrd_notas",
+   "nuevas": 289,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_tpm_4c2cebe2",
+   "archivo": "20261127T224416_bcrd_tpm_4c2cebe2.json",
+   "sha256": "b1049f4d6e257d2efa1b1eb4be3eeb5b531e2c6fce19aaf4e435bdc2d510f29f",
+   "fuente": "bcrd_tpm",
+   "documento": "bcrd_tpm",
+   "nuevas": 825,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_ipc_general_3ff34bd9",
+   "archivo": "20261127T224416_bcrd_ipc_general_3ff34bd9.json",
+   "sha256": "67dd163c4ef752b1e81d475148d6b226681f509748fd08875b995b1eea8c7133",
+   "fuente": "bcrd_ipc",
+   "documento": "bcrd_ipc_general",
+   "nuevas": 2056,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_ipc_subyacente_c5b5f1f4",
+   "archivo": "20261127T224416_bcrd_ipc_subyacente_c5b5f1f4.json",
+   "sha256": "cfd7382ec27d7a4c2be58e95bffc87067d8e3ad444abbe3cedf6e7002072e9aa",
+   "fuente": "bcrd_ipc",
+   "documento": "bcrd_ipc_subyacente",
+   "nuevas": 1288,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_tbm_pasiva_dop_0a39c87f",
+   "archivo": "20261127T224416_bcrd_tbm_pasiva_dop_0a39c87f.json",
+   "sha256": "70a90e2dea74aac483189b7f428f29dcba2cb0df15016dfbda681d02b20ce257",
+   "fuente": "bcrd_tasas_bm",
+   "documento": "bcrd_tbm_pasiva_dop",
+   "nuevas": 1456,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_tbm_pasiva_usd_36d353dd",
+   "archivo": "20261127T224416_bcrd_tbm_pasiva_usd_36d353dd.json",
+   "sha256": "56518f0b263a689d9fadb66c07ef5fa755dc16d109348d5c0fbe41ff6e46cf05",
+   "fuente": "bcrd_tasas_bm",
+   "documento": "bcrd_tbm_pasiva_usd",
+   "nuevas": 1263,
+   "cambiadas": 0
+  },
+  {
+   "id": "20261127T224416_bcrd_tbm_activa_dop_790303a7",
+   "archivo": "20261127T224416_bcrd_tbm_activa_dop_790303a7.json",
+   "sha256": "e2d3a7e73de845130d0fe9a56ce9e0849c4c5466c1ec3da1ebd66abdcc6197ab",
+   "fuente": "bcrd_tasas_bm",
+   "documento": "bcrd_tbm_activa_dop",
+   "nuevas": 1350,
+   "cambiadas": 0
+  }
+ ],
+ "corridas": [
+  {
+   "id": "20261127T224416",
+   "inicio": "2026-11-27T22:44:16-04:00",
+   "fin": "2026-11-27T22:44:17-04:00",
+   "resultados": [
+    {
+     "fuente": "bcrd_tipo_cambio",
+     "documento": "bcrd_tipo_cambio",
+     "inicio": "2026-11-27T22:44:16-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_tipo_cambio_175dbc74",
+     "nuevos": 20662,
+     "modificados": 0,
+     "mensaje": "20662 nuevos, 0 cambiados, 3 pendientes.",
+     "fin": "2026-11-27T22:44:16-04:00"
+    },
+    {
+     "fuente": "bcrd_notas",
+     "documento": "bcrd_notas",
+     "inicio": "2026-11-27T22:44:16-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_notas_48b33711",
+     "nuevos": 289,
+     "modificados": 0,
+     "mensaje": "289 nuevos, 0 cambiados, 18 pendientes.",
+     "fin": "2026-11-27T22:44:16-04:00"
+    },
+    {
+     "fuente": "bcrd_tpm",
+     "documento": "bcrd_tpm",
+     "inicio": "2026-11-27T22:44:16-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_tpm_4c2cebe2",
+     "nuevos": 825,
+     "modificados": 0,
+     "mensaje": "825 nuevos, 0 cambiados, 0 pendientes.",
+     "fin": "2026-11-27T22:44:17-04:00"
+    },
+    {
+     "fuente": "bcrd_ipc",
+     "documento": "bcrd_ipc_general",
+     "inicio": "2026-11-27T22:44:17-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_ipc_general_3ff34bd9",
+     "nuevos": 2056,
+     "modificados": 0,
+     "mensaje": "2056 nuevos, 0 cambiados, 0 pendientes.",
+     "fin": "2026-11-27T22:44:17-04:00"
+    },
+    {
+     "fuente": "bcrd_ipc",
+     "documento": "bcrd_ipc_subyacente",
+     "inicio": "2026-11-27T22:44:17-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_ipc_subyacente_c5b5f1f4",
+     "nuevos": 1288,
+     "modificados": 0,
+     "mensaje": "1288 nuevos, 0 cambiados, 0 pendientes.",
+     "fin": "2026-11-27T22:44:17-04:00"
+    },
+    {
+     "fuente": "bcrd_tasas_bm",
+     "documento": "bcrd_tbm_pasiva_dop",
+     "inicio": "2026-11-27T22:44:17-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_tbm_pasiva_dop_0a39c87f",
+     "nuevos": 1456,
+     "modificados": 0,
+     "mensaje": "1456 nuevos, 0 cambiados, 0 pendientes.",
+     "fin": "2026-11-27T22:44:17-04:00"
+    },
+    {
+     "fuente": "bcrd_tasas_bm",
+     "documento": "bcrd_tbm_pasiva_usd",
+     "inicio": "2026-11-27T22:44:17-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_tbm_pasiva_usd_36d353dd",
+     "nuevos": 1263,
+     "modificados": 0,
+     "mensaje": "1263 nuevos, 0 cambiados, 0 pendientes.",
+     "fin": "2026-11-27T22:44:17-04:00"
+    },
+    {
+     "fuente": "bcrd_tasas_bm",
+     "documento": "bcrd_tbm_activa_dop",
+     "inicio": "2026-11-27T22:44:17-04:00",
+     "estado": "exito",
+     "lote": "20261127T224416_bcrd_tbm_activa_dop_790303a7",
+     "nuevos": 1350,
+     "modificados": 0,
+     "mensaje": "1350 nuevos, 0 cambiados, 0 pendientes.",
+     "fin": "2026-11-27T22:44:17-04:00"
+    }
+   ]
+  }
+ ],
+ "estado": {
+  "bcrd_tipo_cambio": {
+   "fuente": "bcrd_tipo_cambio",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:16-04:00",
+   "sha256": "175dbc74bab1c4ac9405009dd8146c69fe406df667621d5beb47cd56c88e1a20",
+   "bytes": 359025,
+   "ultima_observacion": "2026-11-26",
+   "estado": "al_dia",
+   "mensaje": "20662 nuevos, 0 cambiados, 3 pendientes."
+  },
+  "bcrd_notas": {
+   "fuente": "bcrd_notas",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:16-04:00",
+   "sha256": "48b33711fe39ec9e8e55c5735f9695b83338717e2a17cd8524653cccafce9822",
+   "bytes": 53598,
+   "ultima_observacion": "2026-11-25",
+   "estado": "al_dia",
+   "mensaje": "289 nuevos, 0 cambiados, 18 pendientes."
+  },
+  "bcrd_tpm": {
+   "fuente": "bcrd_tpm",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:16-04:00",
+   "sha256": "4c2cebe20e95d42b3b23a14fb6c11bc91e537c5f045cc9e13d56ba9dbd7281f1",
+   "bytes": 37210,
+   "ultima_observacion": "2026-11-30",
+   "estado": "al_dia",
+   "mensaje": "825 nuevos, 0 cambiados, 0 pendientes."
+  },
+  "bcrd_ipc_general": {
+   "fuente": "bcrd_ipc",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:17-04:00",
+   "sha256": "3ff34bd97f7210fa73cddfb686e8d47575f723578fe2a237440e77b0d57af164",
+   "bytes": 117248,
+   "ultima_observacion": "2026-10-31",
+   "estado": "al_dia",
+   "mensaje": "2056 nuevos, 0 cambiados, 0 pendientes."
+  },
+  "bcrd_ipc_subyacente": {
+   "fuente": "bcrd_ipc",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:17-04:00",
+   "sha256": "c5b5f1f420f483e4476d47919f21402e2512e1b24453f505c123afdb70b979f3",
+   "bytes": 61239,
+   "ultima_observacion": "2026-10-31",
+   "estado": "al_dia",
+   "mensaje": "1288 nuevos, 0 cambiados, 0 pendientes."
+  },
+  "bcrd_tbm_pasiva_dop": {
+   "fuente": "bcrd_tasas_bm",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:17-04:00",
+   "sha256": "0a39c87fb9c20ef9e5d8a9f851b7ec98bcf7ebbd072c7f8e76ca9105b3bf412e",
+   "bytes": 149494,
+   "ultima_observacion": "2026-11-25",
+   "estado": "al_dia",
+   "mensaje": "1456 nuevos, 0 cambiados, 0 pendientes."
+  },
+  "bcrd_tbm_pasiva_usd": {
+   "fuente": "bcrd_tasas_bm",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:17-04:00",
+   "sha256": "36d353ddd6f62ae3cf3db34541e42a4a39811755841b7120bc324d30e959deaa",
+   "bytes": 146201,
+   "ultima_observacion": "2026-11-25",
+   "estado": "al_dia",
+   "mensaje": "1263 nuevos, 0 cambiados, 0 pendientes."
+  },
+  "bcrd_tbm_activa_dop": {
+   "fuente": "bcrd_tasas_bm",
+   "fallos_seguidos": 0,
+   "ultima_consulta": "2026-11-27T22:44:17-04:00",
+   "sha256": "790303a7045526a7e08b37888a782b0827441ec8b50b57bb8ebaecedad83bf09",
+   "bytes": 40473,
+   "ultima_observacion": "2026-11-25",
+   "estado": "al_dia",
+   "mensaje": "1350 nuevos, 0 cambiados, 0 pendientes."
+  }
+ },
+ "actualizado": "2026-11-27T22:44:17-04:00"
+}
