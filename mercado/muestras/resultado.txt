@@ -1,0 +1,22 @@
+bcrd_tasa_dolar.xlsx | 200 application/octet-stream 359025 | https://cdn.bancentral.gov.do/documents/estadisticas/mercado-cambiario/documents/TASA_DOLAR_REFERENCIA_MC.xlsx
+bcrd_notas_subastas.xlsx | 200 application/octet-stream 53598 | https://cdn.bancentral.gov.do/documents/instrumentos-de-inversion/instrumentos-operaciones-de-mercado-abierto/documents/Historico_Subastas_Notas.xlsx
+bcrd_notas_vigentes.xlsx | 200 application/octet-stream 19957 | https://cdn.bancentral.gov.do/documents/instrumentos-de-inversion/instrumentos-operaciones-de-mercado-abierto/documents/Notas_historico_vigentes.xlsx
+bcrd_ipc.xls | 200 application/octet-stream 117248 | https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_base_2019-2020.xls
+bcrd_ipc_subyacente.xlsx | 200 application/octet-stream 61239 | https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_subyacente_base_2019-2020.xlsx
+simv_fondos_cerrados.xlsx | 403 text/html; charset=UTF-8 5506 | https://deepblue.simv.gob.do/api/reports/bvrd-navs
+sipen_listado.html | 200 text/html; charset=UTF-8 332789 | https://sipen.gob.do/estadisticas/resumenes-estadisticos/957-resumenes-estadisticos-2026
+bcrd_politica_monetaria.html | 200 text/html; charset=utf-8 95176 | https://www.bancentral.gov.do/a/d/2532-politica-monetaria
+bcrd_monetario.html | 200 text/html; charset=utf-8 95330 | https://www.bancentral.gov.do/a/d/2536-sector-monetario-y-financiero
+total 1144
+drwxr-xr-x 2 runner runner   4096 Nov 28 02:34 .
+drwxr-xr-x 6 runner runner   4096 Nov 28 02:34 ..
+-rw-r--r-- 1 runner runner 117248 Nov 28 02:34 bcrd_ipc.xls
+-rw-r--r-- 1 runner runner  61239 Nov 28 02:34 bcrd_ipc_subyacente.xlsx
+-rw-r--r-- 1 runner runner  95330 Nov 28 02:34 bcrd_monetario.html
+-rw-r--r-- 1 runner runner  53598 Nov 28 02:34 bcrd_notas_subastas.xlsx
+-rw-r--r-- 1 runner runner  19957 Nov 28 02:34 bcrd_notas_vigentes.xlsx
+-rw-r--r-- 1 runner runner  95176 Nov 28 02:34 bcrd_politica_monetaria.html
+-rw-r--r-- 1 runner runner 359025 Nov 28 02:34 bcrd_tasa_dolar.xlsx
+-rw-r--r-- 1 runner runner   1434 Nov 28 02:34 resultado.txt
+-rw-r--r-- 1 runner runner   5506 Nov 28 02:34 simv_fondos_cerrados.xlsx
+-rw-r--r-- 1 runner runner 332789 Nov 28 02:34 sipen_listado.html
