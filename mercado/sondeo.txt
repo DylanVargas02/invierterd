@@ -1,0 +1,6 @@
+bcrd_tpm.xlsx https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/Serie_TPM.xlsx
+bcrd_tasas_semanales_bm_2026.xlsx https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tasas_semanalesBM-2026.xlsx
+bcrd_tasas_semanales_aap_2026.xls https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tasas_semanalesAAP-2026.xls
+bcrd_tbm_pasivad.xlsx https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tbm_pasivad.xlsx
+bcrd_tbm_activad.xlsx https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tbm_activad.xlsx
+bcrd_tbm_pasivad_usd.xlsx https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tbm-pasivad-usd.xlsx
