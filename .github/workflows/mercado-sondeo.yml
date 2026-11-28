@@ -1,0 +1,35 @@
+name: Mercado · sondeo de fuentes
+# Descarga una vez los archivos de cada fuente y los guarda en mercado/muestras para revisar su formato.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sondeo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descargar
+        run: |
+          mkdir -p mercado/muestras
+          cd mercado/muestras
+          ua="Mozilla/5.0 (compatible; CaobaMercado/1.0)"
+          get() { code=$(curl -sSL -A "$ua" -o "$1" -w '%{http_code} %{content_type} %{size_download}' --max-time 90 "$2" || echo "error"); echo "$1 | $code | $2" >> resultado.txt; }
+          get bcrd_tasa_dolar.xlsx "https://cdn.bancentral.gov.do/documents/estadisticas/mercado-cambiario/documents/TASA_DOLAR_REFERENCIA_MC.xlsx"
+          get bcrd_notas_subastas.xlsx "https://cdn.bancentral.gov.do/documents/instrumentos-de-inversion/instrumentos-operaciones-de-mercado-abierto/documents/Historico_Subastas_Notas.xlsx"
+          get bcrd_notas_vigentes.xlsx "https://cdn.bancentral.gov.do/documents/instrumentos-de-inversion/instrumentos-operaciones-de-mercado-abierto/documents/Notas_historico_vigentes.xlsx"
+          get bcrd_ipc.xls "https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_base_2019-2020.xls"
+          get bcrd_ipc_subyacente.xlsx "https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_subyacente_base_2019-2020.xlsx"
+          get simv_fondos_cerrados.xlsx "https://deepblue.simv.gob.do/api/reports/bvrd-navs"
+          get sipen_listado.html "https://sipen.gob.do/estadisticas/resumenes-estadisticos/957-resumenes-estadisticos-2026"
+          get bcrd_politica_monetaria.html "https://www.bancentral.gov.do/a/d/2532-politica-monetaria"
+          get bcrd_monetario.html "https://www.bancentral.gov.do/a/d/2536-sector-monetario-y-financiero"
+          ls -la >> resultado.txt
+          cat resultado.txt
+      - name: Guardar muestras
+        run: |
+          git config user.name "caoba-mercado"
+          git config user.email "actions@users.noreply.github.com"
+          git add mercado/muestras
+          git commit -m "Mercado: muestras del sondeo de fuentes" || echo "sin cambios"
+          git push
