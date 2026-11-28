@@ -6,3 +6,5 @@ android/.gradle/
 *.jks
 www/
 tools/caoba-artefacto.html
+mercado/_originales/
+__pycache__/

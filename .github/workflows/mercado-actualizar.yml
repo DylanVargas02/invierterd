@@ -1,0 +1,52 @@
+name: Mercado · actualizar fuentes
+# Descarga las fuentes oficiales, guarda lo nuevo como lotes en mercado/lotes y actualiza el índice.
+# Supabase lee el índice cada hora (minuto 40) y aplica los lotes. No usa claves ni secretos.
+# Horario en UTC. Santo Domingo = UTC-4: 9:15, 13:15 y 18:15 de lunes a viernes; 10:15 los sábados.
+on:
+  schedule:
+    - cron: '15 13,17,22 * * 1-5'
+    - cron: '15 14 * * 6'
+  workflow_dispatch:
+    inputs:
+      solo:
+        description: 'Fuentes o documentos separados por coma (vacío = todos)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: mercado-actualizar
+  cancel-in-progress: false
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencias
+        run: pip install -r mercado/requirements.txt
+      - name: Corrida
+        env:
+          TZ: America/Santo_Domingo
+          SOLO: ${{ github.event.inputs.solo }}
+        run: python3 -I mercado/actualizar.py --solo "$SOLO"
+      - name: Guardar originales (90 días)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: originales-${{ github.run_id }}
+          path: mercado/_originales/
+          retention-days: 90
+          if-no-files-found: ignore
+      - name: Publicar lotes e índice
+        if: always()
+        run: |
+          git config user.name "caoba-mercado"
+          git config user.email "actions@users.noreply.github.com"
+          git add mercado/lotes mercado/datos
+          git commit -q -m "Mercado: corrida $(date -u +%Y-%m-%dT%H:%MZ)" || { echo "Sin cambios"; exit 0; }
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q && exit 0; sleep 5; done
+          exit 1
