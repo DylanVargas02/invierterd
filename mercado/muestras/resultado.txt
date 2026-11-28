@@ -1,22 +1,25 @@
-bcrd_tasa_dolar.xlsx | 200 application/octet-stream 359025 | https://cdn.bancentral.gov.do/documents/estadisticas/mercado-cambiario/documents/TASA_DOLAR_REFERENCIA_MC.xlsx
-bcrd_notas_subastas.xlsx | 200 application/octet-stream 53598 | https://cdn.bancentral.gov.do/documents/instrumentos-de-inversion/instrumentos-operaciones-de-mercado-abierto/documents/Historico_Subastas_Notas.xlsx
-bcrd_notas_vigentes.xlsx | 200 application/octet-stream 19957 | https://cdn.bancentral.gov.do/documents/instrumentos-de-inversion/instrumentos-operaciones-de-mercado-abierto/documents/Notas_historico_vigentes.xlsx
-bcrd_ipc.xls | 200 application/octet-stream 117248 | https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_base_2019-2020.xls
-bcrd_ipc_subyacente.xlsx | 200 application/octet-stream 61239 | https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_subyacente_base_2019-2020.xlsx
-simv_fondos_cerrados.xlsx | 403 text/html; charset=UTF-8 5506 | https://deepblue.simv.gob.do/api/reports/bvrd-navs
-sipen_listado.html | 200 text/html; charset=UTF-8 332789 | https://sipen.gob.do/estadisticas/resumenes-estadisticos/957-resumenes-estadisticos-2026
-bcrd_politica_monetaria.html | 200 text/html; charset=utf-8 95176 | https://www.bancentral.gov.do/a/d/2532-politica-monetaria
-bcrd_monetario.html | 200 text/html; charset=utf-8 95330 | https://www.bancentral.gov.do/a/d/2536-sector-monetario-y-financiero
-total 1144
-drwxr-xr-x 2 runner runner   4096 Nov 28 02:34 .
-drwxr-xr-x 6 runner runner   4096 Nov 28 02:34 ..
--rw-r--r-- 1 runner runner 117248 Nov 28 02:34 bcrd_ipc.xls
--rw-r--r-- 1 runner runner  61239 Nov 28 02:34 bcrd_ipc_subyacente.xlsx
--rw-r--r-- 1 runner runner  95330 Nov 28 02:34 bcrd_monetario.html
--rw-r--r-- 1 runner runner  53598 Nov 28 02:34 bcrd_notas_subastas.xlsx
--rw-r--r-- 1 runner runner  19957 Nov 28 02:34 bcrd_notas_vigentes.xlsx
--rw-r--r-- 1 runner runner  95176 Nov 28 02:34 bcrd_politica_monetaria.html
--rw-r--r-- 1 runner runner 359025 Nov 28 02:34 bcrd_tasa_dolar.xlsx
--rw-r--r-- 1 runner runner   1434 Nov 28 02:34 resultado.txt
--rw-r--r-- 1 runner runner   5506 Nov 28 02:34 simv_fondos_cerrados.xlsx
--rw-r--r-- 1 runner runner 332789 Nov 28 02:34 sipen_listado.html
+bcrd_tpm.xlsx | 200 application/octet-stream 37210 | https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/Serie_TPM.xlsx
+bcrd_tasas_semanales_bm_2026.xlsx | 200 application/octet-stream 397543 | https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tasas_semanalesBM-2026.xlsx
+bcrd_tasas_semanales_aap_2026.xls | 200 application/octet-stream 107008 | https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tasas_semanalesAAP-2026.xls
+bcrd_tbm_pasivad.xlsx | 200 application/octet-stream 150333 | https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tbm_pasivad.xlsx
+bcrd_tbm_activad.xlsx | 200 application/octet-stream 40592 | https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tbm_activad.xlsx
+bcrd_tbm_pasivad_usd.xlsx | 200 application/octet-stream 146969 | https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/tbm-pasivad-usd.xlsx
+total 2016
+drwxr-xr-x 2 runner runner   4096 Nov 28 02:37 .
+drwxr-xr-x 6 runner runner   4096 Nov 28 02:37 ..
+-rw-r--r-- 1 runner runner 117248 Nov 28 02:37 bcrd_ipc.xls
+-rw-r--r-- 1 runner runner  61239 Nov 28 02:37 bcrd_ipc_subyacente.xlsx
+-rw-r--r-- 1 runner runner  95330 Nov 28 02:37 bcrd_monetario.html
+-rw-r--r-- 1 runner runner  53598 Nov 28 02:37 bcrd_notas_subastas.xlsx
+-rw-r--r-- 1 runner runner  19957 Nov 28 02:37 bcrd_notas_vigentes.xlsx
+-rw-r--r-- 1 runner runner  95176 Nov 28 02:37 bcrd_politica_monetaria.html
+-rw-r--r-- 1 runner runner 359025 Nov 28 02:37 bcrd_tasa_dolar.xlsx
+-rw-r--r-- 1 runner runner 107008 Nov 28 02:37 bcrd_tasas_semanales_aap_2026.xls
+-rw-r--r-- 1 runner runner 397543 Nov 28 02:37 bcrd_tasas_semanales_bm_2026.xlsx
+-rw-r--r-- 1 runner runner  40592 Nov 28 02:37 bcrd_tbm_activad.xlsx
+-rw-r--r-- 1 runner runner 150333 Nov 28 02:37 bcrd_tbm_pasivad.xlsx
+-rw-r--r-- 1 runner runner 146969 Nov 28 02:37 bcrd_tbm_pasivad_usd.xlsx
+-rw-r--r-- 1 runner runner  37210 Nov 28 02:37 bcrd_tpm.xlsx
+-rw-r--r-- 1 runner runner   1074 Nov 28 02:37 resultado.txt
+-rw-r--r-- 1 runner runner   5506 Nov 28 02:37 simv_fondos_cerrados.xlsx
+-rw-r--r-- 1 runner runner 332789 Nov 28 02:37 sipen_listado.html
